@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- @artifact-head -->
+<title>Nuit Works</title>
+<meta name="description" content="Nuit Works is a web design and development studio crafting clean, fast, interactive websites that turn visitors into customers. Your first mockup is free.">
+<meta name="theme-color" content="#0a0a0c">
+<link rel="icon" href="data:image/png;base64,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">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<!-- @artifact-head-end -->
+</head>
+<body>
+<!-- @artifact-body -->
+
+<!-- Preloader -->
+<div class="preloader" aria-hidden="true">
+  <div class="pre-logo-wrap"><span class="pre-logo"></span></div>
+  <div class="pre-bar"><i></i></div>
+</div>
+
+<!-- Fixed layers -->
+<div class="bg" aria-hidden="true"></div>
+<canvas class="field" aria-hidden="true"></canvas>
+<div class="glow" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="frame" aria-hidden="true"><span class="tl"></span><span class="tr"></span><span class="bl"></span><span class="br"></span></div>
+<div class="hud" aria-hidden="true"><span class="hud-loc">Maldives</span><span class="hud-time" id="clock">--:--</span></div>
+<div class="cursor-trail" aria-hidden="true"></div>
+<div class="cursor cursor-dot" aria-hidden="true"></div>
+<div class="cursor cursor-ring" aria-hidden="true"><span></span></div>
+
+<!-- Nav -->
+<header class="nav">
+  <a href="#top" class="wordmark" data-cursor aria-label="Nuit Works — back to top"><span class="logo">NUIT</span></a>
+  <nav class="nav-links" aria-label="Primary">
+    <a href="#work" data-cursor>Work</a>
+    <a href="#pricing" data-cursor>Pricing</a>
+    <a href="#contact" data-cursor>Contact</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- Hero -->
+  <section class="hero section" data-shape="0" data-rotx="1.05" data-x="1.15" data-y="0.05" data-scale="1" data-opacity="1" data-spin="0.12">
+    <div class="hero-inner">
+      <p class="eyebrow hero-eyebrow"><span class="dot"></span>Taking new projects — first mockup free</p>
+      <h1 class="display" data-typewriter>We build websites that turn visitors into <em>customers.</em></h1>
+      <p class="lead hero-sub">Nuit is a design studio that creates clear, fast, and high-quality websites. We use interactive design to help your business stand out online. And your first mockup is on us.</p>
+      <div class="cta-row hero-cta">
+        <a class="btn btn-primary magnetic" href="mailto:nuitworksmv@gmail.com?subject=Free%20mockup%20for%20my%20business" data-cursor>
+          <span class="btn-label">Get a free mockup</span>
+          <svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a class="btn btn-ghost magnetic" href="#work" data-cursor><span class="btn-label">See our work</span></a>
+      </div>
+    </div>
+    <div class="scroll-hint" aria-hidden="true"><span>Scroll</span><i></i></div>
+  </section>
+
+  <!-- Ticker -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <div class="ticker-group"><span>Jewelry brands</span><span>Restaurants</span><span>Cafés</span><span>Retail</span><span>Design agencies</span><span>Academies</span><span>Hospitality</span><span>Salons</span><span>Clinics</span></div>
+      <div class="ticker-group"><span>Jewelry brands</span><span>Restaurants</span><span>Cafés</span><span>Retail</span><span>Design agencies</span><span>Academies</span><span>Hospitality</span><span>Salons</span><span>Clinics</span></div>
+      <div class="ticker-group"><span>Jewelry brands</span><span>Restaurants</span><span>Cafés</span><span>Retail</span><span>Design agencies</span><span>Academies</span><span>Hospitality</span><span>Salons</span><span>Clinics</span></div>
+      <div class="ticker-group"><span>Jewelry brands</span><span>Restaurants</span><span>Cafés</span><span>Retail</span><span>Design agencies</span><span>Academies</span><span>Hospitality</span><span>Salons</span><span>Clinics</span></div>
+    </div>
+  </div>
+
+  <!-- Positioning -->
+  <section id="studio" class="section positioning" data-shape="1" data-rotx="0.35" data-x="0" data-y="0" data-scale="1.35" data-opacity="0.42" data-spin="0.08">
+    <div class="container narrow center">
+      <p class="eyebrow" data-reveal><span class="idx">01</span>The studio</p>
+      <h2 class="h2 statement" data-split>Tailored digital solutions built around your <em>business goals.</em></h2>
+      <p class="lead" data-reveal>We are a dedicated team managing every phase of your project, from initial strategy and design to launch and maintenance. By working directly with us, you get clear communication, fast turnaround times, and a website crafted to meet high standards.</p>
+      <ul class="pillars" data-reveal-group>
+        <li data-reveal><span>Custom design</span><small>Tailored specifically to match your brand and audience.</small></li>
+        <li data-reveal><span>Engaging motion</span><small>Smooth interactions that make your site easy and enjoyable to navigate.</small></li>
+        <li data-reveal><span>Full service</span><small>Strategy, design, and launch handled seamlessly in one place.</small></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section id="services" class="section services" data-shape="2" data-rotx="0.5" data-x="-1.25" data-y="-0.1" data-scale="0.85" data-opacity="0.9" data-spin="0.18">
+    <div class="container split">
+      <div class="split-left">
+        <div class="sticky">
+          <p class="eyebrow" data-reveal><span class="idx">02</span>Services</p>
+          <h2 class="h2" data-typewriter>What we <em>build.</em></h2>
+          <p class="lead" data-reveal>Tailored solutions designed around your business needs. Fast, reliable, and built to perform.</p>
+        </div>
+      </div>
+      <div class="split-right" data-reveal-group>
+        <article class="callout" data-reveal>
+          <span class="callout-idx">01</span>
+          <h3 class="callout-h">Business websites</h3>
+          <p class="callout-tag">Build trust and win customers immediately.</p>
+          <p class="callout-p">Clean, fast, easy-to-use websites for local businesses like cafés, clinics, salons, and shops looking to build a strong online presence quickly.</p>
+        </article>
+        <article class="callout" data-reveal>
+          <span class="callout-idx">02</span>
+          <h3 class="callout-h">Brand &amp; portfolio sites</h3>
+          <p class="callout-tag">Showcase your work with style.</p>
+          <p class="callout-p">Custom websites designed to highlight products, creative work, and boutique services with a premium look and feel.</p>
+        </article>
+        <article class="callout" data-reveal>
+          <span class="callout-idx">03</span>
+          <h3 class="callout-h">Interactive experiences</h3>
+          <p class="callout-tag">Stand out with dynamic design.</p>
+          <p class="callout-p">Engaging websites featuring smooth animations and interactive details that make your brand truly memorable.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Work -->
+  <section id="work" class="section work" data-shape="2" data-rotx="0.5" data-x="0" data-y="0.3" data-scale="1.7" data-opacity="0.14" data-spin="0.05">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow" data-reveal><span class="idx">03</span>Selected work</p>
+          <h2 class="h2" data-split>Featured <em>Projects</em></h2>
+        </div>
+        <p class="lead" data-reveal>A selection of websites built for growing businesses and brands.</p>
+      </div>
+      <div class="work-grid" data-reveal-group>
+        <!-- To use real project images: replace <div class="art"></div> with <img class="art" src="..." alt=""> and drop the data-art attribute. -->
+        <a class="card" href="#contact" data-art="1" data-cursor="View" data-reveal>
+          <div class="cover"><div class="art"></div><div class="shine"></div></div>
+          <div class="card-meta"><span class="tag">E-commerce</span><h3>Aurelle Fine Jewelry <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>A jewel-box storefront with slow, gleaming product reveals.</p></div>
+        </a>
+        <a class="card" href="#contact" data-art="2" data-cursor="View" data-reveal>
+          <div class="cover"><div class="art"></div><div class="shine"></div></div>
+          <div class="card-meta"><span class="tag">Brand site</span><h3>Saltwind Restaurant <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>Menu, reservations, and the mood of the room before you arrive.</p></div>
+        </a>
+        <a class="card" href="#contact" data-art="3" data-cursor="View" data-reveal>
+          <div class="cover"><div class="art"></div><div class="shine"></div></div>
+          <div class="card-meta"><span class="tag">E-commerce</span><h3>Noor Fragrance House <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>Scent notes that unfold one by one as you scroll.</p></div>
+        </a>
+        <a class="card" href="#contact" data-art="4" data-cursor="View" data-reveal>
+          <div class="cover"><div class="art"></div><div class="shine"></div></div>
+          <div class="card-meta"><span class="tag">Agency site</span><h3>Studio Halo <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>A design agency's portfolio built to make their own clients jealous.</p></div>
+        </a>
+        <a class="card" href="#contact" data-art="5" data-cursor="View" data-reveal>
+          <div class="cover"><div class="art"></div><div class="shine"></div></div>
+          <div class="card-meta"><span class="tag">Landing page</span><h3>Tide Football Academy <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>An enrollment-first site for a youth sports academy.</p></div>
+        </a>
+        <a class="card" href="#contact" data-art="6" data-cursor="View" data-reveal>
+          <div class="cover"><div class="art"></div><div class="shine"></div></div>
+          <div class="card-meta"><span class="tag">Brand site</span><h3>Ember &amp; Oat Café <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>Warm, quick, and built to fill tables on a Tuesday.</p></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section id="process" class="section process" data-shape="3" data-rotx="1.15" data-x="0" data-y="0.1" data-scale="1.15" data-opacity="0.38" data-spin="0.1">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow" data-reveal><span class="idx">04</span>How it works</p>
+          <h2 class="h2" data-split>From start to <em>launch.</em></h2>
+        </div>
+        <p class="lead" data-reveal>A simple, step-by-step process designed to make working together easy.</p>
+      </div>
+      <div class="steps" data-reveal-group>
+        <div class="process-line"><i></i></div>
+        <div class="step" data-reveal><div class="step-num">01</div><h3>Inquiry</h3><p>Reach out and tell us about your business, your goals, and what you need for your website.</p></div>
+        <div class="step" data-reveal><div class="step-num">02</div><h3>Free mockup</h3><p>We create an initial concept for your homepage so you can see the design direction before making any commitment.</p></div>
+        <div class="step" data-reveal><div class="step-num">03</div><h3>Build</h3><p>Once you approve the concept, we build out the full site, ensuring every page looks great and works smoothly on all devices.</p></div>
+        <div class="step" data-reveal><div class="step-num">04</div><h3>Launch</h3><p>We test, launch, and hand over full ownership. Monthly maintenance plans are available for ongoing updates.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing -->
+  <section id="pricing" class="section pricing" data-shape="3" data-rotx="1.15" data-x="0" data-y="0.6" data-scale="1.9" data-opacity="0.1" data-spin="0.04">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow" data-reveal><span class="idx">05</span>Pricing</p>
+          <h2 class="h2" data-split>Transparent <em>pricing.</em></h2>
+        </div>
+        <p class="lead" data-reveal>Fair rates tailored for local businesses and international clients. All prices listed in Maldivian Rufiyaa (MVR) and USD.</p>
+      </div>
+
+      <div class="tiers" data-reveal-group>
+        <article class="tier" data-reveal>
+          <header><h3>Starter</h3><p class="tier-for">Ideal for small businesses needing a clean, professional online presence.</p></header>
+          <div class="price"><span class="cur">MVR</span>3,500<span class="usd">$200 USD</span></div>
+          <ul class="feats">
+            <li>Single-page site with up to 4 sections</li>
+            <li>Mobile-responsive layout</li>
+            <li>Smooth page animations</li>
+            <li>Contact form or WhatsApp / Instagram integration</li>
+          </ul>
+          <a class="btn btn-ghost magnetic tier-cta" href="mailto:nuitworksmv@gmail.com?subject=Starter%20%E2%80%94%20free%20mockup" data-cursor><span class="btn-label">Start with a free mockup</span></a>
+        </article>
+
+        <article class="tier featured" data-reveal>
+          <span class="badge">Most popular</span>
+          <header><h3>Signature</h3><p class="tier-for">Ideal for businesses wanting a full multi-section site to showcase their brand.</p></header>
+          <div class="price"><span class="cur">MVR</span>6,500<span class="usd">$375 USD</span></div>
+          <ul class="feats">
+            <li>Multi-section site (up to 8 sections)</li>
+            <li>Unique visual design matching your brand</li>
+            <li>Interactive animations throughout</li>
+            <li>Portfolio, gallery, or product showcase section</li>
+            <li>Basic search engine setup (SEO)</li>
+          </ul>
+          <a class="btn btn-primary magnetic tier-cta" href="mailto:nuitworksmv@gmail.com?subject=Signature%20%E2%80%94%20free%20mockup" data-cursor><span class="btn-label">Start with a free mockup</span><svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </article>
+
+        <article class="tier" data-reveal>
+          <header><h3>Flagship</h3><p class="tier-for">Ideal for brands looking for a high-impact, feature-rich website.</p></header>
+          <div class="price"><span class="cur">MVR</span>11,000<span class="usd">$650 USD</span></div>
+          <ul class="feats">
+            <li class="plus">Everything in Signature, plus:</li>
+            <li>Advanced interactive 3D and scroll effects</li>
+            <li>High-end motion design and smooth page transitions</li>
+            <li>Fast-track build priority timeline</li>
+          </ul>
+          <a class="btn btn-ghost magnetic tier-cta" href="mailto:nuitworksmv@gmail.com?subject=Flagship%20%E2%80%94%20free%20mockup" data-cursor><span class="btn-label">Start with a free mockup</span></a>
+        </article>
+      </div>
+
+      <div class="addons" data-reveal-group>
+        <div data-reveal>
+          <h3 class="addons-h">Add-ons</h3>
+          <p class="fine">Optional extra services available for any package.</p>
+        </div>
+        <ul data-reveal>
+          <li><span>Monthly maintenance &amp; updates</span><i></i><b>MVR 500/mo<small>/ $30/mo</small></b></li>
+          <li><span>Extra page or section</span><i></i><b>MVR 700<small>/ $40 each</small></b></li>
+          <li><span>Social media content package</span><i></i><b>MVR 1,200<small>/ $70</small></b></li>
+          <li><span>E-commerce setup</span><i></i><b>from MVR 2,500<small>/ $150</small></b></li>
+          <li><span>Hosting setup</span><i></i><b>Priced based on<small>domain &amp; traffic</small></b></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section id="contact" class="section final center" data-shape="4" data-rotx="0.12" data-x="0" data-y="-0.35" data-scale="1.05" data-opacity="1" data-spin="0.28">
+    <div class="container narrow">
+      <p class="eyebrow" data-reveal><span class="idx">06</span>Get in touch</p>
+      <h2 class="display" data-typewriter>Get your initial design mockup for <em>free.</em></h2>
+      <p class="lead" data-reveal>Tell us about your business goals and we will create an initial homepage concept before you commit to anything. If you like the direction, we move forward. If not, there is no obligation.</p>
+      <div class="cta-row" data-reveal>
+        <a class="btn btn-primary btn-lg magnetic" href="mailto:nuitworksmv@gmail.com?subject=Free%20mockup%20for%20my%20business" data-cursor>
+          <span class="btn-label">Get a free mockup</span>
+          <svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a class="btn btn-ghost btn-lg magnetic" href="https://instagram.com/nuit.works" target="_blank" rel="noopener" data-cursor>
+          <span class="btn-label">DM @nuit.works</span>
+          <svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+      </div>
+      <p class="contact-line" data-reveal><a class="ul" href="mailto:nuitworksmv@gmail.com" data-cursor>nuitworksmv@gmail.com</a><span>·</span><a class="ul" href="https://instagram.com/nuit.works" target="_blank" rel="noopener" data-cursor>@nuit.works</a></p>
+    </div>
+  </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="footer" data-shape="4" data-rotx="0.12" data-x="0" data-y="-0.9" data-scale="1.05" data-opacity="0.55" data-spin="0.28">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#top" class="wordmark" data-cursor aria-label="Nuit Works — back to top"><span class="logo">NUIT</span></a>
+        <p>A web design and development studio crafting clean, modern websites built to elevate growing businesses.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Site</h4>
+        <a href="#work" data-cursor>Work</a>
+        <a href="#pricing" data-cursor>Pricing</a>
+        <a href="#contact" data-cursor>Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Contact</h4>
+        <a href="mailto:nuitworksmv@gmail.com" data-cursor>nuitworksmv@gmail.com</a>
+        <a href="https://instagram.com/nuit.works" target="_blank" rel="noopener" data-cursor>@nuit.works</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year">2026</span> Nuit Works. All rights reserved.</span>
+      <span>Based in the Maldives · Working worldwide</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.1/dist/lenis.min.js"></script>
+<script src="app.js"></script>
+<!-- @artifact-body-end -->
+</body>
+</html>
