@@ -452,7 +452,10 @@ html.has-cursor .footer-col a:hover{color:var(--fg);transform:translateX(6px)}
 /* ---------- Calculator (calculate.html) ---------- */
 /* Controls borrow the tier card's surface, radius and border so the page reads
    as the same system; only the interaction states are new. */
-.calc-hero{min-height:auto;padding-top:clamp(150px,26vh,260px);padding-bottom:clamp(80px,12vh,140px)}
+/* Full height like the landing hero. With min-height:auto the section ended a few
+   hundred pixels down, so #calc crossed its 'top 55%' trigger almost immediately
+   and scattered the knot while the heading was still on screen. */
+.calc-hero{padding-top:clamp(150px,26vh,260px);padding-bottom:clamp(80px,12vh,140px)}
 .calc-grid{display:grid;grid-template-columns:1.55fr .95fr;gap:clamp(32px,4vw,64px);align-items:start}
 .calc-main{display:grid;gap:clamp(40px,5vh,64px);min-width:0}
 .calc-block{border:0;padding:0;margin:0;min-width:0}
