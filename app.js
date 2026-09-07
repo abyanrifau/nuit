@@ -86,9 +86,12 @@
   const CAM_Z = 6;
   const FOV = 40 * Math.PI / 180;
 
+  // Kept in step with SHAPES by hand: one `attribute vec3 aPn` per shape and one
+  // segment per gap between them. The check beside SHAPES shouts if they drift.
+  const SHADER_SHAPES = 3;
   const VERT = [
     'precision highp float;',
-    'attribute vec3 aP0; attribute vec3 aP1;',
+    'attribute vec3 aP0; attribute vec3 aP1; attribute vec3 aP2;',
     'attribute vec4 aRand;',
     'uniform mat4 uProj;',
     'uniform float uTime; uniform float uProgress; uniform float uRotX; uniform float uRotY;',
@@ -99,11 +102,15 @@
     'mat3 rotX(float a){ float c = cos(a); float s = sin(a); return mat3(1.0,0.0,0.0, 0.0,c,s, 0.0,-s,c); }',
     'mat3 rotY(float a){ float c = cos(a); float s = sin(a); return mat3(c,0.0,-s, 0.0,1.0,0.0, s,0.0,c); }',
     'void main(){',
-    '  float f = clamp(uProgress, 0.0, 1.0);',
+    '  float p = clamp(uProgress, 0.0, 2.0);',
+    '  float seg = floor(min(p, 1.999));',
+    '  float f = p - seg;',
     '  float st = aRand.z * 0.4;',
     '  f = clamp((f - st) / 0.6, 0.0, 1.0);',
     '  f = f * f * (3.0 - 2.0 * f);',
-    '  vec3 pos = mix(aP0, aP1, f);',
+    '  vec3 a = aP0; vec3 b = aP1;',
+    '  if (seg > 0.5) { a = aP1; b = aP2; }',
+    '  vec3 pos = mix(a, b, f);',
     '  float burst = sin(f * 3.14159265);',
     '  pos += normalize(pos + vec3(0.001)) * burst * (0.3 + 0.35 * aRand.y);',
     '  float t = uTime * (0.5 + aRand.w * 0.7);',
@@ -378,6 +385,21 @@
   }
   // Synchronous fallback so the buffer is never empty; replaced by the real logo
   // artwork as soon as it decodes (see loadLogoWordmark).
+  function genKnot(N) {
+    const pts = [];
+    const p = 2, q = 3, S = 0.44;
+    for (let i = 0; i < N; i++) {
+      const t = rnd() * TAU;
+      const r = 2 + Math.cos(q * t);
+      let x = r * Math.cos(p * t), y = r * Math.sin(p * t), z = -Math.sin(q * t);
+      const tr = 0.42 * Math.cbrt(rnd());
+      const th = rnd() * TAU, ph = Math.acos(2 * rnd() - 1);
+      x += tr * Math.sin(ph) * Math.cos(th); y += tr * Math.sin(ph) * Math.sin(th); z += tr * Math.cos(ph);
+      pts.push([x * S, z * S * 1.6, y * S, 0]);
+    }
+    return finish(pts);
+  }
+
   /* --- Wordmark. Particles sampled from the opaque pixels of a rendering of the
      NUIT logo, normalised to x in [-1,1] (y follows the logo's aspect) so a section
      can scale it to whatever share of the viewport width it wants. --------------- */
@@ -411,12 +433,13 @@
     };
     img.src = m[1];
   }
-  // Two forms: the galaxy the hero opens on, and the wordmark the footer lands on.
-  // Sections in between ask for the galaxy and disperse it. See shapes-parked.js
-  // for the generators that used to sit between them.
-  const SHAPES = [genGalaxy, genWordmark];
+  // The forms a section can ask for by index: the galaxy the landing hero opens on,
+  // the knot the calculator opens on, and the wordmark the footer lands on. Sections
+  // in between disperse whichever they hold. See shapes-parked.js for retired ones.
+  const SHAPES = [genGalaxy, genKnot, genWordmark];
   const LAST_I = SHAPES.length - 1;          // highest data-shape a section may use
   const WORDMARK_I = SHAPES.indexOf(genWordmark);
+  if (SHAPES.length !== SHADER_SHAPES) console.warn('SHAPES has ' + SHAPES.length + ' entries but the vertex shader is built for ' + SHADER_SHAPES);
 
   function genRandoms(N) {
     const r = new Float32Array(N * 4);
@@ -450,7 +473,7 @@
       this.ndc = { x: 9, y: 9, tx: 9, ty: 9 };
       this.scroll = 0; this.boost = 0; this.time = 0;
 
-      this.prog = createProgram(gl, VERT, FRAG, ['aP0', 'aP1', 'aRand']);
+      this.prog = createProgram(gl, VERT, FRAG, ['aP0', 'aP1', 'aP2', 'aRand']);
       this.dprog = createProgram(gl, DVERT, DFRAG, ['aPos', 'aSeed']);
       this.u = uniformMap(gl, this.prog);
       this.du = uniformMap(gl, this.dprog);
