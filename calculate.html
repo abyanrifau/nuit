@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- @artifact-head -->
+<title>Website Cost Calculator &mdash; Nuit Works</title>
+<meta name="description" content="Estimate the cost of your website in seconds. Pick a package, add the features you need, and see a live price range from Nuit Works.">
+<meta name="theme-color" content="#0a0a0c">
+<link rel="icon" href="data:image/png;base64,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">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<!-- @artifact-head-end -->
+</head>
+<body class="page-calc">
+<!-- @artifact-body -->
+
+<!-- Preloader -->
+<div class="preloader" aria-hidden="true">
+  <div class="pre-logo-wrap"><span class="pre-logo"></span></div>
+  <div class="pre-bar"><i></i></div>
+</div>
+
+<!-- Fixed layers -->
+<div class="bg" aria-hidden="true"></div>
+<canvas class="field" aria-hidden="true"></canvas>
+<div class="glow" aria-hidden="true"></div>
+<div class="grain" aria-hidden="true"></div>
+<div class="frame" aria-hidden="true"><span class="tl"></span><span class="tr"></span><span class="bl"></span><span class="br"></span></div>
+<div class="hud" aria-hidden="true"><span class="hud-loc">Maldives</span><span class="hud-time" id="clock">--:--</span></div>
+<div class="player">
+  <button class="player-btn" type="button" data-cursor aria-pressed="false" aria-label="Play Aphex Twin — #3">
+    <span class="player-eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+    <span class="player-state">Play</span>
+    <span class="player-track">Aphex Twin — #3</span>
+  </button>
+  <audio class="player-audio" src="assets/aphex-twin-3.mp3" preload="none" loop></audio>
+</div>
+<div class="cursor-trail" aria-hidden="true"></div>
+<div class="cursor cursor-dot" aria-hidden="true"></div>
+<div class="cursor cursor-ring" aria-hidden="true"><span></span></div>
+
+<!-- Nav -->
+<header class="nav">
+  <a href="#top" class="wordmark" data-cursor aria-label="Nuit Works — back to top"><span class="logo">NUIT</span></a>
+  <nav class="nav-links" aria-label="Primary">
+    <a href="index.html#work" data-cursor>Work</a>
+    <a href="index.html#pricing" data-cursor>Pricing</a>
+    <a href="index.html#contact" data-cursor>Contact</a>
+  </nav>
+</header>
+
+<main id="top">
+
+  <!-- Hero -->
+  <section class="hero section calc-hero" data-shape="0" data-rotx="1.05" data-x="1.15" data-y="0.05" data-scale="1" data-opacity="0.9" data-spin="0.12" data-m-opacity="0.7">
+    <div class="hero-inner">
+      <p class="eyebrow hero-eyebrow"><span class="dot"></span>Instant estimate — no email required</p>
+      <h1 class="display" data-typewriter>Calculate your <em>website.</em></h1>
+      <p class="lead hero-sub">Pick your package, add the features you need, and get a rough estimate instantly.</p>
+      <div class="cta-row hero-cta">
+        <a class="btn btn-ghost magnetic" href="index.html#pricing" data-cursor><span class="btn-label">Back to pricing</span></a>
+      </div>
+    </div>
+    <div class="scroll-hint" aria-hidden="true"><span>Scroll</span><i></i></div>
+  </section>
+
+  <!-- Calculator -->
+  <section id="calc" class="section calc" data-shape="3" data-rotx="1.15" data-x="0" data-y="0.6" data-scale="1.9" data-opacity="0.26" data-spin="0.04" data-disperse="1">
+    <div class="container">
+      <div class="calc-grid">
+
+        <form class="calc-main" id="calc-form" autocomplete="off">
+
+          <fieldset class="calc-block">
+            <legend class="calc-legend"><span class="idx">01</span>Base package</legend>
+            <div class="pick-grid">
+            <label class="pick">
+              <input type="radio" name="pkg" value="standard" checked>
+              <span class="pick-body">
+                <span class="pick-head"><span class="pick-name">Standard</span><span class="pick-price">MVR 5,000+</span></span>
+                <span class="pick-desc">Simple brochure/portfolio sites, up to 3–4 pages, no CMS/login</span>
+              </span>
+            </label>
+            <label class="pick">
+              <input type="radio" name="pkg" value="premium">
+              <span class="pick-body">
+                <span class="pick-head"><span class="pick-name">Premium</span><span class="pick-price">MVR 10,000+</span></span>
+                <span class="pick-desc">Larger multi-page sites with custom logic, up to 6–8 pages</span>
+              </span>
+            </label>
+            </div>
+          </fieldset>
+
+          <fieldset class="calc-block">
+            <legend class="calc-legend"><span class="idx">02</span>Add-ons</legend>
+            <ul class="opt-list">
+          <li class="opt">
+            <label class="opt-main">
+              <input type="checkbox" data-opt="page">
+              <span class="opt-box" aria-hidden="true"></span>
+              <span class="opt-name">Extra page (beyond tier limit)</span>
+            </label>
+            <span class="opt-price">+500–1,000<small>each</small></span>
+            <span class="stepper" data-stepper="page"><button type="button" class="step-btn" data-step="-1" aria-label="Fewer: Extra pages">&minus;</button><output class="step-val" data-count="page">1</output><button type="button" class="step-btn" data-step="1" aria-label="More: Extra pages">+</button></span>
+          </li>
+          <li class="opt">
+            <label class="opt-main">
+              <input type="checkbox" data-opt="ecom">
+              <span class="opt-box" aria-hidden="true"></span>
+              <span class="opt-name">E-commerce/shop functionality</span>
+            </label>
+            <span class="opt-price">+2,000–4,000</span>
+          </li>
+          <li class="opt">
+            <label class="opt-main">
+              <input type="checkbox" data-opt="book">
+              <span class="opt-box" aria-hidden="true"></span>
+              <span class="opt-name">Booking/reservation system</span>
+            </label>
+            <span class="opt-price">+1,500–3,000</span>
+          </li>
+          <li class="opt">
+            <label class="opt-main">
+              <input type="checkbox" data-opt="member">
+              <span class="opt-box" aria-hidden="true"></span>
+              <span class="opt-name">Password-protected/member area</span>
+            </label>
+            <span class="opt-price">+1,500–2,500</span>
+          </li>
+          <li class="opt">
+            <label class="opt-main">
+              <input type="checkbox" data-opt="cms">
+              <span class="opt-box" aria-hidden="true"></span>
+              <span class="opt-name">Admin dashboard / CMS-style editing</span>
+            </label>
+            <span class="opt-price">+2,000–4,000</span>
+          </li>
+          <li class="opt">
+            <label class="opt-main">
+              <input type="checkbox" data-opt="lang">
+              <span class="opt-box" aria-hidden="true"></span>
+              <span class="opt-name">Multi-language support</span>
+            </label>
+            <span class="opt-price">+1,000–2,000<small>per language</small></span>
+            <span class="stepper" data-stepper="lang"><button type="button" class="step-btn" data-step="-1" aria-label="Fewer: Extra languages">&minus;</button><output class="step-val" data-count="lang">1</output><button type="button" class="step-btn" data-step="1" aria-label="More: Extra languages">+</button></span>
+          </li>
+          <li class="opt">
+            <label class="opt-main">
+              <input type="checkbox" data-opt="social">
+              <span class="opt-box" aria-hidden="true"></span>
+              <span class="opt-name">Social media feed integration</span>
+            </label>
+            <span class="opt-price">+300–500</span>
+          </li>
+          <li class="opt">
+            <label class="opt-main">
+              <input type="checkbox" data-opt="seo">
+              <span class="opt-box" aria-hidden="true"></span>
+              <span class="opt-name">Basic SEO setup</span>
+            </label>
+            <span class="opt-price">+500–1,000</span>
+          </li>
+          <li class="opt">
+            <label class="opt-main">
+              <input type="checkbox" data-opt="rush">
+              <span class="opt-box" aria-hidden="true"></span>
+              <span class="opt-name">Rush delivery (under 5 days)</span>
+            </label>
+            <span class="opt-price">+20–30%<small>of total</small></span>
+          </li>
+            </ul>
+          </fieldset>
+
+          <fieldset class="calc-block">
+            <legend class="calc-legend"><span class="idx">03</span>Subscription</legend>
+            <div class="pick-grid pick-grid-3">
+            <label class="pick">
+              <input type="radio" name="sub" value="none" checked>
+              <span class="pick-body">
+                <span class="pick-head"><span class="pick-name">None</span><span class="pick-price">&mdash;</span></span>
+                <span class="pick-desc">No ongoing plan</span>
+              </span>
+            </label>
+            <label class="pick">
+              <input type="radio" name="sub" value="hosting">
+              <span class="pick-body">
+                <span class="pick-head"><span class="pick-name">Hosting Plan</span><span class="pick-price">MVR 750/mo</span></span>
+                <span class="pick-desc">Hosting + bi-weekly check-ups</span>
+              </span>
+            </label>
+            <label class="pick">
+              <input type="radio" name="sub" value="plus">
+              <span class="pick-body">
+                <span class="pick-head"><span class="pick-name">Plus Plan</span><span class="pick-price">MVR 1,000/mo</span></span>
+                <span class="pick-desc">Hosting + check-ups + monthly edits</span>
+              </span>
+            </label>
+            </div>
+          </fieldset>
+
+        </form>
+
+        <aside class="calc-summary">
+          <div class="sum-card">
+            <p class="sum-label">Estimated one-time cost</p>
+            <p class="sum-total" data-total aria-live="polite">MVR 5,000</p>
+            <p class="sum-month" data-month hidden></p>
+            <ul class="sum-lines" data-lines></ul>
+            <p class="sum-note">This is a rough estimate. Final pricing is confirmed after a discovery call.</p>
+            <a class="btn btn-primary magnetic sum-cta" data-quote href="mailto:nuitworksmv@gmail.com" data-cursor>
+              <span class="btn-label">Get this quote</span>
+              <svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </aside>
+
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="footer" data-shape="4" data-rotx="0" data-roty="0" data-x="0" data-y="0.1" data-fit="width" data-scale="0.72" data-opacity="1" data-spin="0">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-lead">
+        <a class="footer-mail" href="mailto:nuitworksmv@gmail.com?subject=Free%20mockup%20for%20my%20business" data-cursor>nuitworksmv@gmail.com</a>
+        <p class="footer-note">Web design and development for growing businesses.</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Site</h4>
+          <a href="index.html#work" data-cursor>Work</a>
+          <a href="index.html#pricing" data-cursor>Pricing</a>
+          <a href="index.html#contact" data-cursor>Contact</a>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <a href="mailto:nuitworksmv@gmail.com" data-cursor>nuitworksmv@gmail.com</a>
+          <a href="https://instagram.com/nuit.works" target="_blank" rel="noopener" data-cursor>@nuit.works</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© <span id="year">2026</span> Nuit Works. All rights reserved.</span>
+      <span>Based in the Maldives · Working worldwide</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.1/dist/lenis.min.js"></script>
+<script src="app.js"></script>
+<script src="calc.js"></script>
+<!-- @artifact-body-end -->
+</body>
+</html>

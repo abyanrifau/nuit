@@ -88,6 +88,28 @@ html.low-fx .glow,html.low-fx .grain{display:none}
 }
 .hud-time{font-variant-numeric:tabular-nums;color:var(--soft)}
 
+/* ---------- Music ---------- */
+/* Stacked above the HUD in the same corner. The wrapper never takes pointer
+   events, so only the few characters of the control itself are clickable —
+   nothing over the page is blocked. */
+.player{position:fixed;right:34px;bottom:62px;z-index:40;pointer-events:none}
+.player-btn{
+  pointer-events:auto;display:inline-flex;align-items:center;gap:10px;
+  margin:0;padding:6px 0;border:0;background:none;cursor:pointer;
+  font-family:var(--sans);font-size:10px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--muted);transition:color .35s var(--ease-out)
+}
+html.has-cursor .player-btn:hover,.player-btn:focus-visible{color:var(--fg)}
+.player-btn:focus-visible{outline:1px solid var(--silver-hi);outline-offset:6px}
+.player-track{color:var(--muted);opacity:.62}
+.player-eq{display:inline-flex;align-items:flex-end;gap:2px;height:9px}
+.player-eq i{width:2px;height:2px;background:currentColor;transition:height .3s var(--ease-out)}
+.player.is-playing .player-eq i{animation:eq 1s ease-in-out infinite}
+.player.is-playing .player-eq i:nth-child(2){animation-delay:.18s}
+.player.is-playing .player-eq i:nth-child(3){animation-delay:.36s}
+.player.is-playing .player-eq i:nth-child(4){animation-delay:.54s}
+@keyframes eq{0%,100%{height:2px}50%{height:9px}}
+
 /* ---------- Preloader ---------- */
 .preloader{position:fixed;inset:0;z-index:200;background:#0a0a0c;display:grid;place-items:center;will-change:transform}
 .pre-logo-wrap{overflow:hidden;padding-bottom:3px}
@@ -129,11 +151,14 @@ html.low-fx .glow,html.low-fx .grain{display:none}
 .nav.is-scrolled{padding:18px var(--gutter)}
 .nav.is-scrolled::before{opacity:1}
 .wordmark{--logo-size:19px;display:inline-flex;align-items:center;text-decoration:none;color:var(--fg)}
+/* Hidden while the particle wordmark holds the footer — see is-eclipsed in app.js */
+.nav .wordmark{transition:opacity .7s var(--ease-out),transform .7s var(--ease-out)}
+.nav .wordmark.is-eclipsed{opacity:0;transform:translateY(-8px);pointer-events:none}
 /* The wordmark is live text in a neo-grotesque, weight 700, default tracking.
    To use a supplied image file instead: give .logo a background-image and
    text-indent:-9999px, or replace the span with an <img>. */
 .logo{display:block;height:var(--logo-size);width:calc(var(--logo-size) * var(--logo-ratio));background:var(--logo-img) center/contain no-repeat;text-indent:-200vw;overflow:hidden;white-space:nowrap;transition:opacity .4s var(--ease-out)}
-.wordmark:hover .logo{opacity:.68}
+html.has-cursor .wordmark:hover .logo{opacity:.68}
 .wordmark:focus-visible{outline:1px solid var(--silver-hi);outline-offset:8px}
 .nav-links{display:flex;gap:36px}
 .nav-links a{
@@ -141,8 +166,8 @@ html.low-fx .glow,html.low-fx .grain{display:none}
   padding:6px 0;transition:color .35s;
 }
 .nav-links a::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--fg);transform:scaleX(0);transform-origin:right;transition:transform .5s var(--ease-out)}
-.nav-links a:hover{color:var(--fg)}
-.nav-links a:hover::after{transform:scaleX(1);transform-origin:left}
+html.has-cursor .nav-links a:hover{color:var(--fg)}
+html.has-cursor .nav-links a:hover::after{transform:scaleX(1);transform-origin:left}
 
 /* ---------- Layout ---------- */
 main,footer{position:relative;z-index:4}
@@ -186,14 +211,14 @@ em{font-style:italic;color:var(--silver-hi)}
   width:0;height:0;border-radius:50%;background:var(--fill);transform:translate(-50%,-50%);
   transition:width .7s var(--ease-out),height .7s var(--ease-out);
 }
-.btn:hover::before{width:640px;height:640px}
+html.has-cursor .btn:hover::before{width:640px;height:640px}
 .btn .btn-label{display:inline-block;will-change:transform}
 .btn .arr{width:14px;height:14px;transition:transform .5s var(--ease-out)}
-.btn:hover .arr{transform:translateX(5px)}
+html.has-cursor .btn:hover .arr{transform:translateX(5px)}
 .btn-primary{background:var(--fg);color:var(--bg);box-shadow:0 0 0 0 rgba(232,232,236,0)}
-.btn-primary:hover{box-shadow:0 0 48px -8px rgba(232,232,236,.45)}
+html.has-cursor .btn-primary:hover{box-shadow:0 0 48px -8px rgba(232,232,236,.45)}
 .btn-ghost{--fill:var(--fg);border-color:var(--line-strong);color:var(--fg)}
-.btn-ghost:hover{color:var(--bg);border-color:var(--fg)}
+html.has-cursor .btn-ghost:hover{color:var(--bg);border-color:var(--fg)}
 .btn-lg{padding:24px 40px;font-size:15px}
 .btn:focus-visible{outline:1px solid var(--silver-hi);outline-offset:4px}
 
@@ -227,15 +252,6 @@ em{font-style:italic;color:var(--silver-hi)}
 .scroll-hint i::after{content:'';position:absolute;inset:0;background:var(--fg);transform:translateX(-100%);animation:scrollline 2.2s var(--ease-inout) infinite}
 @keyframes scrollline{0%{transform:translateX(-100%)}50%{transform:translateX(0)}100%{transform:translateX(100%)}}
 
-/* ---------- Ticker ---------- */
-.ticker{position:relative;z-index:4;overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:20px 0;
-  -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
-.ticker-track{display:flex;width:max-content}
-.ticker-group{display:flex;flex:0 0 auto;animation:ticker 46s linear infinite;will-change:transform}
-.ticker:hover .ticker-group{animation-play-state:paused}
-.ticker-track span{display:inline-flex;align-items:center;gap:36px;padding-right:36px;font-size:11px;font-weight:500;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
-.ticker-track span::after{content:'';width:5px;height:5px;background:var(--silver);transform:rotate(45deg);opacity:.8}
-@keyframes ticker{to{transform:translateX(-100%)}}
 
 /* ---------- Positioning ---------- */
 .positioning .lead{margin:36px auto 0}
@@ -255,52 +271,83 @@ em{font-style:italic;color:var(--silver-hi)}
 .callout-tag{font-size:clamp(1.25rem,1.7vw,1.6rem);font-weight:600;letter-spacing:-.01em;line-height:1.25;margin-bottom:16px;max-width:24ch}
 .callout-p{color:var(--muted);font-size:15.5px;line-height:1.65;max-width:52ch}
 .callout::after{content:'';position:absolute;left:0;right:0;top:-1px;height:1px;background:var(--silver-hi);transform:scaleX(0);transform-origin:left;transition:transform .9s var(--ease-out)}
-.callout:hover::after{transform:scaleX(1)}
+html.has-cursor .callout:hover::after{transform:scaleX(1)}
 
 /* ---------- Work ---------- */
 .work-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;perspective:1600px}
 .card{display:block;text-decoration:none;color:inherit;transform-style:preserve-3d;will-change:transform}
 .cover{position:relative;aspect-ratio:4/5;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:#0e0e11;transform:translateZ(0)}
 .art{position:absolute;inset:-6% 0;transition:transform 1.3s var(--ease-out);will-change:transform;background-color:#0f0f12}
-.card:hover .art{transform:scale(1.06)}
+html.has-cursor .card:hover .art{transform:scale(1.06)}
 .cover::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,12,0) 55%,rgba(10,10,12,.55));pointer-events:none}
 .cover .shine{position:absolute;inset:0;background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(232,232,236,.12),transparent 60%);opacity:0;transition:opacity .5s;pointer-events:none}
-.card:hover .shine{opacity:1}
+html.has-cursor .card:hover .shine{opacity:1}
 .card-meta{padding:22px 4px 0}
 .tag{display:inline-block;font-size:10.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:7px 11px;border-radius:999px}
 .card-meta h3{font:400 1.7rem/1.1 var(--serif);margin:16px 0 8px;display:flex;align-items:center;gap:10px}
 .card-meta h3 svg{width:14px;height:14px;opacity:0;transform:translate(-6px,6px);transition:opacity .4s,transform .5s var(--ease-out)}
-.card:hover .card-meta h3 svg{opacity:1;transform:translate(0,0)}
+html.has-cursor .card:hover .card-meta h3 svg{opacity:1;transform:translate(0,0)}
 .card-meta p{color:var(--muted);font-size:14.5px}
 
-/* Placeholder cover art — swap the .art div for <img class="art"> when real images exist */
-[data-art="1"] .art{background:
-  radial-gradient(circle at 50% 46%,transparent 27%,rgba(232,232,236,.95) 27.4%,rgba(232,232,236,.95) 29.2%,transparent 29.6%),
-  radial-gradient(circle at 50% 46%,rgba(232,232,236,.22),transparent 46%),
-  radial-gradient(circle at 50% 17.5%,rgba(255,255,255,1) 0 1.4%,transparent 1.6%),
-  linear-gradient(160deg,#1c1c20,#0b0b0d)}
-[data-art="2"] .art{background:
-  radial-gradient(circle at 70% 64%,transparent 19%,rgba(232,232,236,.7) 19.4%,rgba(232,232,236,.7) 20.4%,transparent 20.8%),
-  radial-gradient(circle at 70% 64%,rgba(232,232,236,.14),transparent 30%),
-  repeating-linear-gradient(180deg,transparent 0 34px,rgba(232,232,236,.16) 34px 35px),
-  linear-gradient(200deg,#18181c,#0a0a0c)}
-[data-art="3"] .art{background:
-  linear-gradient(90deg,rgba(232,232,236,.05),rgba(232,232,236,.5) 50%,rgba(232,232,236,.05)) 50% 66% / 30% 52% no-repeat,
-  linear-gradient(90deg,rgba(232,232,236,.6),rgba(232,232,236,.9)) 50% 32% / 12% 9% no-repeat,
-  radial-gradient(circle at 50% 70%,rgba(232,232,236,.16),transparent 45%),
-  linear-gradient(180deg,#131316,#0b0b0d)}
-[data-art="4"] .art{background:
-  linear-gradient(135deg,transparent 49.6%,rgba(232,232,236,.75) 49.8%,rgba(232,232,236,.75) 50.2%,transparent 50.4%),
-  radial-gradient(circle,rgba(232,232,236,.55) 1px,transparent 1.6px) 0 0 / 28px 28px,
-  linear-gradient(160deg,#151518,#0a0a0c)}
-[data-art="5"] .art{background:
-  radial-gradient(circle at 34% 40%,transparent 23%,rgba(232,232,236,.85) 23.4%,rgba(232,232,236,.85) 24.6%,transparent 25%),
-  repeating-linear-gradient(115deg,transparent 0 46px,rgba(232,232,236,.14) 46px 47px),
-  linear-gradient(180deg,#111114,#0d0d0f)}
-[data-art="6"] .art{background:
-  repeating-radial-gradient(circle at 50% 112%,transparent 0 44px,rgba(232,232,236,.22) 44px 45px),
-  radial-gradient(circle at 50% 112%,rgba(232,232,236,.2),transparent 40%),
-  linear-gradient(180deg,#19191d,#0a0a0c)}
+/* Auto-fit so the grid stays right whether there are two concepts or six. */
+.work-grid{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.work-grid .cover{aspect-ratio:16/10}
+
+
+/* Live preview. The frame is laid out at a desktop width and scaled down by --pv
+   (set in app.js from the cover width) so the page inside renders its desktop
+   layout rather than its mobile one. Never interactive — the card owns the click. */
+/* Transition is added by app.js after the first fit, so the initial scale lands
+   without animating up from the fallback value. */
+/* Screenshot layer: sits over the gradient, under the live frame. It is what phones
+   show (frames are desktop-only) and it fills the cover instantly on desktop while the
+   frame loads behind it. Stays hidden until a file actually loads — see app.js. */
+/* Starts transparent rather than display:none — a lazy image with no box never trips
+   its own intersection observer, so it would sit there never loading and never failing. */
+.shot{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:50% 0;opacity:0;
+  transition:opacity .7s var(--ease-out),transform 1s var(--ease-out)
+}
+.shot.is-on{opacity:1}
+.shot.is-off{display:none}
+html.has-cursor .card:hover .shot{transform:scale(1.07)}
+.preview[hidden]{display:none}
+.preview.is-fitted{transition:transform 1s var(--ease-out)}
+.preview{
+  position:absolute;left:50%;top:50%;width:1440px;height:900px;border:0;
+  transform-origin:50% 50%;transform:translate(-50%,-50%) scale(var(--pv,.45));
+  pointer-events:none;background:#0e0e11;color-scheme:light
+}
+html.has-cursor .card:hover .preview{transform:translate(-50%,-50%) scale(calc(var(--pv,.45) * 1.07))}
+
+/* Placeholder cover art, keyed to the project. Swap the .art div for
+   <img class="art" src="..."> as soon as a real screenshot exists. */
+[data-art="moka"] .art{background:
+  radial-gradient(circle at 76% 20%,rgba(255,232,170,.5),transparent 44%),
+  radial-gradient(circle at 20% 82%,rgba(214,74,52,.55),transparent 58%),
+  linear-gradient(155deg,#e0913c 0%,#d2653c 46%,#b8402c 100%)}
+[data-art="akiri"] .art{background:
+  radial-gradient(circle at 30% 18%,rgba(255,255,255,.55),transparent 46%),
+  radial-gradient(circle at 74% 76%,rgba(126,178,178,.45),transparent 55%),
+  linear-gradient(165deg,#cfdedb 0%,#9db9bb 48%,#6f8f95 100%)}
+
+/* ---------- Client work: empty state ---------- */
+/* Dashed rather than solid so it reads as a slot waiting to be filled, not a panel. */
+.empty-state{
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  padding:clamp(56px,9vw,96px) clamp(24px,5vw,64px);
+  border:1px dashed var(--line-strong);border-radius:var(--radius);
+  background:rgba(242,242,240,.015)
+}
+/* Left as typed — a sideways emoticon, not turned upright. */
+.empty-face{
+  display:block;font-family:var(--serif);font-size:clamp(56px,9vw,96px);line-height:1;
+  color:var(--silver);opacity:.5;letter-spacing:-.02em;
+  margin-bottom:clamp(28px,4vw,44px)
+}
+.empty-state h3{margin:0 0 14px;font-family:var(--serif);font-weight:400;font-size:clamp(26px,3.4vw,38px);letter-spacing:-.01em}
+.empty-state p{margin:0 auto 34px;max-width:52ch;color:var(--muted);font-size:15px;line-height:1.7}
 
 /* ---------- Process ---------- */
 .steps{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:40px;padding-top:44px}
@@ -311,7 +358,10 @@ em{font-style:italic;color:var(--silver-hi)}
 .step p{color:var(--muted);font-size:15px;line-height:1.65;max-width:30ch}
 
 /* ---------- Pricing ---------- */
-.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch}
+.tiers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:stretch;max-width:948px;margin-inline:auto}
+/* Same muted register as the section intro, set italic and centred under the pair. */
+.tiers-note{max-width:60ch;margin:30px auto 0;text-align:center;color:var(--muted);font-size:14px;line-height:1.65;font-style:italic}
+.tiers-cta{display:flex;justify-content:center;margin-top:26px}
 .tier{
   --mx:50%;--my:50%;
   position:relative;display:flex;flex-direction:column;gap:26px;padding:42px 36px;border-radius:24px;
@@ -329,16 +379,12 @@ em{font-style:italic;color:var(--silver-hi)}
   background:radial-gradient(420px circle at var(--mx) var(--my),rgba(232,232,236,.07),transparent 60%);
   opacity:0;transition:opacity .5s;
 }
-.tier:hover::before,.tier:hover::after{opacity:1}
-.tier:hover{transform:translateY(-6px)}
-.tier.featured{border-color:rgba(201,201,207,.4);background:rgba(20,20,23,.92);transform:translateY(-12px)}
-.tier.featured:hover{transform:translateY(-18px)}
-.badge{position:absolute;top:24px;right:24px;font-size:9.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;padding:8px 12px;border-radius:999px;background:var(--fg);color:var(--bg)}
+html.has-cursor .tier:hover::before,html.has-cursor .tier:hover::after{opacity:1}
+html.has-cursor .tier:hover{transform:translateY(-6px)}
 .tier h3{font:400 2rem/1 var(--serif);margin-bottom:12px}
 .tier-for{color:var(--muted);font-size:14.5px;line-height:1.55;max-width:30ch;min-height:3.1em}
 .price{display:flex;align-items:baseline;flex-wrap:wrap;gap:10px;font:400 3.1rem/1 var(--serif);letter-spacing:-.01em}
 .price .cur{font:500 11.5px var(--sans);letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
-.price .usd{flex-basis:100%;font:400 14px var(--sans);color:var(--muted);margin-top:4px}
 .feats{display:grid;gap:12px;padding-top:24px;border-top:1px solid var(--line)}
 .feats li{position:relative;padding-left:22px;font-size:14.5px;line-height:1.5;color:var(--soft)}
 .feats li::before{content:'';position:absolute;left:0;top:.72em;width:10px;height:1px;background:var(--silver)}
@@ -353,33 +399,182 @@ em{font-style:italic;color:var(--silver-hi)}
 .addons li i{flex:1;border-bottom:1px dotted rgba(242,242,240,.22);transform:translateY(-.3em)}
 .addons li b{font-weight:500;color:var(--fg);white-space:nowrap}
 .addons li b small{color:var(--muted);font-weight:400;font-size:12.5px;margin-left:4px}
+/* Subscriptions reuse the add-ons frame; each row is a leader line plus a note. */
+.subs ul{columns:1}
+.subs li{display:block;padding:16px 0}
+.subs .sub-row{display:flex;align-items:baseline;gap:12px}
+.subs .sub-note{display:block;margin-top:8px;max-width:52ch;color:var(--muted);font-size:13px;line-height:1.6}
 
 /* ---------- Final CTA ---------- */
-.final{padding-top:clamp(120px,22vh,260px);padding-bottom:clamp(120px,22vh,240px)}
+/* The run-out below the CTA is deliberately long. The footer's shape trigger fires
+   when this section's bottom edge reaches 55% of the viewport, so anything shorter
+   than 55vh leaves the copy still on screen while the wordmark morphs across it on
+   the way back up. 62vh keeps the text clear with room to spare at any height. */
+.final{padding-top:clamp(120px,22vh,260px);padding-bottom:max(300px,62vh)}
 .final .display{max-width:16ch;margin:0 auto 32px}
 .final .lead{margin-bottom:48px}
 .contact-line{margin-top:40px;font-size:14px;color:var(--muted);display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
 .ul{text-decoration:none;position:relative;color:var(--soft);transition:color .3s}
 .ul::after{content:'';position:absolute;left:0;right:0;bottom:-3px;height:1px;background:currentColor;transform:scaleX(1);transform-origin:left;transition:transform .5s var(--ease-out)}
-.ul:hover{color:var(--fg)}
-.ul:hover::after{transform:scaleX(0);transform-origin:right}
+html.has-cursor .ul:hover{color:var(--fg)}
+html.has-cursor .ul:hover::after{transform:scaleX(0);transform-origin:right}
 
 /* ---------- Footer ---------- */
-.footer{border-top:1px solid var(--line);padding:96px var(--gutter) 40px;background:linear-gradient(180deg,rgba(10,10,12,0),rgba(10,10,12,.6))}
-.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px;margin-bottom:80px}
-.footer-brand .wordmark{--logo-size:46px}
-.footer-brand p{color:var(--muted);max-width:36ch;margin-top:22px;font-size:14.5px;line-height:1.6}
+/* Full-height footer: the particle wordmark occupies the empty upper half, the
+   links sit on the floor of the viewport. */
+.footer{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;/* Bottom padding clears the fixed player + HUD that sit in this corner (see .player/.hud). */padding:clamp(140px,42vh,460px) var(--gutter) 104px;background:linear-gradient(180deg,rgba(10,10,12,0),rgba(10,10,12,.6))}
+/* Two parts: the address as a display heading, then the link columns beside it.
+   Heights here are deliberately restrained — the footer must stay within 100vh or
+   its top edge lifts and takes the anchored particle wordmark with it. */
+.footer-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:clamp(40px,5vw,88px);align-items:start;margin-bottom:72px}
+.footer-lead{min-width:0}
+/* Optical top alignment with the SITE/CONTACT labels: their caps start 3.4px into a
+   fixed 10.5px line box, the address's start .131em into its own scaling one. Shift by
+   the difference so both halves of the row begin on the same line at every clamp size. */
+
+.footer-mail{
+  display:inline-block;max-width:100%;
+  font:400 clamp(1.6rem,3.2vw,2.9rem)/1.08 var(--serif);font-style:italic;
+  margin-top:calc(3.4px - .131em);
+  letter-spacing:-.012em;color:var(--fg);text-decoration:none;word-break:break-word;
+  position:relative;transition:color .3s;
+}
+.footer-mail::after{content:'';position:absolute;left:0;right:0;bottom:.06em;height:1px;background:currentColor;opacity:.32;transform:scaleX(1);transform-origin:left;transition:transform .55s var(--ease-out),opacity .3s}
+html.has-cursor .footer-mail:hover{color:var(--silver-hi)}
+html.has-cursor .footer-mail:hover::after{transform:scaleX(0);transform-origin:right}
+.footer-note{color:var(--muted);max-width:34ch;margin:18px 0 0;font-size:14px;line-height:1.6}
+.footer-links{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,56px)}
 .footer-col h4{font-size:10.5px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin-bottom:22px}
 .footer-col a{display:block;width:max-content;text-decoration:none;color:var(--soft);font-size:15px;margin-bottom:12px;transition:color .3s,transform .5s var(--ease-out)}
-.footer-col a:hover{color:var(--fg);transform:translateX(6px)}
+html.has-cursor .footer-col a:hover{color:var(--fg);transform:translateX(6px)}
 .footer-bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-top:28px;border-top:1px solid var(--line);font-size:12px;letter-spacing:.06em;color:var(--muted)}
+
+/* ---------- Calculator (calculate.html) ---------- */
+/* Controls borrow the tier card's surface, radius and border so the page reads
+   as the same system; only the interaction states are new. */
+.calc-hero{min-height:auto;padding-top:clamp(150px,26vh,260px);padding-bottom:clamp(80px,12vh,140px)}
+.calc-grid{display:grid;grid-template-columns:1.55fr .95fr;gap:clamp(32px,4vw,64px);align-items:start}
+.calc-main{display:grid;gap:clamp(40px,5vh,64px);min-width:0}
+.calc-block{border:0;padding:0;margin:0;min-width:0}
+.calc-legend{
+  display:flex;align-items:center;gap:12px;padding:0;margin-bottom:26px;
+  font-size:11px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);
+}
+.calc-legend .idx{font-family:var(--serif);font-style:italic;font-size:15px;letter-spacing:0;color:var(--silver);text-transform:none}
+.calc-legend .idx::after{content:'';display:inline-block;width:28px;height:1px;background:var(--line-strong);margin-left:14px;vertical-align:middle}
+
+/* Card-style single-select */
+.pick-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pick-grid-3{grid-template-columns:repeat(3,1fr)}
+.pick{position:relative;display:block;cursor:pointer}
+.pick input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.pick-body{
+  display:block;height:100%;padding:22px 22px 24px;border-radius:18px;
+  border:1px solid var(--line);background:rgba(13,13,15,.74);
+  transition:border-color .35s,background-color .35s,transform .5s var(--ease-out);
+}
+.pick-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
+.pick-name{font:400 1.35rem/1 var(--serif);color:var(--fg)}
+.pick-price{font-size:12.5px;letter-spacing:.04em;color:var(--muted);white-space:nowrap}
+.pick-desc{display:block;font-size:13.5px;line-height:1.55;color:var(--muted)}
+html.has-cursor .pick:hover .pick-body{border-color:var(--line-strong);transform:translateY(-3px)}
+.pick.is-picked .pick-body{border-color:rgba(201,201,207,.55);background:rgba(20,20,23,.94)}
+.pick.is-picked .pick-price{color:var(--soft)}
+.pick input:focus-visible + .pick-body{outline:1px solid var(--silver-hi);outline-offset:4px}
+
+/* Multi-select rows */
+.opt-list{display:grid;gap:2px}
+.opt{
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  padding:15px 18px;border-radius:14px;border:1px solid transparent;
+  transition:border-color .35s,background-color .35s;
+}
+.opt.is-on{border-color:var(--line);background:rgba(20,20,23,.7)}
+html.has-cursor .opt:hover{background:rgba(20,20,23,.5)}
+.opt-main{display:flex;align-items:center;gap:14px;flex:1;min-width:0;cursor:pointer}
+.opt-main input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.opt-box{
+  flex:0 0 auto;width:17px;height:17px;border-radius:5px;border:1px solid var(--line-strong);
+  position:relative;transition:background-color .3s,border-color .3s;
+}
+.opt-box::after{
+  content:'';position:absolute;left:5px;top:1.5px;width:4px;height:9px;
+  border:solid var(--bg);border-width:0 1.6px 1.6px 0;transform:rotate(42deg) scale(.5);
+  opacity:0;transition:opacity .2s,transform .3s var(--ease-out);
+}
+.opt.is-on .opt-box{background:var(--silver-hi);border-color:var(--silver-hi)}
+.opt.is-on .opt-box::after{opacity:1;transform:rotate(42deg) scale(1)}
+.opt-main input:focus-visible + .opt-box{outline:1px solid var(--silver-hi);outline-offset:3px}
+.opt-name{font-size:14.5px;line-height:1.45;color:var(--soft)}
+.opt.is-on .opt-name{color:var(--fg)}
+.opt-price{font-size:13.5px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.opt-price small{font-size:12px;margin-left:5px;opacity:.8}
+
+.stepper{display:inline-flex;align-items:center;gap:2px;transition:opacity .3s}
+.stepper.is-off{opacity:.3}
+.step-btn{
+  width:26px;height:26px;display:grid;place-items:center;cursor:pointer;
+  border:1px solid var(--line-strong);background:transparent;color:var(--soft);
+  border-radius:8px;font:400 14px/1 var(--sans);transition:border-color .3s,color .3s;
+}
+.step-btn:disabled{cursor:default}
+html.has-cursor .step-btn:not(:disabled):hover{border-color:var(--silver-hi);color:var(--fg)}
+.step-val{min-width:22px;text-align:center;font-size:13.5px;color:var(--fg);font-variant-numeric:tabular-nums}
+
+/* Sticky summary */
+.calc-summary{position:sticky;top:clamp(96px,14vh,150px);min-width:0}
+.sum-card{
+  padding:30px 28px;border-radius:22px;border:1px solid rgba(201,201,207,.4);
+  background:rgba(20,20,23,.94);backdrop-filter:blur(6px);
+}
+.sum-label{font-size:10.5px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.sum-total{font:400 clamp(1.9rem,2.6vw,2.5rem)/1.05 var(--serif);margin-top:12px;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.sum-month{margin-top:8px;font-size:13.5px;color:var(--silver);font-variant-numeric:tabular-nums}
+.sum-lines{display:grid;gap:9px;margin-top:22px;padding-top:20px;border-top:1px solid var(--line)}
+.sum-lines li{display:flex;align-items:baseline;justify-content:space-between;gap:14px;font-size:13px;color:var(--muted)}
+.sum-lines li b{font-weight:500;color:var(--soft);white-space:nowrap;font-variant-numeric:tabular-nums}
+.sum-lines li.is-sub{padding-top:9px;border-top:1px dotted rgba(242,242,240,.16)}
+.sum-note{margin-top:20px;font-size:12px;line-height:1.6;color:var(--muted);opacity:.85}
+.sum-cta{margin-top:22px;width:100%;justify-content:center}
+
+@media (max-width:980px){
+  .calc-grid{grid-template-columns:1fr}
+  .pick-grid-3{grid-template-columns:1fr}
+  /* Summary docks to the bottom of the viewport once it can no longer sit beside
+     the controls. The breakdown is dropped here — the total and the CTA are what
+     matter at a glance, and the full list is still above in the flow. */
+  .calc-summary{
+    position:fixed;left:0;right:0;bottom:0;top:auto;z-index:45;padding:12px var(--gutter) 14px;
+    background:linear-gradient(180deg,rgba(10,10,12,0),rgba(10,10,12,.92) 38%);
+    transition:transform .5s var(--ease-out),opacity .4s;
+  }
+  /* Slides away once the controls are behind you, so it never covers the footer. */
+  .calc-summary.is-away{transform:translateY(130%);opacity:0;pointer-events:none}
+  .sum-card{display:grid;grid-template-columns:1fr auto;align-items:center;gap:2px 14px;padding:12px 16px;border-radius:16px}
+  .sum-label,.sum-lines,.sum-note{display:none}
+  .sum-total{grid-column:1;grid-row:1;margin-top:0;font-size:1.15rem;white-space:nowrap}
+  .sum-month{grid-column:1;grid-row:2;margin-top:0;font-size:11.5px;white-space:nowrap}
+  .sum-cta{grid-column:2;grid-row:1 / span 2;margin-top:0;width:auto;align-self:center}
+  .calc{padding-bottom:190px}
+  /* Clear the docked bar so the corner controls stay reachable. Scoped to the
+     calculator page and by class, so it outranks the plain .player/.hud rules. */
+  .page-calc .player{bottom:154px}
+  .page-calc .hud{bottom:128px}
+}
+@media (max-width:560px){
+  .pick-grid{grid-template-columns:1fr}
+  .opt{gap:10px}
+  .opt-price{width:100%;padding-left:31px}
+  .sum-card{padding:11px 13px;gap:2px 10px}
+  .sum-total{font-size:1rem}
+  .sum-cta{padding-left:18px;padding-right:18px}
+  .sum-cta .btn-label{font-size:11.5px}
+}
 
 /* ---------- Responsive ---------- */
 @media (max-width:1100px){
   .work-grid{grid-template-columns:repeat(2,1fr)}
   .tiers{grid-template-columns:1fr;max-width:640px;margin:0 auto}
-  .tier.featured{transform:none}
-  .tier.featured:hover{transform:translateY(-6px)}
   .steps{grid-template-columns:repeat(2,1fr)}
   .addons{grid-template-columns:1fr}
 }
@@ -387,14 +582,12 @@ em{font-style:italic;color:var(--silver-hi)}
   .split{grid-template-columns:1fr;gap:56px}
   .sticky{position:static}
   .section-head{grid-template-columns:1fr;gap:20px}
-  .footer-grid{grid-template-columns:1fr 1fr}
-  .footer-brand{grid-column:1 / -1}
+  .footer-grid{grid-template-columns:1fr;gap:48px;align-items:start}
   .pillars{grid-template-columns:1fr;gap:20px}
 }
 @media (max-width:640px){
   .nav{padding:22px var(--gutter)}
   .nav .wordmark{--logo-size:16px}
-  .footer-brand .wordmark{--logo-size:38px}
   .nav-links{gap:22px}
   .nav-links a{font-size:10.5px;letter-spacing:.16em}
   .hero{padding-top:120px;padding-bottom:110px}
@@ -403,17 +596,26 @@ em{font-style:italic;color:var(--silver-hi)}
   .steps{grid-template-columns:1fr;gap:36px}
   .addons ul{columns:1}
   .hud{display:none}
+  /* HUD is gone here, so the player drops into the corner itself */
+  .player{right:22px;bottom:24px}
+  .player-track{display:none}
   .frame{inset:12px}
   .frame span{width:16px;height:16px}
   .callout{padding-left:48px}
   .btn{padding:17px 26px}
   .btn-lg{padding:20px 30px}
-  .footer-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr;margin-bottom:36px}
+  .footer-links{gap:24px}
+  /* Phone headroom is tight: the footer has to stay inside 100vh or its top edge
+     lifts and drags the anchored wordmark up with it. */
+  .footer-mail{font-size:clamp(1.3rem,5.6vw,1.75rem)}
+  .footer-note{margin-top:14px;font-size:13.5px}
   .footer-bottom{flex-direction:column}
 }
 
 @media (prefers-reduced-motion:reduce){
-  .grain,.ticker-group,.scroll-hint i::after,.eyebrow .dot{animation:none}
+  .grain,.scroll-hint i::after,.eyebrow .dot,.player.is-playing .player-eq i{animation:none}
+  .player.is-playing .player-eq i{height:9px}
   .cursor-trail{display:none}
   .tw-c{visibility:visible}
   *{transition-duration:.01ms!important}
@@ -466,7 +668,18 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
     animation:none;background-image:none;-webkit-text-fill-color:currentColor
   }
 }
-</style>
+
+/* Phone: the galaxy sits directly behind the hero copy and there is no clear zone to
+   move it to, so lift the type off it with a soft scrim. Wide and fully transparent at
+   the edges, so it reads as depth rather than a dark panel. Breakpoint matches the
+   mobile() check in app.js that dims the particles. */
+@media (max-width:760px){
+  .hero-inner{position:relative}
+  .hero-inner::before{
+    content:"";position:absolute;inset:-8vh -12vw;z-index:-1;pointer-events:none;
+    background:radial-gradient(115% 72% at 42% 46%,rgba(10,10,12,.92) 0%,rgba(10,10,12,.82) 38%,rgba(10,10,12,.5) 62%,rgba(10,10,12,0) 82%)
+  }
+}
 </head>
 <body>
 
@@ -483,6 +696,14 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
 <div class="grain" aria-hidden="true"></div>
 <div class="frame" aria-hidden="true"><span class="tl"></span><span class="tr"></span><span class="bl"></span><span class="br"></span></div>
 <div class="hud" aria-hidden="true"><span class="hud-loc">Maldives</span><span class="hud-time" id="clock">--:--</span></div>
+<div class="player">
+  <button class="player-btn" type="button" data-cursor aria-pressed="false" aria-label="Play Aphex Twin — #3">
+    <span class="player-eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+    <span class="player-state">Play</span>
+    <span class="player-track">Aphex Twin — #3</span>
+  </button>
+  <audio class="player-audio" src="assets/aphex-twin-3.mp3" preload="none" loop></audio>
+</div>
 <div class="cursor-trail" aria-hidden="true"></div>
 <div class="cursor cursor-dot" aria-hidden="true"></div>
 <div class="cursor cursor-ring" aria-hidden="true"><span></span></div>
@@ -500,7 +721,7 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
 <main id="top">
 
   <!-- Hero -->
-  <section class="hero section" data-shape="0" data-rotx="1.05" data-x="1.15" data-y="0.05" data-scale="1" data-opacity="1" data-spin="0.12">
+  <section class="hero section" data-shape="0" data-rotx="1.05" data-x="1.15" data-y="0.05" data-scale="1" data-opacity="1" data-spin="0.12" data-m-opacity="0.85">
     <div class="hero-inner">
       <p class="eyebrow hero-eyebrow"><span class="dot"></span>Taking new projects — first mockup free</p>
       <h1 class="display" data-typewriter>We build websites that turn visitors into <em>customers.</em></h1>
@@ -516,18 +737,8 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
     <div class="scroll-hint" aria-hidden="true"><span>Scroll</span><i></i></div>
   </section>
 
-  <!-- Ticker -->
-  <div class="ticker" aria-hidden="true">
-    <div class="ticker-track">
-      <div class="ticker-group"><span>Jewelry brands</span><span>Restaurants</span><span>Cafés</span><span>Retail</span><span>Design agencies</span><span>Academies</span><span>Hospitality</span><span>Salons</span><span>Clinics</span></div>
-      <div class="ticker-group"><span>Jewelry brands</span><span>Restaurants</span><span>Cafés</span><span>Retail</span><span>Design agencies</span><span>Academies</span><span>Hospitality</span><span>Salons</span><span>Clinics</span></div>
-      <div class="ticker-group"><span>Jewelry brands</span><span>Restaurants</span><span>Cafés</span><span>Retail</span><span>Design agencies</span><span>Academies</span><span>Hospitality</span><span>Salons</span><span>Clinics</span></div>
-      <div class="ticker-group"><span>Jewelry brands</span><span>Restaurants</span><span>Cafés</span><span>Retail</span><span>Design agencies</span><span>Academies</span><span>Hospitality</span><span>Salons</span><span>Clinics</span></div>
-    </div>
-  </div>
-
   <!-- Positioning -->
-  <section id="studio" class="section positioning" data-shape="1" data-rotx="0.35" data-x="0" data-y="0" data-scale="1.35" data-opacity="0.42" data-spin="0.08">
+  <section id="studio" class="section positioning" data-shape="1" data-rotx="0.35" data-x="0" data-y="0" data-scale="1.35" data-opacity="0.5" data-spin="0.08" data-disperse="1">
     <div class="container narrow center">
       <p class="eyebrow" data-reveal><span class="idx">01</span>The studio</p>
       <h2 class="h2 statement" data-split>Tailored digital solutions built around your <em>business goals.</em></h2>
@@ -541,7 +752,7 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
   </section>
 
   <!-- Services -->
-  <section id="services" class="section services" data-shape="2" data-rotx="0.5" data-x="-1.25" data-y="-0.1" data-scale="0.85" data-opacity="0.9" data-spin="0.18">
+  <section id="services" class="section services" data-shape="2" data-rotx="0.5" data-x="-1.25" data-y="-0.1" data-scale="0.85" data-opacity="0.55" data-spin="0.18" data-disperse="1">
     <div class="container split">
       <div class="split-left">
         <div class="sticky">
@@ -573,52 +784,72 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
     </div>
   </section>
 
-  <!-- Work -->
-  <section id="work" class="section work" data-shape="2" data-rotx="0.5" data-x="0" data-y="0.3" data-scale="1.7" data-opacity="0.14" data-spin="0.05">
+  <!-- Concept work — self-initiated mockups, clearly labelled as such -->
+  <section id="work" class="section work" data-shape="2" data-rotx="0.5" data-x="0" data-y="0.3" data-scale="1.7" data-opacity="0.45" data-spin="0.05" data-disperse="1">
     <div class="container">
       <div class="section-head">
         <div>
-          <p class="eyebrow" data-reveal><span class="idx">03</span>Selected work</p>
-          <h2 class="h2" data-split>Featured <em>Projects</em></h2>
+          <p class="eyebrow" data-reveal><span class="idx">03</span>Concept work</p>
+          <h2 class="h2" data-split>Concept <em>builds.</em></h2>
         </div>
-        <p class="lead" data-reveal>A selection of websites built for growing businesses and brands.</p>
+        <p class="lead" data-reveal>Real places in the Maldives, reimagined on our own initiative to show how we work.</p>
       </div>
+
       <div class="work-grid" data-reveal-group>
-        <!-- To use real project images: replace <div class="art"></div> with <img class="art" src="..." alt=""> and drop the data-art attribute. -->
-        <a class="card" href="#contact" data-art="1" data-cursor="View" data-reveal>
-          <div class="cover"><div class="art"></div><div class="shine"></div></div>
-          <div class="card-meta"><span class="tag">E-commerce</span><h3>Aurelle Fine Jewelry <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>A jewel-box storefront with slow, gleaming product reveals.</p></div>
+        <!-- Each cover is the live concept in a frame, rendered at desktop width and scaled to fit,
+             so it can never go stale. The gradient .art behind it is the fallback if a frame is
+             blocked or offline. -->
+        <a class="card" href="https://cafe-moka-mu.vercel.app/" target="_blank" rel="noopener" data-art="moka" data-cursor="Visit" data-reveal>
+          <div class="cover">
+            <div class="art"></div>
+            <img class="shot" data-shot="cafe-moka" alt="" loading="lazy" decoding="async">
+            <iframe class="preview" data-src="https://cafe-moka-mu.vercel.app/" title="Live preview of the Café Moka concept site" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true" sandbox="allow-scripts allow-same-origin"></iframe>
+            <div class="shine"></div>
+          </div>
+          <div class="card-meta"><span class="tag">Concept · Café</span><h3>Café Moka <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>Menu, hours and directions for a late-night coffee bar off the north harbour.</p></div>
         </a>
-        <a class="card" href="#contact" data-art="2" data-cursor="View" data-reveal>
-          <div class="cover"><div class="art"></div><div class="shine"></div></div>
-          <div class="card-meta"><span class="tag">Brand site</span><h3>Saltwind Restaurant <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>Menu, reservations, and the mood of the room before you arrive.</p></div>
+        <a class="card" href="https://akiristudiosite.vercel.app/" target="_blank" rel="noopener" data-art="akiri" data-cursor="Visit" data-reveal>
+          <div class="cover">
+            <div class="art"></div>
+            <img class="shot" data-shot="akiri" alt="" loading="lazy" decoding="async">
+            <iframe class="preview" data-src="https://akiristudiosite.vercel.app/" title="Live preview of the Akiri Studio concept site" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true" sandbox="allow-scripts allow-same-origin"></iframe>
+            <div class="shine"></div>
+          </div>
+          <div class="card-meta"><span class="tag">Concept · Jewellery</span><h3>Akiri Studio <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>A quiet editorial storefront for a Maldivian jewellery label and its first collection.</p></div>
         </a>
-        <a class="card" href="#contact" data-art="3" data-cursor="View" data-reveal>
-          <div class="cover"><div class="art"></div><div class="shine"></div></div>
-          <div class="card-meta"><span class="tag">E-commerce</span><h3>Noor Fragrance House <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>Scent notes that unfold one by one as you scroll.</p></div>
-        </a>
-        <a class="card" href="#contact" data-art="4" data-cursor="View" data-reveal>
-          <div class="cover"><div class="art"></div><div class="shine"></div></div>
-          <div class="card-meta"><span class="tag">Agency site</span><h3>Studio Halo <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>A design agency's portfolio built to make their own clients jealous.</p></div>
-        </a>
-        <a class="card" href="#contact" data-art="5" data-cursor="View" data-reveal>
-          <div class="cover"><div class="art"></div><div class="shine"></div></div>
-          <div class="card-meta"><span class="tag">Landing page</span><h3>Tide Football Academy <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>An enrollment-first site for a youth sports academy.</p></div>
-        </a>
-        <a class="card" href="#contact" data-art="6" data-cursor="View" data-reveal>
-          <div class="cover"><div class="art"></div><div class="shine"></div></div>
-          <div class="card-meta"><span class="tag">Brand site</span><h3>Ember &amp; Oat Café <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>Warm, quick, and built to fill tables on a Tuesday.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Client work — deliberately empty until there is something real to put here -->
+  <section id="clients" class="section clients" data-shape="3" data-rotx="0.8" data-x="0" data-y="0.1" data-scale="1.2" data-opacity="0.45" data-spin="0.08" data-disperse="1">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow" data-reveal><span class="idx">04</span>Client work</p>
+          <h2 class="h2" data-split>Real <em>commissions.</em></h2>
+        </div>
+        <p class="lead" data-reveal>Paid work, for paying clients. Kept separate from the concepts above.</p>
+      </div>
+
+      <div class="empty-state" data-reveal>
+        <span class="empty-face" aria-hidden="true">:(</span>
+        <h3>Nothing here yet.</h3>
+        <p>We are new. The first site we are commissioned to build will land right here.</p>
+        <a class="btn btn-primary magnetic" href="mailto:nuitworksmv@gmail.com?subject=I%27d%20like%20to%20be%20your%20first%20client" data-cursor>
+          <span class="btn-label">Be the first</span>
+          <svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
       </div>
     </div>
   </section>
 
   <!-- Process -->
-  <section id="process" class="section process" data-shape="3" data-rotx="1.15" data-x="0" data-y="0.1" data-scale="1.15" data-opacity="0.38" data-spin="0.1">
+  <section id="process" class="section process" data-shape="3" data-rotx="1.15" data-x="0" data-y="0.1" data-scale="1.15" data-opacity="0.5" data-spin="0.1" data-disperse="1">
     <div class="container">
       <div class="section-head">
         <div>
-          <p class="eyebrow" data-reveal><span class="idx">04</span>How it works</p>
+          <p class="eyebrow" data-reveal><span class="idx">05</span>How it works</p>
           <h2 class="h2" data-split>From start to <em>launch.</em></h2>
         </div>
         <p class="lead" data-reveal>A simple, step-by-step process designed to make working together easy.</p>
@@ -634,54 +865,47 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
   </section>
 
   <!-- Pricing -->
-  <section id="pricing" class="section pricing" data-shape="3" data-rotx="1.15" data-x="0" data-y="0.6" data-scale="1.9" data-opacity="0.1" data-spin="0.04">
+  <section id="pricing" class="section pricing" data-shape="3" data-rotx="1.15" data-x="0" data-y="0.6" data-scale="1.9" data-opacity="0.42" data-spin="0.04" data-disperse="1">
     <div class="container">
       <div class="section-head">
         <div>
-          <p class="eyebrow" data-reveal><span class="idx">05</span>Pricing</p>
+          <p class="eyebrow" data-reveal><span class="idx">06</span>Pricing</p>
           <h2 class="h2" data-split>Transparent <em>pricing.</em></h2>
         </div>
-        <p class="lead" data-reveal>Fair rates tailored for local businesses and international clients. All prices listed in Maldivian Rufiyaa (MVR) and USD.</p>
+        <p class="lead" data-reveal>Fair rates tailored for local businesses and international clients. All prices listed in Maldivian Rufiyaa (MVR).</p>
       </div>
 
       <div class="tiers" data-reveal-group>
         <article class="tier" data-reveal>
-          <header><h3>Starter</h3><p class="tier-for">Ideal for small businesses needing a clean, professional online presence.</p></header>
-          <div class="price"><span class="cur">MVR</span>3,500<span class="usd">$200 USD</span></div>
+          <header><h3>Standard</h3><p class="tier-for">For simple brochure/portfolio sites — think Akiri Studio or Blanc Studios-style builds without custom backend logic.</p></header>
+          <div class="price"><span class="cur">MVR</span>5,000+</div>
           <ul class="feats">
-            <li>Single-page site with up to 4 sections</li>
-            <li>Mobile-responsive layout</li>
-            <li>Smooth page animations</li>
-            <li>Contact form or WhatsApp / Instagram integration</li>
+            <li>Up to 3–4 pages (Home, About, Services/Products, Contact)</li>
+            <li>Responsive design, standard animations/transitions</li>
+            <li>Basic contact form</li>
+            <li>No CMS/login system</li>
           </ul>
-          <a class="btn btn-ghost magnetic tier-cta" href="mailto:nuitworksmv@gmail.com?subject=Starter%20%E2%80%94%20free%20mockup" data-cursor><span class="btn-label">Start with a free mockup</span></a>
-        </article>
-
-        <article class="tier featured" data-reveal>
-          <span class="badge">Most popular</span>
-          <header><h3>Signature</h3><p class="tier-for">Ideal for businesses wanting a full multi-section site to showcase their brand.</p></header>
-          <div class="price"><span class="cur">MVR</span>6,500<span class="usd">$375 USD</span></div>
-          <ul class="feats">
-            <li>Multi-section site (up to 8 sections)</li>
-            <li>Unique visual design matching your brand</li>
-            <li>Interactive animations throughout</li>
-            <li>Portfolio, gallery, or product showcase section</li>
-            <li>Basic search engine setup (SEO)</li>
-          </ul>
-          <a class="btn btn-primary magnetic tier-cta" href="mailto:nuitworksmv@gmail.com?subject=Signature%20%E2%80%94%20free%20mockup" data-cursor><span class="btn-label">Start with a free mockup</span><svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <a class="btn btn-ghost magnetic tier-cta" href="mailto:nuitworksmv@gmail.com?subject=Standard%20%E2%80%94%20free%20mockup" data-cursor><span class="btn-label">Start with a free mockup</span></a>
         </article>
 
         <article class="tier" data-reveal>
-          <header><h3>Flagship</h3><p class="tier-for">Ideal for brands looking for a high-impact, feature-rich website.</p></header>
-          <div class="price"><span class="cur">MVR</span>11,000<span class="usd">$650 USD</span></div>
+          <header><h3>Premium</h3><p class="tier-for">For larger or functionally complex sites — think Aina Residency, UBE Academy, or anything needing logic beyond static pages.</p></header>
+          <div class="price"><span class="cur">MVR</span>10,000+</div>
           <ul class="feats">
-            <li class="plus">Everything in Signature, plus:</li>
-            <li>Advanced interactive 3D and scroll effects</li>
-            <li>High-end motion design and smooth page transitions</li>
-            <li>Fast-track build priority timeline</li>
+            <li>Up to 6–8 pages</li>
+            <li>Custom animations/motion graphics integration</li>
+            <li>Forms with logic (multi-step, conditional)</li>
+            <li>Basic post-launch support window</li>
           </ul>
-          <a class="btn btn-ghost magnetic tier-cta" href="mailto:nuitworksmv@gmail.com?subject=Flagship%20%E2%80%94%20free%20mockup" data-cursor><span class="btn-label">Start with a free mockup</span></a>
+          <a class="btn btn-primary magnetic tier-cta" href="mailto:nuitworksmv@gmail.com?subject=Premium%20%E2%80%94%20free%20mockup" data-cursor><span class="btn-label">Start with a free mockup</span><svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </article>
+      </div>
+      <p class="tiers-note" data-reveal>The final price within a tier depends on design complexity and how much custom work (vs. templated structure) it needs.</p>
+      <div class="tiers-cta" data-reveal>
+        <a class="btn btn-ghost magnetic" href="calculate.html" data-cursor>
+          <span class="btn-label">Calculate your website</span>
+          <svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
       </div>
 
       <div class="addons" data-reveal-group>
@@ -690,20 +914,41 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
           <p class="fine">Optional extra services available for any package.</p>
         </div>
         <ul data-reveal>
-          <li><span>Monthly maintenance &amp; updates</span><i></i><b>MVR 500/mo<small>/ $30/mo</small></b></li>
-          <li><span>Extra page or section</span><i></i><b>MVR 700<small>/ $40 each</small></b></li>
-          <li><span>Social media content package</span><i></i><b>MVR 1,200<small>/ $70</small></b></li>
-          <li><span>E-commerce setup</span><i></i><b>from MVR 2,500<small>/ $150</small></b></li>
-          <li><span>Hosting setup</span><i></i><b>Priced based on<small>domain &amp; traffic</small></b></li>
+          <li><span>Extra page (beyond tier limit)</span><i></i><b>+500–1,000</b></li>
+          <li><span>E-commerce/shop functionality</span><i></i><b>+2,000–4,000</b></li>
+          <li><span>Booking/reservation system</span><i></i><b>+1,500–3,000</b></li>
+          <li><span>Password-protected/member area</span><i></i><b>+1,500–2,500</b></li>
+          <li><span>Admin dashboard / CMS-style editing</span><i></i><b>+2,000–4,000</b></li>
+          <li><span>Multi-language support</span><i></i><b>+1,000–2,000<small>per language</small></b></li>
+          <li><span>Social media feed integration</span><i></i><b>+300–500</b></li>
+          <li><span>Basic SEO setup</span><i></i><b>+500–1,000</b></li>
+          <li><span>Rush delivery (under 5 days)</span><i></i><b>+20–30%<small>of total</small></b></li>
+        </ul>
+      </div>
+
+      <div class="addons subs" data-reveal-group>
+        <div data-reveal>
+          <h3 class="addons-h">Subscriptions</h3>
+          <p class="fine">Ongoing maintenance plans, billed monthly.</p>
+        </div>
+        <ul data-reveal>
+          <li data-reveal>
+            <span class="sub-row"><span>Hosting Plan</span><i></i><b>MVR 750<small>/month</small></b></span>
+            <small class="sub-note">Website hosting + bi-weekly check-ups to confirm everything is running well.</small>
+          </li>
+          <li data-reveal>
+            <span class="sub-row"><span>Plus Plan</span><i></i><b>MVR 1,000<small>/month</small></b></span>
+            <small class="sub-note">Everything in the Hosting Plan + monthly edits to the website at the customer’s desire.</small>
+          </li>
         </ul>
       </div>
     </div>
   </section>
 
   <!-- Final CTA -->
-  <section id="contact" class="section final center" data-shape="4" data-rotx="0.12" data-x="0" data-y="-0.35" data-scale="1.05" data-opacity="1" data-spin="0.28">
+  <section id="contact" class="section final center" data-shape="4" data-rotx="0.12" data-x="0" data-y="-0.35" data-scale="1.05" data-opacity="0.5" data-spin="0.28" data-disperse="1">
     <div class="container narrow">
-      <p class="eyebrow" data-reveal><span class="idx">06</span>Get in touch</p>
+      <p class="eyebrow" data-reveal><span class="idx">07</span>Get in touch</p>
       <h2 class="display" data-typewriter>Get your initial design mockup for <em>free.</em></h2>
       <p class="lead" data-reveal>Tell us about your business goals and we will create an initial homepage concept before you commit to anything. If you like the direction, we move forward. If not, there is no obligation.</p>
       <div class="cta-row" data-reveal>
@@ -723,23 +968,25 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
 </main>
 
 <!-- Footer -->
-<footer class="footer" data-shape="4" data-rotx="0.12" data-x="0" data-y="-0.9" data-scale="1.05" data-opacity="0.55" data-spin="0.28">
+<footer class="footer" data-shape="4" data-rotx="0" data-roty="0" data-x="0" data-y="0.1" data-fit="width" data-scale="0.72" data-opacity="1" data-spin="0">
   <div class="container">
     <div class="footer-grid">
-      <div class="footer-brand">
-        <a href="#top" class="wordmark" data-cursor aria-label="Nuit Works — back to top"><span class="logo">NUIT</span></a>
-        <p>A web design and development studio crafting clean, modern websites built to elevate growing businesses.</p>
+      <div class="footer-lead">
+        <a class="footer-mail" href="mailto:nuitworksmv@gmail.com?subject=Free%20mockup%20for%20my%20business" data-cursor>nuitworksmv@gmail.com</a>
+        <p class="footer-note">Web design and development for growing businesses.</p>
       </div>
-      <div class="footer-col">
-        <h4>Site</h4>
-        <a href="#work" data-cursor>Work</a>
-        <a href="#pricing" data-cursor>Pricing</a>
-        <a href="#contact" data-cursor>Contact</a>
-      </div>
-      <div class="footer-col">
-        <h4>Contact</h4>
-        <a href="mailto:nuitworksmv@gmail.com" data-cursor>nuitworksmv@gmail.com</a>
-        <a href="https://instagram.com/nuit.works" target="_blank" rel="noopener" data-cursor>@nuit.works</a>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Site</h4>
+          <a href="#work" data-cursor>Work</a>
+          <a href="#pricing" data-cursor>Pricing</a>
+          <a href="#contact" data-cursor>Contact</a>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <a href="mailto:nuitworksmv@gmail.com" data-cursor>nuitworksmv@gmail.com</a>
+          <a href="https://instagram.com/nuit.works" target="_blank" rel="noopener" data-cursor>@nuit.works</a>
+        </div>
       </div>
     </div>
     <div class="footer-bottom">
@@ -790,9 +1037,9 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
     return 'low';
   }
   const TIERS = {
-    high: { count: 36000, dust: 1400, dpr: 2 },
-    mid:  { count: 18000, dust: 900,  dpr: 1.5 },
-    low:  { count: 7000,  dust: 420,  dpr: 1.25 }
+    high: { count: 36000, dust: 1400, comets: 6, dpr: 2 },
+    mid:  { count: 18000, dust: 900,  comets: 4, dpr: 1.5 },
+    low:  { count: 7000,  dust: 420,  comets: 3, dpr: 1.25 }
   };
   const tier = detectTier();
   html.classList.add('tier-' + tier);
@@ -825,10 +1072,15 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
      Pointer state (shared by cursor, glow and particles)
      ------------------------------------------------------------------ */
   const pointer = { x: innerWidth / 2, y: innerHeight / 2, seen: false, moved: 0 };
-  window.addEventListener('pointermove', (e) => {
-    pointer.x = e.clientX; pointer.y = e.clientY; pointer.seen = true; pointer.moved = performance.now();
-    if (field) field.setPointer(e.clientX, e.clientY);
-  }, { passive: true });
+  // Touch devices get no pointer tracking at all. A finger dragging the page emits
+  // pointermove just like a mouse, which fed the field's cursor repulsion and pushed
+  // the particles around under the thumb — a cursor effect with no cursor.
+  if (finePointer) {
+    window.addEventListener('pointermove', (e) => {
+      pointer.x = e.clientX; pointer.y = e.clientY; pointer.seen = true; pointer.moved = performance.now();
+      if (field) field.setPointer(e.clientX, e.clientY);
+    }, { passive: true });
+  }
 
   /* ------------------------------------------------------------------
      WebGL particle field
@@ -843,6 +1095,7 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
     'uniform mat4 uProj;',
     'uniform float uTime; uniform float uProgress; uniform float uRotX; uniform float uRotY;',
     'uniform float uScale; uniform float uPointScale; uniform float uCamZ; uniform float uMouseR; uniform float uMouseF;',
+    'uniform float uDisperse; uniform vec2 uScatter;',
     'uniform vec2 uOffset; uniform vec2 uMouse;',
     'varying float vA; varying float vB;',
     'mat3 rotX(float a){ float c = cos(a); float s = sin(a); return mat3(1.0,0.0,0.0, 0.0,c,s, 0.0,-s,c); }',
@@ -867,6 +1120,22 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
     '  pos = rotX(uRotX) * (rotY(uRotY) * pos);',
     '  pos *= uScale;',
     '  pos.xy += uOffset;',
+    // Dispersion: blend the assembled shape out into a wide, camera-facing haze so
+    // sections with copy over them read as background dust instead of a solid object.
+    // Applied after rotate/scale/offset so the dispersed state is identical everywhere,
+    // whatever shape the section happens to be morphing through underneath.
+    '  float dsp = clamp(uDisperse, 0.0, 1.0);',
+    '  if (dsp > 0.001) {',
+    '    float h1 = fract(sin(aRand.z * 91.7 + aRand.w * 47.3) * 43758.5453);',
+    '    float h2 = fract(sin(aRand.y * 63.1 + aRand.z * 21.9) * 24634.6345);',
+    '    float h3 = fract(sin(aRand.w * 39.9 + aRand.y * 75.4) * 13758.5453);',
+    '    float sth = h1 * 6.2831853;',
+    '    float sr = sqrt(h2);',
+    '    vec3 scat = vec3(sr * cos(sth) * uScatter.x, sr * sin(sth) * uScatter.y, (h3 - 0.5) * 2.4);',
+    '    scat.x += 0.18 * sin(t * 0.35 + h1 * 6.2831853);',
+    '    scat.y += 0.18 * cos(t * 0.30 + h2 * 6.2831853);',
+    '    pos = mix(pos, scat, dsp * dsp * (3.0 - 2.0 * dsp));',
+    '  }',
     '  vec2 d = pos.xy - uMouse;',
     '  float dist = length(d);',
     '  float infl = 1.0 - smoothstep(0.0, uMouseR, dist);',
@@ -874,7 +1143,7 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
     '  pos.xy += (d / max(dist, 0.001)) * infl * uMouseF;',
     '  float dz = uCamZ - pos.z;',
     '  gl_Position = uProj * vec4(pos.x, pos.y, pos.z - uCamZ, 1.0);',
-    '  gl_PointSize = aRand.x * uPointScale / max(dz, 0.5);',
+    '  gl_PointSize = aRand.x * uPointScale * (1.0 - 0.35 * dsp) / max(dz, 0.5);',
     '  vA = 0.35 + 0.65 * smoothstep(-2.0, 1.5, pos.z);',
     '  vB = aRand.y;',
     '}'
@@ -931,6 +1200,63 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
     '}'
   ].join('\n');
 
+  /* Comets. Each is a string of points trailing a head, and every position comes from
+     uTime plus a per-comet seed — so the whole layer is one static buffer that never
+     needs updating from JS. They work in "visual" space (y in [-1,1], x in
+     [-aspect, aspect]) so the streaks keep their angle whatever the window shape. */
+  const COMET_TAIL = 64;
+  const CVERT = [
+    'precision highp float;',
+    'attribute vec2 aC;',
+    'uniform float uTime; uniform float uAspect; uniform float uPx;',
+    'varying float vA;',
+    'float h(float n){ return fract(sin(n * 12.9898) * 43758.5453); }',
+    'void main(){',
+    '  float id = aC.x, tail = aC.y;',
+    '  float period = 11.0 + 13.0 * h(id + 1.3);',
+    '  float ph = fract((uTime + h(id + 4.7) * period) / period);',
+    '  float win = 0.13;',
+    '  float k = ph / win;',
+    '  float ang = 3.55 + 0.6 * h(id + 9.1);',
+    '  vec2 dir = vec2(cos(ang), sin(ang));',
+    // Travel far enough that the vertical drop always clears the screen, however
+    // shallow the angle, so no comet stalls half way across.
+    '  float dist = 2.6 / max(0.35, -dir.y);',
+    '  vec2 v = vec2(0.6 + 2.2 * h(id + 2.9), 1.25) + dir * dist * k;',
+    '  v -= dir * tail * (0.26 + 0.20 * h(id + 8.7));',
+    '  gl_Position = vec4(v.x / uAspect, v.y, 0.0, 1.0);',
+    '  float head = 1.0 - tail;',
+    '  gl_PointSize = uPx * (0.8 + 3.4 * head * head);',
+    '  vA = step(ph, win) * sin(k * 3.14159265) * pow(head, 1.6) * (0.5 + 0.5 * h(id + 11.9));',
+    '}'
+  ].join('\n');
+
+  const CFRAG = [
+    'precision mediump float;',
+    'uniform float uOpacity;',
+    'varying float vA;',
+    'void main(){',
+    '  vec2 c = gl_PointCoord - 0.5;',
+    '  float d2 = dot(c, c);',
+    '  if (d2 > 0.25) discard;',
+    '  float a = (1.0 - smoothstep(0.0, 0.25, d2)) * vA * uOpacity;',
+    '  gl_FragColor = vec4(vec3(0.88, 0.91, 1.0) * a, a);',
+    '}'
+  ].join('\n');
+
+  function genComets(N) {
+    const arr = new Float32Array(N * COMET_TAIL * 2);
+    let k = 0;
+    for (let i = 0; i < N; i++) {
+      for (let j = 0; j < COMET_TAIL; j++) {
+        arr[k++] = i + 1;
+        // Bunch the points toward the head so the streak stays solid where it is bright.
+        arr[k++] = Math.pow(j / (COMET_TAIL - 1), 1.4);
+      }
+    }
+    return arr;
+  }
+
   function compileShader(gl, type, src) {
     const s = gl.createShader(type);
     gl.shaderSource(s, src);
@@ -979,12 +1305,44 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
   /* --- Shape generators. Each returns N points sorted by angle so morphs flow. --- */
   const TAU = Math.PI * 2;
   const rnd = Math.random;
-  function finish(pts) {
-    for (let i = 0; i < pts.length; i++) pts[i][3] = Math.atan2(pts[i][2], pts[i][0]);
+  /* Shapes are angle-sorted so morphs flow, but degrade() draws only the first
+     drawCount particles — and a prefix of an angle-sorted array is a wedge, not the
+     whole shape. One shared permutation applied to every shape keeps index i paired
+     across shapes (so the morph is unchanged) while making any prefix a uniform
+     sample of the whole form. */
+  function makeOrder(N) {
+    const idx = new Uint32Array(N);
+    for (let i = 0; i < N; i++) idx[i] = i;
+    for (let i = N - 1; i > 0; i--) {
+      const j = (rnd() * (i + 1)) | 0;
+      const t = idx[i]; idx[i] = idx[j]; idx[j] = t;
+    }
+    return idx;
+  }
+  function applyOrder(src, order) {
+    const out = new Float32Array(order.length * 3);
+    for (let i = 0; i < order.length; i++) {
+      const s = order[i] * 3, d = i * 3;
+      out[d] = src[s]; out[d + 1] = src[s + 1]; out[d + 2] = src[s + 2];
+    }
+    return out;
+  }
+  function flatten(pts) {
     pts.sort((a, b) => a[3] - b[3]);
     const out = new Float32Array(pts.length * 3);
     for (let i = 0; i < pts.length; i++) { out[i * 3] = pts[i][0]; out[i * 3 + 1] = pts[i][1]; out[i * 3 + 2] = pts[i][2]; }
     return out;
+  }
+  // Volumetric shapes sort around the Y axis; the flat wordmark sorts in the screen
+  // plane instead, so particles sweep radially into the letterforms rather than
+  // collapsing from one side.
+  function finish(pts) {
+    for (let i = 0; i < pts.length; i++) pts[i][3] = Math.atan2(pts[i][2], pts[i][0]);
+    return flatten(pts);
+  }
+  function finishXY(pts) {
+    for (let i = 0; i < pts.length; i++) pts[i][3] = Math.atan2(pts[i][1], pts[i][0]);
+    return flatten(pts);
   }
   function genGalaxy(N) {
     const pts = [];
@@ -1048,18 +1406,66 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
     }
     return finish(pts);
   }
-  function genCone(N) {
+  /* --- Wordmark. Particles sampled from the opaque pixels of a rendering of the
+     NUIT logo, normalised to x in [-1,1] (y follows the logo's aspect) so a section
+     can scale it to whatever share of the viewport width it wants. --------------- */
+  const LOGO_RATIO = 3.082;
+  function sampleAlpha(ctx, W, H, N) {
+    const data = ctx.getImageData(0, 0, W, H).data;
+    const hits = [];
+    for (let i = 0; i < W * H; i++) if (data[i * 4 + 3] > 128) hits.push(i);
+    if (hits.length < 32) return null;
     const pts = [];
     for (let i = 0; i < N; i++) {
-      const h = Math.pow(rnd(), 1.7);
-      const y = 1.55 - h * 3.0;
-      const radius = (0.02 + h * 1.25) * Math.sqrt(rnd());
-      const th = rnd() * TAU + h * 4.0;
-      pts.push([radius * Math.cos(th), y, radius * Math.sin(th), 0]);
+      const idx = hits[(rnd() * hits.length) | 0];
+      const px = (idx % W) + rnd(), py = ((idx / W) | 0) + rnd();
+      pts.push([
+        (px / W) * 2 - 1,
+        -((py / H) * 2 - 1) / LOGO_RATIO,
+        (rnd() - 0.5) * 0.09,
+        0
+      ]);
     }
-    return finish(pts);
+    return pts;
   }
-  const SHAPES = [genGalaxy, genSphere, genKnot, genRing, genCone];
+  function wordmarkCanvas() {
+    const W = 640, H = Math.round(W / LOGO_RATIO);
+    const c = document.createElement('canvas');
+    c.width = W; c.height = H;
+    return { c: c, ctx: c.getContext('2d', { willReadFrequently: true }), W: W, H: H };
+  }
+  // Synchronous fallback so the buffer is never empty; replaced by the real logo
+  // artwork as soon as it decodes (see loadLogoWordmark).
+  function genWordmark(N) {
+    const { ctx, W, H } = wordmarkCanvas();
+    ctx.fillStyle = '#fff';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    let size = H * 0.8;
+    const font = (s) => '600 ' + s + 'px Inter, system-ui, sans-serif';
+    ctx.font = font(size);
+    const w = ctx.measureText('NUIT').width;
+    if (w > W * 0.92) ctx.font = font(size * (W * 0.92) / w);
+    ctx.fillText('NUIT', W / 2, H / 2);
+    const pts = sampleAlpha(ctx, W, H, N);
+    return finishXY(pts || [[0, 0, 0, 0]]);
+  }
+  function loadLogoWordmark(field) {
+    const raw = getComputedStyle(document.documentElement).getPropertyValue('--logo-img').trim();
+    const m = raw.match(/url\(\s*["']?(.+?)["']?\s*\)$/);
+    if (!m) return;
+    const img = new Image();
+    img.onload = () => {
+      const { ctx, W, H } = wordmarkCanvas();
+      ctx.clearRect(0, 0, W, H);
+      ctx.drawImage(img, 0, 0, W, H);
+      let pts;
+      try { pts = sampleAlpha(ctx, W, H, field.count); } catch (e) { return; }
+      if (pts) field.setWordmark(finishXY(pts));
+    };
+    img.src = m[1];
+  }
+  const SHAPES = [genGalaxy, genSphere, genKnot, genRing, genWordmark];
 
   function genRandoms(N) {
     const r = new Float32Array(N * 4);
@@ -1088,7 +1494,7 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
       this.canvas = canvas; this.gl = gl;
       this.count = budget.count; this.dustCount = budget.dust; this.maxDpr = budget.dpr;
       this.drawCount = this.count; this.dustDraw = this.dustCount;
-      this.state = { progress: 0, rotX: 1.05, rotY: 0.6, offX: mobile() ? 0 : 1.15, offY: 0.05, scale: 0.55, opacity: 1, intro: 0, mouseF: 0.34, mouseR: 0.95, spin: 0.12 };
+      this.state = { progress: 0, rotX: 1.05, rotY: 0.6, offX: mobile() ? 0 : 1.15, offY: 0.05, scale: 0.55, opacity: 1, intro: 0, mouseF: finePointer ? 0.34 : 0, mouseR: 0.95, spin: 0.12, disperse: 0 };
       this.mouse = { x: 9, y: 9, tx: 9, ty: 9 };
       this.ndc = { x: 9, y: 9, tx: 9, ty: 9 };
       this.scroll = 0; this.boost = 0; this.time = 0;
@@ -1097,11 +1503,16 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
       this.dprog = createProgram(gl, DVERT, DFRAG, ['aPos', 'aSeed']);
       this.u = uniformMap(gl, this.prog);
       this.du = uniformMap(gl, this.dprog);
-      this.buffers = SHAPES.map((fn) => makeBuffer(gl, fn(this.count)));
+      this.order = makeOrder(this.count);
+      this.buffers = SHAPES.map((fn) => makeBuffer(gl, applyOrder(fn(this.count), this.order)));
       this.randBuf = makeBuffer(gl, genRandoms(this.count));
       const dust = genDust(this.dustCount);
       this.dustPos = makeBuffer(gl, dust.pos);
       this.dustSeed = makeBuffer(gl, dust.seed);
+      this.cprog = createProgram(gl, CVERT, CFRAG, ['aC']);
+      this.cu = uniformMap(gl, this.cprog);
+      this.cometBuf = makeBuffer(gl, genComets(budget.comets));
+      this.cometDraw = reduced ? 0 : budget.comets * COMET_TAIL;
 
       gl.disable(gl.DEPTH_TEST);
       gl.enable(gl.BLEND);
@@ -1122,6 +1533,16 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
       this.halfH = Math.tan(FOV / 2) * CAM_Z;
       this.halfW = this.halfH * this.aspect;
       this.pointScale = this.canvas.height * 0.0115;
+      // Dispersed-haze radii: 1.35x the viewport half-extents at the cloud's depth, so the
+      // scattered state fills the screen the same way on a phone as on a widescreen desktop.
+      this.scatterX = this.halfW * 1.35;
+      this.scatterY = this.halfH * 1.35;
+    }
+    // Swap the wordmark shape (buffer 4) for a better sampling once the logo decodes.
+    setWordmark(data) {
+      const gl = this.gl;
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers[4]);
+      gl.bufferData(gl.ARRAY_BUFFER, applyOrder(data, this.order), gl.STATIC_DRAW);
     }
     setPointer(px, py) {
       const nx = px / innerWidth * 2 - 1, ny = -(py / innerHeight * 2 - 1);
@@ -1142,8 +1563,11 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
       this.boost *= 0.9;
       const k = 1 - Math.exp(-dt * 11);
       if (!finePointer) {
-        const t = this.time;
-        this.mouse.tx = Math.sin(t * 0.31) * 0.9; this.mouse.ty = Math.cos(t * 0.23) * 0.7;
+        // Touch device: there is no cursor to react to, so park the repulsion point
+        // far outside the field. Flying a phantom one around on a sine path pushed a
+        // drifting hole through the shape — a cursor effect with no cursor behind it.
+        // The dust layer already does this; the centrepiece was the odd one out.
+        this.mouse.tx = 9; this.mouse.ty = 9;
       }
       this.mouse.x += (this.mouse.tx - this.mouse.x) * k;
       this.mouse.y += (this.mouse.ty - this.mouse.y) * k;
@@ -1165,6 +1589,18 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
       gl.drawArrays(gl.POINTS, 0, this.dustDraw);
       gl.disableVertexAttribArray(0); gl.disableVertexAttribArray(1);
 
+      // Comets
+      if (this.cometDraw) {
+        gl.useProgram(this.cprog);
+        gl.uniform1f(this.cu.uTime, this.time);
+        gl.uniform1f(this.cu.uAspect, this.aspect);
+        gl.uniform1f(this.cu.uPx, this.dpr);
+        gl.uniform1f(this.cu.uOpacity, s.intro);
+        bindAttrib(gl, this.cometBuf, 0, 2);
+        gl.drawArrays(gl.POINTS, 0, this.cometDraw);
+        gl.disableVertexAttribArray(0);
+      }
+
       // Centerpiece
       gl.useProgram(this.prog);
       gl.uniformMatrix4fv(this.u.uProj, false, this.proj);
@@ -1177,6 +1613,8 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
       gl.uniform1f(this.u.uCamZ, CAM_Z);
       gl.uniform1f(this.u.uMouseR, s.mouseR);
       gl.uniform1f(this.u.uMouseF, s.mouseF);
+      if (this.u.uDisperse) gl.uniform1f(this.u.uDisperse, s.disperse);
+      if (this.u.uScatter) gl.uniform2f(this.u.uScatter, this.scatterX, this.scatterY);
       gl.uniform2f(this.u.uOffset, s.offX, s.offY);
       gl.uniform2f(this.u.uMouse, this.mouse.x, this.mouse.y);
       gl.uniform1f(this.u.uOpacity, s.opacity * s.intro);
@@ -1189,10 +1627,14 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
   }
 
   let field = null;
+  // Set while a width-fitted shape is showing: returns the offY that keeps it
+  // inside its own section's box on screen. See cfgFor / anchorFor below.
+  let fitAnchor = null;
   try {
     field = new Field($('.field'), TIERS[tier]);
     window.addEventListener('resize', () => field.resize(), { passive: true });
     window.__nuit = { field: field, tier: tier };
+    loadLogoWordmark(field);
   } catch (err) {
     console.warn('Particle field disabled:', err.message);
     $('.field').style.display = 'none';
@@ -1352,6 +1794,25 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
     // Nav scrim
     ScrollTrigger.create({ start: 'top -60', end: 'max', toggleClass: { targets: '.nav', className: 'is-scrolled' } });
 
+    // Two wordmarks at once reads badly, so the small one steps aside for the big one.
+    // Same start as the footer's shape trigger, so the nav begins fading exactly as the
+    // particles start gathering into the logo.
+    // Driven by callbacks rather than toggleClass: at the very bottom of the page the
+    // scroll position lands exactly on a 'max' end, which counts as past the range, so
+    // a range-based toggle pops the logo back on in the last pixel. Only crossing the
+    // start upward should bring it back.
+    const navMark = $('.nav .wordmark');
+    if (navMark) {
+      const eclipse = (on) => navMark.classList.toggle('is-eclipsed', on);
+      ScrollTrigger.create({
+        trigger: '.footer', start: 'top 55%', end: 'max',
+        onEnter: () => eclipse(true),
+        onEnterBack: () => eclipse(true),
+        onLeaveBack: () => eclipse(false),
+        onRefresh: (self) => eclipse(self.scroll() >= self.start)
+      });
+    }
+
     // Hero drifts up and fades as you leave it
     if (!reduced) {
       gsap.to('.hero-inner', { yPercent: -14, opacity: 0, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
@@ -1407,27 +1868,121 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
 
     // Section → particle shape
     if (field) {
+      // The canvas is fixed to the viewport, so a shape placed at a fixed viewport
+      // fraction sits wherever the scroll happens to be — which is how the wordmark
+      // ended up drawn over the contact copy while the footer was still coming up.
+      // Measure the gap from the section's own top edge instead, so the shape travels
+      // with its section and stays in the space reserved for it. With the footer parked
+      // at the top of the viewport (page bottom) this returns exactly what the old
+      // fixed-fraction maths did, so the settled composition is unchanged.
+      const anchorFor = (sec) => () => {
+        const scale = field.halfW * +sec.dataset.scale;
+        const halfFrac = (scale / LOGO_RATIO) / (2 * field.halfH);
+        const topFrac = sec.getBoundingClientRect().top / innerHeight;
+        return field.halfH * (1 - 2 * (topFrac + +sec.dataset.y + halfFrac));
+      };
       const cfgFor = (sec) => {
         const m = mobile();
+        // data-fit="width" sizes the shape as a share of the viewport width rather than
+        // a fixed world scale, and reads data-y as the gap above it as a fraction of the
+        // viewport. A width-fitted wordmark changes height with the aspect ratio, so
+        // anchoring its top (not its centre) is what keeps it clear of the footer copy
+        // on every screen.
+        const fit = sec.dataset.fit === 'width';
+        const scale = fit ? field.halfW * +sec.dataset.scale : +sec.dataset.scale * (m ? 0.72 : 1);
+        let offY;
+        if (fit) {
+          offY = anchorFor(sec)();
+        } else {
+          offY = +sec.dataset.y * (m ? 0.6 : 1);
+        }
+        // data-m-* are phone overrides. A narrow screen has no room beside the copy —
+        // the hero text alone fills most of the viewport — so a centred shape ends up
+        // behind the words however it is placed. Sections that would collide say so
+        // here and show the dispersed starfield instead.
+        const mOver = (key, fallback) => (m && sec.dataset[key] !== undefined ? +sec.dataset[key] : fallback);
         return {
           progress: +sec.dataset.shape,
           rotX: +sec.dataset.rotx,
           offX: m ? 0 : +sec.dataset.x,
-          offY: +sec.dataset.y * (m ? 0.6 : 1),
-          scale: +sec.dataset.scale * (m ? 0.72 : 1),
-          opacity: +sec.dataset.opacity,
-          spin: +sec.dataset.spin
+          offY: offY,
+          scale: scale,
+          opacity: mOver('mOpacity', +sec.dataset.opacity),
+          spin: +sec.dataset.spin,
+          disperse: mOver('mDisperse', +(sec.dataset.disperse || 0))
         };
       };
       let activeSec = null;
       const go = (sec) => {
         activeSec = sec;
-        gsap.to(field.state, Object.assign({ duration: 1.5, ease: 'power3.inOut', overwrite: 'auto' }, cfgFor(sec)));
+        const cfg = cfgFor(sec);
+        // A fitted shape's offY tracks scroll every frame, so leave it out of the tween
+        // rather than have the two write the same property.
+        fitAnchor = sec.dataset.fit === 'width' ? anchorFor(sec) : null;
+        if (fitAnchor) delete cfg.offY;
+        // A flat shape has to face the camera, so data-roty pins the spin angle. Aim at
+        // the nearest equivalent turn to keep the rotation short, and snap on completion
+        // because render() keeps adding spin to rotY while the tween runs.
+        let lock = null;
+        if (sec.dataset.roty !== undefined) {
+          const target = +sec.dataset.roty;
+          lock = target + Math.round((field.state.rotY - target) / TAU) * TAU;
+          cfg.rotY = lock;
+        }
+        gsap.to(field.state, Object.assign({
+          duration: 1.5,
+          ease: 'power3.inOut',
+          overwrite: 'auto',
+          onComplete: () => { if (lock !== null && activeSec === sec) field.state.rotY = lock; }
+        }, cfg));
+      };
+      /* Flinging across the page fires every section's trigger in turn, and each one
+         starting its own 1.5s morph means you sit and watch the shape crawl back down
+         the chain — footer to hero replays every form on the way. So when triggers
+         arrive in quick succession, scatter to the haze instead, snap the shape index
+         across silently (invisible while dispersed), and condense once only into
+         whatever section the scroll actually settles on. */
+      // SETTLE stays above RAPID: if it were shorter it could fire between two triggers
+      // that are still part of the same fling, condensing and scattering on every step.
+      const RAPID = 350;   // ms between triggers below which we treat it as a fling
+      const SETTLE = 400;  // ms of quiet that ends one
+      let lastTrigger = -1e9, flying = false, settleTimer = null;
+
+      const settle = () => {
+        settleTimer = null;
+        if (!flying) return;
+        flying = false;
+        if (activeSec) go(activeSec);
+      };
+      const request = (sec) => {
+        const now = performance.now();
+        const rapid = now - lastTrigger < RAPID;
+        lastTrigger = now;
+        if (rapid && !flying) {
+          flying = true;
+          // Kill outright rather than relying on overwrite:'auto' — that only drops the
+          // properties this tween touches, leaving the previous section's tween still
+          // walking `progress` down the shape chain underneath us. Named properties
+          // only: a bare killTweensOf would also stop the intro tween's `intro` ramp
+          // if the visitor flings within the first couple of seconds, leaving the whole
+          // field dimmed until the watchdog fires.
+          gsap.killTweensOf(field.state, 'progress,rotX,rotY,scale,offX,offY,opacity,spin,disperse');
+          gsap.to(field.state, { disperse: 1, duration: 0.4, ease: 'power2.out' });
+        }
+        if (flying) {
+          activeSec = sec;
+          fitAnchor = null;
+          gsap.set(field.state, { progress: +sec.dataset.shape });
+          clearTimeout(settleTimer);
+          settleTimer = setTimeout(settle, SETTLE);
+        } else {
+          go(sec);
+        }
       };
       $$('[data-shape]').forEach((sec) => {
-        ScrollTrigger.create({ trigger: sec, start: 'top 55%', end: 'bottom 55%', onEnter: () => go(sec), onEnterBack: () => go(sec) });
+        ScrollTrigger.create({ trigger: sec, start: 'top 55%', end: 'bottom 55%', onEnter: () => request(sec), onEnterBack: () => request(sec) });
       });
-      window.addEventListener('resize', () => { if (activeSec) go(activeSec); }, { passive: true });
+      window.addEventListener('resize', () => { if (activeSec && !flying) go(activeSec); }, { passive: true });
       const onScroll = () => {
         const y = window.scrollY || 0;
         field.scroll = y / innerHeight;
@@ -1498,7 +2053,12 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
         }
       }
     }
-    if (field) field.render(dt);
+    if (field) {
+      // Follow the anchor rather than snapping to it, so entering the footer still eases
+      // in and scrolling does not make the shape jitter frame to frame.
+      if (fitAnchor) field.state.offY += (fitAnchor() - field.state.offY) * (1 - Math.exp(-dt / 0.3));
+      field.render(dt);
+    }
     requestAnimationFrame(frame);
   }
   requestAnimationFrame(frame);
@@ -1568,6 +2128,145 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
       .fromTo('.pre-bar i', { scaleX: 0 }, { scaleX: 1, duration: 0.75, ease: 'power2.inOut' }, 0.35)
       .to('.pre-logo, .pre-bar', { opacity: 0, duration: 0.3, ease: 'power2.in' }, 1.05)
       .to(pre, { yPercent: -100, duration: 0.95, ease: 'power4.inOut', onStart: startHero }, 1.15);
+  }
+
+  /* ------------------------------------------------------------------
+     Music — starts on its own, click to pause. Browsers refuse to play sound
+     until the visitor has interacted with the page, so the load-time attempt
+     usually fails; when it does we arm a one-shot fallback that starts the
+     track on the first click, key, scroll or touch anywhere. Kept to a few
+     characters in the corner.
+     ------------------------------------------------------------------ */
+  const player = $('.player');
+  if (player) {
+    const audio = $('.player-audio', player);
+    const btn = $('.player-btn', player);
+    const label = $('.player-state', player);
+    const TRACK = 'Aphex Twin — #3';
+    const GESTURES = ['pointerdown', 'keydown', 'wheel', 'touchstart'];
+    let started = false, armed = false;
+
+    // A dead control is worse than none: if the file will not load — moved, or the
+    // standalone build opened without its assets folder — drop the player entirely.
+    audio.addEventListener('error', () => { player.remove(); disarm(); });
+
+    const sync = () => {
+      const on = !audio.paused;
+      player.classList.toggle('is-playing', on);
+      label.textContent = on ? 'Playing' : (started ? 'Paused' : 'Play');
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      btn.setAttribute('aria-label', (on ? 'Pause ' : 'Play ') + TRACK);
+    };
+    audio.addEventListener('play', () => { started = true; sync(); });
+    audio.addEventListener('pause', sync);
+
+    function disarm() {
+      if (!armed) return;
+      armed = false;
+      GESTURES.forEach((t) => document.removeEventListener(t, onGesture, true));
+    }
+    function onGesture(e) {
+      // A click on the control itself is the visitor deciding for themselves —
+      // leave it to the button handler, or pointerdown would start the track and
+      // the click that follows would immediately pause it again.
+      if (e.target && e.target.closest && e.target.closest('.player')) return;
+      audio.play().catch(() => {});
+      disarm();
+    }
+    const arm = () => {
+      if (armed) return;
+      armed = true;
+      GESTURES.forEach((t) => document.addEventListener(t, onGesture, true));
+    };
+
+    btn.addEventListener('click', () => {
+      disarm();
+      if (audio.paused) audio.play().catch(() => sync());
+      else audio.pause();
+    });
+
+    audio.volume = 0.5;
+    // preload stays "none": play() pulls the file in on its own, so a visitor who
+    // never triggers it is not made to download several megabytes.
+    audio.play().catch(arm);
+    sync();
+  }
+
+  /* ------------------------------------------------------------------
+     Work card previews — scale each embedded site to fit its cover
+     ------------------------------------------------------------------ */
+  /* Cover screenshots. Drop a file into assets/ named after data-shot and it appears —
+     no markup change needed. Several extensions are tried because a saved screenshot is
+     as likely to be a .png as a .jpg; if none of them exist the image stays hidden and
+     the gradient cover art stands in, so a missing file is never a broken card. */
+  $$('.shot').forEach((img) => {
+    const exts = ['.jpg', '.webp', '.png', '.jpeg'];
+    let i = 0;
+    const tryNext = () => {
+      if (i >= exts.length) { img.classList.add('is-off'); return; }
+      img.src = 'assets/' + img.dataset.shot + exts[i++];
+    };
+    img.addEventListener('load', () => img.classList.add('is-on'));
+    img.addEventListener('error', tryNext);
+    tryNext();
+  });
+
+  const previews = $$('.preview');
+  if (previews.length) {
+    // Each frame renders an entire other website at desktop size. That is far too much
+    // for a phone on top of the WebGL field — it stutters and runs out of memory — so
+    // previews are for cursor-driven, desktop-class devices only. The src lives in
+    // data-src until then, so on a phone nothing is ever fetched or rendered and the
+    // gradient cover art stands in.
+    const previewOK = () => finePointer && !reduced && tier !== 'low' && innerWidth > 760;
+    let previewsOn = null;
+    const syncPreviews = () => {
+      const on = previewOK();
+      if (on === previewsOn) return;   // only act on a real transition, not every resize
+      previewsOn = on;
+      previews.forEach((fr) => {
+        fr.hidden = !on;
+        if (on) {
+          if (!fr.hasAttribute('src') && fr.dataset.src) fr.src = fr.dataset.src;
+        } else if (fr.hasAttribute('src')) {
+          fr.removeAttribute('src');   // let the window drop the embedded page
+        }
+      });
+    };
+    const fit = (fr) => {
+      const cover = fr.parentElement;
+      const w = fr.offsetWidth;
+      if (cover && w) fr.style.setProperty('--pv', (cover.clientWidth / w).toFixed(4));
+    };
+    // Watch the cover itself rather than the window: the card is inside a responsive
+    // grid, so its width changes for reasons a resize event never sees, and a stale
+    // scale leaves the preview cropped or floating inside its frame.
+    const fitAll = () => { syncPreviews(); if (previewsOn) previews.forEach(fit); };
+    fitAll();
+    // Only now allow the transform to animate, so hover and resize ease but the initial
+    // scale is not seen ramping up from the stylesheet's fallback value.
+    setTimeout(() => previews.forEach((fr) => fr.classList.add('is-fitted')), 80);
+    // Both, deliberately. ResizeObserver catches width changes the window never hears
+    // about, but it is delivered with the rendering steps, so it goes quiet whenever the
+    // page is not painting; the resize listener still fires in that state.
+    if (typeof ResizeObserver !== 'undefined') {
+      const ro = new ResizeObserver((entries) => {
+        entries.forEach((e) => { const fr = e.target.querySelector('.preview'); if (fr) fit(fr); });
+      });
+      previews.forEach((fr) => { if (fr.parentElement) ro.observe(fr.parentElement); });
+    }
+    window.addEventListener('resize', fitAll, { passive: true });
+    // The card is still settling when the script first runs — webfonts reflow the copy
+    // and a scrollbar can appear — so re-fit once the layout is final. Both are plain
+    // events, so they land even where the observer above is throttled.
+    window.addEventListener('load', fitAll);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll, fitAll);
+    previews.forEach((fr) => {
+      fr.addEventListener('load', () => fit(fr));
+      // If the site refuses to be framed, hide the frame so the gradient behind it shows
+      // rather than leaving a blank white rectangle on the card.
+      fr.addEventListener('error', () => { fr.hidden = true; });
+    });
   }
 
   /* ------------------------------------------------------------------

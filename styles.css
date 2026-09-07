@@ -75,6 +75,28 @@ html.low-fx .glow,html.low-fx .grain{display:none}
 }
 .hud-time{font-variant-numeric:tabular-nums;color:var(--soft)}
 
+/* ---------- Music ---------- */
+/* Stacked above the HUD in the same corner. The wrapper never takes pointer
+   events, so only the few characters of the control itself are clickable —
+   nothing over the page is blocked. */
+.player{position:fixed;right:34px;bottom:62px;z-index:40;pointer-events:none}
+.player-btn{
+  pointer-events:auto;display:inline-flex;align-items:center;gap:10px;
+  margin:0;padding:6px 0;border:0;background:none;cursor:pointer;
+  font-family:var(--sans);font-size:10px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;
+  color:var(--muted);transition:color .35s var(--ease-out)
+}
+html.has-cursor .player-btn:hover,.player-btn:focus-visible{color:var(--fg)}
+.player-btn:focus-visible{outline:1px solid var(--silver-hi);outline-offset:6px}
+.player-track{color:var(--muted);opacity:.62}
+.player-eq{display:inline-flex;align-items:flex-end;gap:2px;height:9px}
+.player-eq i{width:2px;height:2px;background:currentColor;transition:height .3s var(--ease-out)}
+.player.is-playing .player-eq i{animation:eq 1s ease-in-out infinite}
+.player.is-playing .player-eq i:nth-child(2){animation-delay:.18s}
+.player.is-playing .player-eq i:nth-child(3){animation-delay:.36s}
+.player.is-playing .player-eq i:nth-child(4){animation-delay:.54s}
+@keyframes eq{0%,100%{height:2px}50%{height:9px}}
+
 /* ---------- Preloader ---------- */
 .preloader{position:fixed;inset:0;z-index:200;background:#0a0a0c;display:grid;place-items:center;will-change:transform}
 .pre-logo-wrap{overflow:hidden;padding-bottom:3px}
@@ -116,11 +138,14 @@ html.low-fx .glow,html.low-fx .grain{display:none}
 .nav.is-scrolled{padding:18px var(--gutter)}
 .nav.is-scrolled::before{opacity:1}
 .wordmark{--logo-size:19px;display:inline-flex;align-items:center;text-decoration:none;color:var(--fg)}
+/* Hidden while the particle wordmark holds the footer — see is-eclipsed in app.js */
+.nav .wordmark{transition:opacity .7s var(--ease-out),transform .7s var(--ease-out)}
+.nav .wordmark.is-eclipsed{opacity:0;transform:translateY(-8px);pointer-events:none}
 /* The wordmark is live text in a neo-grotesque, weight 700, default tracking.
    To use a supplied image file instead: give .logo a background-image and
    text-indent:-9999px, or replace the span with an <img>. */
 .logo{display:block;height:var(--logo-size);width:calc(var(--logo-size) * var(--logo-ratio));background:var(--logo-img) center/contain no-repeat;text-indent:-200vw;overflow:hidden;white-space:nowrap;transition:opacity .4s var(--ease-out)}
-.wordmark:hover .logo{opacity:.68}
+html.has-cursor .wordmark:hover .logo{opacity:.68}
 .wordmark:focus-visible{outline:1px solid var(--silver-hi);outline-offset:8px}
 .nav-links{display:flex;gap:36px}
 .nav-links a{
@@ -128,8 +153,8 @@ html.low-fx .glow,html.low-fx .grain{display:none}
   padding:6px 0;transition:color .35s;
 }
 .nav-links a::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--fg);transform:scaleX(0);transform-origin:right;transition:transform .5s var(--ease-out)}
-.nav-links a:hover{color:var(--fg)}
-.nav-links a:hover::after{transform:scaleX(1);transform-origin:left}
+html.has-cursor .nav-links a:hover{color:var(--fg)}
+html.has-cursor .nav-links a:hover::after{transform:scaleX(1);transform-origin:left}
 
 /* ---------- Layout ---------- */
 main,footer{position:relative;z-index:4}
@@ -173,14 +198,14 @@ em{font-style:italic;color:var(--silver-hi)}
   width:0;height:0;border-radius:50%;background:var(--fill);transform:translate(-50%,-50%);
   transition:width .7s var(--ease-out),height .7s var(--ease-out);
 }
-.btn:hover::before{width:640px;height:640px}
+html.has-cursor .btn:hover::before{width:640px;height:640px}
 .btn .btn-label{display:inline-block;will-change:transform}
 .btn .arr{width:14px;height:14px;transition:transform .5s var(--ease-out)}
-.btn:hover .arr{transform:translateX(5px)}
+html.has-cursor .btn:hover .arr{transform:translateX(5px)}
 .btn-primary{background:var(--fg);color:var(--bg);box-shadow:0 0 0 0 rgba(232,232,236,0)}
-.btn-primary:hover{box-shadow:0 0 48px -8px rgba(232,232,236,.45)}
+html.has-cursor .btn-primary:hover{box-shadow:0 0 48px -8px rgba(232,232,236,.45)}
 .btn-ghost{--fill:var(--fg);border-color:var(--line-strong);color:var(--fg)}
-.btn-ghost:hover{color:var(--bg);border-color:var(--fg)}
+html.has-cursor .btn-ghost:hover{color:var(--bg);border-color:var(--fg)}
 .btn-lg{padding:24px 40px;font-size:15px}
 .btn:focus-visible{outline:1px solid var(--silver-hi);outline-offset:4px}
 
@@ -214,15 +239,6 @@ em{font-style:italic;color:var(--silver-hi)}
 .scroll-hint i::after{content:'';position:absolute;inset:0;background:var(--fg);transform:translateX(-100%);animation:scrollline 2.2s var(--ease-inout) infinite}
 @keyframes scrollline{0%{transform:translateX(-100%)}50%{transform:translateX(0)}100%{transform:translateX(100%)}}
 
-/* ---------- Ticker ---------- */
-.ticker{position:relative;z-index:4;overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:20px 0;
-  -webkit-mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent);mask-image:linear-gradient(90deg,transparent,#000 12%,#000 88%,transparent)}
-.ticker-track{display:flex;width:max-content}
-.ticker-group{display:flex;flex:0 0 auto;animation:ticker 46s linear infinite;will-change:transform}
-.ticker:hover .ticker-group{animation-play-state:paused}
-.ticker-track span{display:inline-flex;align-items:center;gap:36px;padding-right:36px;font-size:11px;font-weight:500;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
-.ticker-track span::after{content:'';width:5px;height:5px;background:var(--silver);transform:rotate(45deg);opacity:.8}
-@keyframes ticker{to{transform:translateX(-100%)}}
 
 /* ---------- Positioning ---------- */
 .positioning .lead{margin:36px auto 0}
@@ -242,52 +258,83 @@ em{font-style:italic;color:var(--silver-hi)}
 .callout-tag{font-size:clamp(1.25rem,1.7vw,1.6rem);font-weight:600;letter-spacing:-.01em;line-height:1.25;margin-bottom:16px;max-width:24ch}
 .callout-p{color:var(--muted);font-size:15.5px;line-height:1.65;max-width:52ch}
 .callout::after{content:'';position:absolute;left:0;right:0;top:-1px;height:1px;background:var(--silver-hi);transform:scaleX(0);transform-origin:left;transition:transform .9s var(--ease-out)}
-.callout:hover::after{transform:scaleX(1)}
+html.has-cursor .callout:hover::after{transform:scaleX(1)}
 
 /* ---------- Work ---------- */
 .work-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;perspective:1600px}
 .card{display:block;text-decoration:none;color:inherit;transform-style:preserve-3d;will-change:transform}
 .cover{position:relative;aspect-ratio:4/5;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:#0e0e11;transform:translateZ(0)}
 .art{position:absolute;inset:-6% 0;transition:transform 1.3s var(--ease-out);will-change:transform;background-color:#0f0f12}
-.card:hover .art{transform:scale(1.06)}
+html.has-cursor .card:hover .art{transform:scale(1.06)}
 .cover::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,12,0) 55%,rgba(10,10,12,.55));pointer-events:none}
 .cover .shine{position:absolute;inset:0;background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(232,232,236,.12),transparent 60%);opacity:0;transition:opacity .5s;pointer-events:none}
-.card:hover .shine{opacity:1}
+html.has-cursor .card:hover .shine{opacity:1}
 .card-meta{padding:22px 4px 0}
 .tag{display:inline-block;font-size:10.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:7px 11px;border-radius:999px}
 .card-meta h3{font:400 1.7rem/1.1 var(--serif);margin:16px 0 8px;display:flex;align-items:center;gap:10px}
 .card-meta h3 svg{width:14px;height:14px;opacity:0;transform:translate(-6px,6px);transition:opacity .4s,transform .5s var(--ease-out)}
-.card:hover .card-meta h3 svg{opacity:1;transform:translate(0,0)}
+html.has-cursor .card:hover .card-meta h3 svg{opacity:1;transform:translate(0,0)}
 .card-meta p{color:var(--muted);font-size:14.5px}
 
-/* Placeholder cover art — swap the .art div for <img class="art"> when real images exist */
-[data-art="1"] .art{background:
-  radial-gradient(circle at 50% 46%,transparent 27%,rgba(232,232,236,.95) 27.4%,rgba(232,232,236,.95) 29.2%,transparent 29.6%),
-  radial-gradient(circle at 50% 46%,rgba(232,232,236,.22),transparent 46%),
-  radial-gradient(circle at 50% 17.5%,rgba(255,255,255,1) 0 1.4%,transparent 1.6%),
-  linear-gradient(160deg,#1c1c20,#0b0b0d)}
-[data-art="2"] .art{background:
-  radial-gradient(circle at 70% 64%,transparent 19%,rgba(232,232,236,.7) 19.4%,rgba(232,232,236,.7) 20.4%,transparent 20.8%),
-  radial-gradient(circle at 70% 64%,rgba(232,232,236,.14),transparent 30%),
-  repeating-linear-gradient(180deg,transparent 0 34px,rgba(232,232,236,.16) 34px 35px),
-  linear-gradient(200deg,#18181c,#0a0a0c)}
-[data-art="3"] .art{background:
-  linear-gradient(90deg,rgba(232,232,236,.05),rgba(232,232,236,.5) 50%,rgba(232,232,236,.05)) 50% 66% / 30% 52% no-repeat,
-  linear-gradient(90deg,rgba(232,232,236,.6),rgba(232,232,236,.9)) 50% 32% / 12% 9% no-repeat,
-  radial-gradient(circle at 50% 70%,rgba(232,232,236,.16),transparent 45%),
-  linear-gradient(180deg,#131316,#0b0b0d)}
-[data-art="4"] .art{background:
-  linear-gradient(135deg,transparent 49.6%,rgba(232,232,236,.75) 49.8%,rgba(232,232,236,.75) 50.2%,transparent 50.4%),
-  radial-gradient(circle,rgba(232,232,236,.55) 1px,transparent 1.6px) 0 0 / 28px 28px,
-  linear-gradient(160deg,#151518,#0a0a0c)}
-[data-art="5"] .art{background:
-  radial-gradient(circle at 34% 40%,transparent 23%,rgba(232,232,236,.85) 23.4%,rgba(232,232,236,.85) 24.6%,transparent 25%),
-  repeating-linear-gradient(115deg,transparent 0 46px,rgba(232,232,236,.14) 46px 47px),
-  linear-gradient(180deg,#111114,#0d0d0f)}
-[data-art="6"] .art{background:
-  repeating-radial-gradient(circle at 50% 112%,transparent 0 44px,rgba(232,232,236,.22) 44px 45px),
-  radial-gradient(circle at 50% 112%,rgba(232,232,236,.2),transparent 40%),
-  linear-gradient(180deg,#19191d,#0a0a0c)}
+/* Auto-fit so the grid stays right whether there are two concepts or six. */
+.work-grid{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
+.work-grid .cover{aspect-ratio:16/10}
+
+
+/* Live preview. The frame is laid out at a desktop width and scaled down by --pv
+   (set in app.js from the cover width) so the page inside renders its desktop
+   layout rather than its mobile one. Never interactive — the card owns the click. */
+/* Transition is added by app.js after the first fit, so the initial scale lands
+   without animating up from the fallback value. */
+/* Screenshot layer: sits over the gradient, under the live frame. It is what phones
+   show (frames are desktop-only) and it fills the cover instantly on desktop while the
+   frame loads behind it. Stays hidden until a file actually loads — see app.js. */
+/* Starts transparent rather than display:none — a lazy image with no box never trips
+   its own intersection observer, so it would sit there never loading and never failing. */
+.shot{
+  position:absolute;inset:0;width:100%;height:100%;
+  object-fit:cover;object-position:50% 0;opacity:0;
+  transition:opacity .7s var(--ease-out),transform 1s var(--ease-out)
+}
+.shot.is-on{opacity:1}
+.shot.is-off{display:none}
+html.has-cursor .card:hover .shot{transform:scale(1.07)}
+.preview[hidden]{display:none}
+.preview.is-fitted{transition:transform 1s var(--ease-out)}
+.preview{
+  position:absolute;left:50%;top:50%;width:1440px;height:900px;border:0;
+  transform-origin:50% 50%;transform:translate(-50%,-50%) scale(var(--pv,.45));
+  pointer-events:none;background:#0e0e11;color-scheme:light
+}
+html.has-cursor .card:hover .preview{transform:translate(-50%,-50%) scale(calc(var(--pv,.45) * 1.07))}
+
+/* Placeholder cover art, keyed to the project. Swap the .art div for
+   <img class="art" src="..."> as soon as a real screenshot exists. */
+[data-art="moka"] .art{background:
+  radial-gradient(circle at 76% 20%,rgba(255,232,170,.5),transparent 44%),
+  radial-gradient(circle at 20% 82%,rgba(214,74,52,.55),transparent 58%),
+  linear-gradient(155deg,#e0913c 0%,#d2653c 46%,#b8402c 100%)}
+[data-art="akiri"] .art{background:
+  radial-gradient(circle at 30% 18%,rgba(255,255,255,.55),transparent 46%),
+  radial-gradient(circle at 74% 76%,rgba(126,178,178,.45),transparent 55%),
+  linear-gradient(165deg,#cfdedb 0%,#9db9bb 48%,#6f8f95 100%)}
+
+/* ---------- Client work: empty state ---------- */
+/* Dashed rather than solid so it reads as a slot waiting to be filled, not a panel. */
+.empty-state{
+  display:flex;flex-direction:column;align-items:center;text-align:center;
+  padding:clamp(56px,9vw,96px) clamp(24px,5vw,64px);
+  border:1px dashed var(--line-strong);border-radius:var(--radius);
+  background:rgba(242,242,240,.015)
+}
+/* Left as typed — a sideways emoticon, not turned upright. */
+.empty-face{
+  display:block;font-family:var(--serif);font-size:clamp(56px,9vw,96px);line-height:1;
+  color:var(--silver);opacity:.5;letter-spacing:-.02em;
+  margin-bottom:clamp(28px,4vw,44px)
+}
+.empty-state h3{margin:0 0 14px;font-family:var(--serif);font-weight:400;font-size:clamp(26px,3.4vw,38px);letter-spacing:-.01em}
+.empty-state p{margin:0 auto 34px;max-width:52ch;color:var(--muted);font-size:15px;line-height:1.7}
 
 /* ---------- Process ---------- */
 .steps{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:40px;padding-top:44px}
@@ -298,7 +345,10 @@ em{font-style:italic;color:var(--silver-hi)}
 .step p{color:var(--muted);font-size:15px;line-height:1.65;max-width:30ch}
 
 /* ---------- Pricing ---------- */
-.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch}
+.tiers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:stretch;max-width:948px;margin-inline:auto}
+/* Same muted register as the section intro, set italic and centred under the pair. */
+.tiers-note{max-width:60ch;margin:30px auto 0;text-align:center;color:var(--muted);font-size:14px;line-height:1.65;font-style:italic}
+.tiers-cta{display:flex;justify-content:center;margin-top:26px}
 .tier{
   --mx:50%;--my:50%;
   position:relative;display:flex;flex-direction:column;gap:26px;padding:42px 36px;border-radius:24px;
@@ -316,16 +366,12 @@ em{font-style:italic;color:var(--silver-hi)}
   background:radial-gradient(420px circle at var(--mx) var(--my),rgba(232,232,236,.07),transparent 60%);
   opacity:0;transition:opacity .5s;
 }
-.tier:hover::before,.tier:hover::after{opacity:1}
-.tier:hover{transform:translateY(-6px)}
-.tier.featured{border-color:rgba(201,201,207,.4);background:rgba(20,20,23,.92);transform:translateY(-12px)}
-.tier.featured:hover{transform:translateY(-18px)}
-.badge{position:absolute;top:24px;right:24px;font-size:9.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;padding:8px 12px;border-radius:999px;background:var(--fg);color:var(--bg)}
+html.has-cursor .tier:hover::before,html.has-cursor .tier:hover::after{opacity:1}
+html.has-cursor .tier:hover{transform:translateY(-6px)}
 .tier h3{font:400 2rem/1 var(--serif);margin-bottom:12px}
 .tier-for{color:var(--muted);font-size:14.5px;line-height:1.55;max-width:30ch;min-height:3.1em}
 .price{display:flex;align-items:baseline;flex-wrap:wrap;gap:10px;font:400 3.1rem/1 var(--serif);letter-spacing:-.01em}
 .price .cur{font:500 11.5px var(--sans);letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
-.price .usd{flex-basis:100%;font:400 14px var(--sans);color:var(--muted);margin-top:4px}
 .feats{display:grid;gap:12px;padding-top:24px;border-top:1px solid var(--line)}
 .feats li{position:relative;padding-left:22px;font-size:14.5px;line-height:1.5;color:var(--soft)}
 .feats li::before{content:'';position:absolute;left:0;top:.72em;width:10px;height:1px;background:var(--silver)}
@@ -340,33 +386,182 @@ em{font-style:italic;color:var(--silver-hi)}
 .addons li i{flex:1;border-bottom:1px dotted rgba(242,242,240,.22);transform:translateY(-.3em)}
 .addons li b{font-weight:500;color:var(--fg);white-space:nowrap}
 .addons li b small{color:var(--muted);font-weight:400;font-size:12.5px;margin-left:4px}
+/* Subscriptions reuse the add-ons frame; each row is a leader line plus a note. */
+.subs ul{columns:1}
+.subs li{display:block;padding:16px 0}
+.subs .sub-row{display:flex;align-items:baseline;gap:12px}
+.subs .sub-note{display:block;margin-top:8px;max-width:52ch;color:var(--muted);font-size:13px;line-height:1.6}
 
 /* ---------- Final CTA ---------- */
-.final{padding-top:clamp(120px,22vh,260px);padding-bottom:clamp(120px,22vh,240px)}
+/* The run-out below the CTA is deliberately long. The footer's shape trigger fires
+   when this section's bottom edge reaches 55% of the viewport, so anything shorter
+   than 55vh leaves the copy still on screen while the wordmark morphs across it on
+   the way back up. 62vh keeps the text clear with room to spare at any height. */
+.final{padding-top:clamp(120px,22vh,260px);padding-bottom:max(300px,62vh)}
 .final .display{max-width:16ch;margin:0 auto 32px}
 .final .lead{margin-bottom:48px}
 .contact-line{margin-top:40px;font-size:14px;color:var(--muted);display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
 .ul{text-decoration:none;position:relative;color:var(--soft);transition:color .3s}
 .ul::after{content:'';position:absolute;left:0;right:0;bottom:-3px;height:1px;background:currentColor;transform:scaleX(1);transform-origin:left;transition:transform .5s var(--ease-out)}
-.ul:hover{color:var(--fg)}
-.ul:hover::after{transform:scaleX(0);transform-origin:right}
+html.has-cursor .ul:hover{color:var(--fg)}
+html.has-cursor .ul:hover::after{transform:scaleX(0);transform-origin:right}
 
 /* ---------- Footer ---------- */
-.footer{border-top:1px solid var(--line);padding:96px var(--gutter) 40px;background:linear-gradient(180deg,rgba(10,10,12,0),rgba(10,10,12,.6))}
-.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr;gap:48px;margin-bottom:80px}
-.footer-brand .wordmark{--logo-size:46px}
-.footer-brand p{color:var(--muted);max-width:36ch;margin-top:22px;font-size:14.5px;line-height:1.6}
+/* Full-height footer: the particle wordmark occupies the empty upper half, the
+   links sit on the floor of the viewport. */
+.footer{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;/* Bottom padding clears the fixed player + HUD that sit in this corner (see .player/.hud). */padding:clamp(140px,42vh,460px) var(--gutter) 104px;background:linear-gradient(180deg,rgba(10,10,12,0),rgba(10,10,12,.6))}
+/* Two parts: the address as a display heading, then the link columns beside it.
+   Heights here are deliberately restrained — the footer must stay within 100vh or
+   its top edge lifts and takes the anchored particle wordmark with it. */
+.footer-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:clamp(40px,5vw,88px);align-items:start;margin-bottom:72px}
+.footer-lead{min-width:0}
+/* Optical top alignment with the SITE/CONTACT labels: their caps start 3.4px into a
+   fixed 10.5px line box, the address's start .131em into its own scaling one. Shift by
+   the difference so both halves of the row begin on the same line at every clamp size. */
+
+.footer-mail{
+  display:inline-block;max-width:100%;
+  font:400 clamp(1.6rem,3.2vw,2.9rem)/1.08 var(--serif);font-style:italic;
+  margin-top:calc(3.4px - .131em);
+  letter-spacing:-.012em;color:var(--fg);text-decoration:none;word-break:break-word;
+  position:relative;transition:color .3s;
+}
+.footer-mail::after{content:'';position:absolute;left:0;right:0;bottom:.06em;height:1px;background:currentColor;opacity:.32;transform:scaleX(1);transform-origin:left;transition:transform .55s var(--ease-out),opacity .3s}
+html.has-cursor .footer-mail:hover{color:var(--silver-hi)}
+html.has-cursor .footer-mail:hover::after{transform:scaleX(0);transform-origin:right}
+.footer-note{color:var(--muted);max-width:34ch;margin:18px 0 0;font-size:14px;line-height:1.6}
+.footer-links{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,56px)}
 .footer-col h4{font-size:10.5px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin-bottom:22px}
 .footer-col a{display:block;width:max-content;text-decoration:none;color:var(--soft);font-size:15px;margin-bottom:12px;transition:color .3s,transform .5s var(--ease-out)}
-.footer-col a:hover{color:var(--fg);transform:translateX(6px)}
+html.has-cursor .footer-col a:hover{color:var(--fg);transform:translateX(6px)}
 .footer-bottom{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-top:28px;border-top:1px solid var(--line);font-size:12px;letter-spacing:.06em;color:var(--muted)}
+
+/* ---------- Calculator (calculate.html) ---------- */
+/* Controls borrow the tier card's surface, radius and border so the page reads
+   as the same system; only the interaction states are new. */
+.calc-hero{min-height:auto;padding-top:clamp(150px,26vh,260px);padding-bottom:clamp(80px,12vh,140px)}
+.calc-grid{display:grid;grid-template-columns:1.55fr .95fr;gap:clamp(32px,4vw,64px);align-items:start}
+.calc-main{display:grid;gap:clamp(40px,5vh,64px);min-width:0}
+.calc-block{border:0;padding:0;margin:0;min-width:0}
+.calc-legend{
+  display:flex;align-items:center;gap:12px;padding:0;margin-bottom:26px;
+  font-size:11px;font-weight:500;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);
+}
+.calc-legend .idx{font-family:var(--serif);font-style:italic;font-size:15px;letter-spacing:0;color:var(--silver);text-transform:none}
+.calc-legend .idx::after{content:'';display:inline-block;width:28px;height:1px;background:var(--line-strong);margin-left:14px;vertical-align:middle}
+
+/* Card-style single-select */
+.pick-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pick-grid-3{grid-template-columns:repeat(3,1fr)}
+.pick{position:relative;display:block;cursor:pointer}
+.pick input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.pick-body{
+  display:block;height:100%;padding:22px 22px 24px;border-radius:18px;
+  border:1px solid var(--line);background:rgba(13,13,15,.74);
+  transition:border-color .35s,background-color .35s,transform .5s var(--ease-out);
+}
+.pick-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
+.pick-name{font:400 1.35rem/1 var(--serif);color:var(--fg)}
+.pick-price{font-size:12.5px;letter-spacing:.04em;color:var(--muted);white-space:nowrap}
+.pick-desc{display:block;font-size:13.5px;line-height:1.55;color:var(--muted)}
+html.has-cursor .pick:hover .pick-body{border-color:var(--line-strong);transform:translateY(-3px)}
+.pick.is-picked .pick-body{border-color:rgba(201,201,207,.55);background:rgba(20,20,23,.94)}
+.pick.is-picked .pick-price{color:var(--soft)}
+.pick input:focus-visible + .pick-body{outline:1px solid var(--silver-hi);outline-offset:4px}
+
+/* Multi-select rows */
+.opt-list{display:grid;gap:2px}
+.opt{
+  display:flex;align-items:center;gap:16px;flex-wrap:wrap;
+  padding:15px 18px;border-radius:14px;border:1px solid transparent;
+  transition:border-color .35s,background-color .35s;
+}
+.opt.is-on{border-color:var(--line);background:rgba(20,20,23,.7)}
+html.has-cursor .opt:hover{background:rgba(20,20,23,.5)}
+.opt-main{display:flex;align-items:center;gap:14px;flex:1;min-width:0;cursor:pointer}
+.opt-main input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
+.opt-box{
+  flex:0 0 auto;width:17px;height:17px;border-radius:5px;border:1px solid var(--line-strong);
+  position:relative;transition:background-color .3s,border-color .3s;
+}
+.opt-box::after{
+  content:'';position:absolute;left:5px;top:1.5px;width:4px;height:9px;
+  border:solid var(--bg);border-width:0 1.6px 1.6px 0;transform:rotate(42deg) scale(.5);
+  opacity:0;transition:opacity .2s,transform .3s var(--ease-out);
+}
+.opt.is-on .opt-box{background:var(--silver-hi);border-color:var(--silver-hi)}
+.opt.is-on .opt-box::after{opacity:1;transform:rotate(42deg) scale(1)}
+.opt-main input:focus-visible + .opt-box{outline:1px solid var(--silver-hi);outline-offset:3px}
+.opt-name{font-size:14.5px;line-height:1.45;color:var(--soft)}
+.opt.is-on .opt-name{color:var(--fg)}
+.opt-price{font-size:13.5px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.opt-price small{font-size:12px;margin-left:5px;opacity:.8}
+
+.stepper{display:inline-flex;align-items:center;gap:2px;transition:opacity .3s}
+.stepper.is-off{opacity:.3}
+.step-btn{
+  width:26px;height:26px;display:grid;place-items:center;cursor:pointer;
+  border:1px solid var(--line-strong);background:transparent;color:var(--soft);
+  border-radius:8px;font:400 14px/1 var(--sans);transition:border-color .3s,color .3s;
+}
+.step-btn:disabled{cursor:default}
+html.has-cursor .step-btn:not(:disabled):hover{border-color:var(--silver-hi);color:var(--fg)}
+.step-val{min-width:22px;text-align:center;font-size:13.5px;color:var(--fg);font-variant-numeric:tabular-nums}
+
+/* Sticky summary */
+.calc-summary{position:sticky;top:clamp(96px,14vh,150px);min-width:0}
+.sum-card{
+  padding:30px 28px;border-radius:22px;border:1px solid rgba(201,201,207,.4);
+  background:rgba(20,20,23,.94);backdrop-filter:blur(6px);
+}
+.sum-label{font-size:10.5px;font-weight:500;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.sum-total{font:400 clamp(1.9rem,2.6vw,2.5rem)/1.05 var(--serif);margin-top:12px;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.sum-month{margin-top:8px;font-size:13.5px;color:var(--silver);font-variant-numeric:tabular-nums}
+.sum-lines{display:grid;gap:9px;margin-top:22px;padding-top:20px;border-top:1px solid var(--line)}
+.sum-lines li{display:flex;align-items:baseline;justify-content:space-between;gap:14px;font-size:13px;color:var(--muted)}
+.sum-lines li b{font-weight:500;color:var(--soft);white-space:nowrap;font-variant-numeric:tabular-nums}
+.sum-lines li.is-sub{padding-top:9px;border-top:1px dotted rgba(242,242,240,.16)}
+.sum-note{margin-top:20px;font-size:12px;line-height:1.6;color:var(--muted);opacity:.85}
+.sum-cta{margin-top:22px;width:100%;justify-content:center}
+
+@media (max-width:980px){
+  .calc-grid{grid-template-columns:1fr}
+  .pick-grid-3{grid-template-columns:1fr}
+  /* Summary docks to the bottom of the viewport once it can no longer sit beside
+     the controls. The breakdown is dropped here — the total and the CTA are what
+     matter at a glance, and the full list is still above in the flow. */
+  .calc-summary{
+    position:fixed;left:0;right:0;bottom:0;top:auto;z-index:45;padding:12px var(--gutter) 14px;
+    background:linear-gradient(180deg,rgba(10,10,12,0),rgba(10,10,12,.92) 38%);
+    transition:transform .5s var(--ease-out),opacity .4s;
+  }
+  /* Slides away once the controls are behind you, so it never covers the footer. */
+  .calc-summary.is-away{transform:translateY(130%);opacity:0;pointer-events:none}
+  .sum-card{display:grid;grid-template-columns:1fr auto;align-items:center;gap:2px 14px;padding:12px 16px;border-radius:16px}
+  .sum-label,.sum-lines,.sum-note{display:none}
+  .sum-total{grid-column:1;grid-row:1;margin-top:0;font-size:1.15rem;white-space:nowrap}
+  .sum-month{grid-column:1;grid-row:2;margin-top:0;font-size:11.5px;white-space:nowrap}
+  .sum-cta{grid-column:2;grid-row:1 / span 2;margin-top:0;width:auto;align-self:center}
+  .calc{padding-bottom:190px}
+  /* Clear the docked bar so the corner controls stay reachable. Scoped to the
+     calculator page and by class, so it outranks the plain .player/.hud rules. */
+  .page-calc .player{bottom:154px}
+  .page-calc .hud{bottom:128px}
+}
+@media (max-width:560px){
+  .pick-grid{grid-template-columns:1fr}
+  .opt{gap:10px}
+  .opt-price{width:100%;padding-left:31px}
+  .sum-card{padding:11px 13px;gap:2px 10px}
+  .sum-total{font-size:1rem}
+  .sum-cta{padding-left:18px;padding-right:18px}
+  .sum-cta .btn-label{font-size:11.5px}
+}
 
 /* ---------- Responsive ---------- */
 @media (max-width:1100px){
   .work-grid{grid-template-columns:repeat(2,1fr)}
   .tiers{grid-template-columns:1fr;max-width:640px;margin:0 auto}
-  .tier.featured{transform:none}
-  .tier.featured:hover{transform:translateY(-6px)}
   .steps{grid-template-columns:repeat(2,1fr)}
   .addons{grid-template-columns:1fr}
 }
@@ -374,14 +569,12 @@ em{font-style:italic;color:var(--silver-hi)}
   .split{grid-template-columns:1fr;gap:56px}
   .sticky{position:static}
   .section-head{grid-template-columns:1fr;gap:20px}
-  .footer-grid{grid-template-columns:1fr 1fr}
-  .footer-brand{grid-column:1 / -1}
+  .footer-grid{grid-template-columns:1fr;gap:48px;align-items:start}
   .pillars{grid-template-columns:1fr;gap:20px}
 }
 @media (max-width:640px){
   .nav{padding:22px var(--gutter)}
   .nav .wordmark{--logo-size:16px}
-  .footer-brand .wordmark{--logo-size:38px}
   .nav-links{gap:22px}
   .nav-links a{font-size:10.5px;letter-spacing:.16em}
   .hero{padding-top:120px;padding-bottom:110px}
@@ -390,17 +583,26 @@ em{font-style:italic;color:var(--silver-hi)}
   .steps{grid-template-columns:1fr;gap:36px}
   .addons ul{columns:1}
   .hud{display:none}
+  /* HUD is gone here, so the player drops into the corner itself */
+  .player{right:22px;bottom:24px}
+  .player-track{display:none}
   .frame{inset:12px}
   .frame span{width:16px;height:16px}
   .callout{padding-left:48px}
   .btn{padding:17px 26px}
   .btn-lg{padding:20px 30px}
-  .footer-grid{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr;margin-bottom:36px}
+  .footer-links{gap:24px}
+  /* Phone headroom is tight: the footer has to stay inside 100vh or its top edge
+     lifts and drags the anchored wordmark up with it. */
+  .footer-mail{font-size:clamp(1.3rem,5.6vw,1.75rem)}
+  .footer-note{margin-top:14px;font-size:13.5px}
   .footer-bottom{flex-direction:column}
 }
 
 @media (prefers-reduced-motion:reduce){
-  .grain,.ticker-group,.scroll-hint i::after,.eyebrow .dot{animation:none}
+  .grain,.scroll-hint i::after,.eyebrow .dot,.player.is-playing .player-eq i{animation:none}
+  .player.is-playing .player-eq i{height:9px}
   .cursor-trail{display:none}
   .tw-c{visibility:visible}
   *{transition-duration:.01ms!important}
@@ -451,5 +653,17 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
   .display em,.h2 em,
   .display em .wi,.h2 em .wi,.hero-eyebrow{
     animation:none;background-image:none;-webkit-text-fill-color:currentColor
+  }
+}
+
+/* Phone: the galaxy sits directly behind the hero copy and there is no clear zone to
+   move it to, so lift the type off it with a soft scrim. Wide and fully transparent at
+   the edges, so it reads as depth rather than a dark panel. Breakpoint matches the
+   mobile() check in app.js that dims the particles. */
+@media (max-width:760px){
+  .hero-inner{position:relative}
+  .hero-inner::before{
+    content:"";position:absolute;inset:-8vh -12vw;z-index:-1;pointer-events:none;
+    background:radial-gradient(115% 72% at 42% 46%,rgba(10,10,12,.92) 0%,rgba(10,10,12,.82) 38%,rgba(10,10,12,.5) 62%,rgba(10,10,12,0) 82%)
   }
 }

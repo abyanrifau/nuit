@@ -1,5 +1,10 @@
-<title>Nuit Works</title>
-<meta name="description" content="Nuit Works is a web design and development studio crafting clean, fast, interactive websites that turn visitors into customers. Your first mockup is free.">
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Website Cost Calculator &mdash; Nuit Works</title>
+<meta name="description" content="Estimate the cost of your website in seconds. Pick a package, add the features you need, and see a live price range from Nuit Works.">
 <meta name="theme-color" content="#0a0a0c">
 <link rel="icon" href="data:image/png;base64,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">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -675,6 +680,8 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
     background:radial-gradient(115% 72% at 42% 46%,rgba(10,10,12,.92) 0%,rgba(10,10,12,.82) 38%,rgba(10,10,12,.5) 62%,rgba(10,10,12,0) 82%)
   }
 }
+</head>
+<body class="page-calc">
 
 <!-- Preloader -->
 <div class="preloader" aria-hidden="true">
@@ -705,256 +712,178 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
 <header class="nav">
   <a href="#top" class="wordmark" data-cursor aria-label="Nuit Works — back to top"><span class="logo">NUIT</span></a>
   <nav class="nav-links" aria-label="Primary">
-    <a href="#work" data-cursor>Work</a>
-    <a href="#pricing" data-cursor>Pricing</a>
-    <a href="#contact" data-cursor>Contact</a>
+    <a href="index.html#work" data-cursor>Work</a>
+    <a href="index.html#pricing" data-cursor>Pricing</a>
+    <a href="index.html#contact" data-cursor>Contact</a>
   </nav>
 </header>
 
 <main id="top">
 
   <!-- Hero -->
-  <section class="hero section" data-shape="0" data-rotx="1.05" data-x="1.15" data-y="0.05" data-scale="1" data-opacity="1" data-spin="0.12" data-m-opacity="0.85">
+  <section class="hero section calc-hero" data-shape="0" data-rotx="1.05" data-x="1.15" data-y="0.05" data-scale="1" data-opacity="0.9" data-spin="0.12" data-m-opacity="0.7">
     <div class="hero-inner">
-      <p class="eyebrow hero-eyebrow"><span class="dot"></span>Taking new projects — first mockup free</p>
-      <h1 class="display" data-typewriter>We build websites that turn visitors into <em>customers.</em></h1>
-      <p class="lead hero-sub">Nuit is a design studio that creates clear, fast, and high-quality websites. We use interactive design to help your business stand out online. And your first mockup is on us.</p>
+      <p class="eyebrow hero-eyebrow"><span class="dot"></span>Instant estimate — no email required</p>
+      <h1 class="display" data-typewriter>Calculate your <em>website.</em></h1>
+      <p class="lead hero-sub">Pick your package, add the features you need, and get a rough estimate instantly.</p>
       <div class="cta-row hero-cta">
-        <a class="btn btn-primary magnetic" href="mailto:nuitworksmv@gmail.com?subject=Free%20mockup%20for%20my%20business" data-cursor>
-          <span class="btn-label">Get a free mockup</span>
-          <svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-        <a class="btn btn-ghost magnetic" href="#work" data-cursor><span class="btn-label">See our work</span></a>
+        <a class="btn btn-ghost magnetic" href="index.html#pricing" data-cursor><span class="btn-label">Back to pricing</span></a>
       </div>
     </div>
     <div class="scroll-hint" aria-hidden="true"><span>Scroll</span><i></i></div>
   </section>
 
-  <!-- Positioning -->
-  <section id="studio" class="section positioning" data-shape="1" data-rotx="0.35" data-x="0" data-y="0" data-scale="1.35" data-opacity="0.5" data-spin="0.08" data-disperse="1">
-    <div class="container narrow center">
-      <p class="eyebrow" data-reveal><span class="idx">01</span>The studio</p>
-      <h2 class="h2 statement" data-split>Tailored digital solutions built around your <em>business goals.</em></h2>
-      <p class="lead" data-reveal>We are a dedicated team managing every phase of your project, from initial strategy and design to launch and maintenance. By working directly with us, you get clear communication, fast turnaround times, and a website crafted to meet high standards.</p>
-      <ul class="pillars" data-reveal-group>
-        <li data-reveal><span>Custom design</span><small>Tailored specifically to match your brand and audience.</small></li>
-        <li data-reveal><span>Engaging motion</span><small>Smooth interactions that make your site easy and enjoyable to navigate.</small></li>
-        <li data-reveal><span>Full service</span><small>Strategy, design, and launch handled seamlessly in one place.</small></li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- Services -->
-  <section id="services" class="section services" data-shape="2" data-rotx="0.5" data-x="-1.25" data-y="-0.1" data-scale="0.85" data-opacity="0.55" data-spin="0.18" data-disperse="1">
-    <div class="container split">
-      <div class="split-left">
-        <div class="sticky">
-          <p class="eyebrow" data-reveal><span class="idx">02</span>Services</p>
-          <h2 class="h2" data-typewriter>What we <em>build.</em></h2>
-          <p class="lead" data-reveal>Tailored solutions designed around your business needs. Fast, reliable, and built to perform.</p>
-        </div>
-      </div>
-      <div class="split-right" data-reveal-group>
-        <article class="callout" data-reveal>
-          <span class="callout-idx">01</span>
-          <h3 class="callout-h">Business websites</h3>
-          <p class="callout-tag">Build trust and win customers immediately.</p>
-          <p class="callout-p">Clean, fast, easy-to-use websites for local businesses like cafés, clinics, salons, and shops looking to build a strong online presence quickly.</p>
-        </article>
-        <article class="callout" data-reveal>
-          <span class="callout-idx">02</span>
-          <h3 class="callout-h">Brand &amp; portfolio sites</h3>
-          <p class="callout-tag">Showcase your work with style.</p>
-          <p class="callout-p">Custom websites designed to highlight products, creative work, and boutique services with a premium look and feel.</p>
-        </article>
-        <article class="callout" data-reveal>
-          <span class="callout-idx">03</span>
-          <h3 class="callout-h">Interactive experiences</h3>
-          <p class="callout-tag">Stand out with dynamic design.</p>
-          <p class="callout-p">Engaging websites featuring smooth animations and interactive details that make your brand truly memorable.</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- Concept work — self-initiated mockups, clearly labelled as such -->
-  <section id="work" class="section work" data-shape="2" data-rotx="0.5" data-x="0" data-y="0.3" data-scale="1.7" data-opacity="0.45" data-spin="0.05" data-disperse="1">
+  <!-- Calculator -->
+  <section id="calc" class="section calc" data-shape="3" data-rotx="1.15" data-x="0" data-y="0.6" data-scale="1.9" data-opacity="0.26" data-spin="0.04" data-disperse="1">
     <div class="container">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow" data-reveal><span class="idx">03</span>Concept work</p>
-          <h2 class="h2" data-split>Concept <em>builds.</em></h2>
-        </div>
-        <p class="lead" data-reveal>Real places in the Maldives, reimagined on our own initiative to show how we work.</p>
-      </div>
+      <div class="calc-grid">
 
-      <div class="work-grid" data-reveal-group>
-        <!-- Each cover is the live concept in a frame, rendered at desktop width and scaled to fit,
-             so it can never go stale. The gradient .art behind it is the fallback if a frame is
-             blocked or offline. -->
-        <a class="card" href="https://cafe-moka-mu.vercel.app/" target="_blank" rel="noopener" data-art="moka" data-cursor="Visit" data-reveal>
-          <div class="cover">
-            <div class="art"></div>
-            <img class="shot" data-shot="cafe-moka" alt="" loading="lazy" decoding="async">
-            <iframe class="preview" data-src="https://cafe-moka-mu.vercel.app/" title="Live preview of the Café Moka concept site" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true" sandbox="allow-scripts allow-same-origin"></iframe>
-            <div class="shine"></div>
-          </div>
-          <div class="card-meta"><span class="tag">Concept · Café</span><h3>Café Moka <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>Menu, hours and directions for a late-night coffee bar off the north harbour.</p></div>
-        </a>
-        <a class="card" href="https://akiristudiosite.vercel.app/" target="_blank" rel="noopener" data-art="akiri" data-cursor="Visit" data-reveal>
-          <div class="cover">
-            <div class="art"></div>
-            <img class="shot" data-shot="akiri" alt="" loading="lazy" decoding="async">
-            <iframe class="preview" data-src="https://akiristudiosite.vercel.app/" title="Live preview of the Akiri Studio concept site" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true" sandbox="allow-scripts allow-same-origin"></iframe>
-            <div class="shine"></div>
-          </div>
-          <div class="card-meta"><span class="tag">Concept · Jewellery</span><h3>Akiri Studio <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>A quiet editorial storefront for a Maldivian jewellery label and its first collection.</p></div>
-        </a>
-      </div>
-    </div>
-  </section>
+        <form class="calc-main" id="calc-form" autocomplete="off">
 
-  <!-- Client work — deliberately empty until there is something real to put here -->
-  <section id="clients" class="section clients" data-shape="3" data-rotx="0.8" data-x="0" data-y="0.1" data-scale="1.2" data-opacity="0.45" data-spin="0.08" data-disperse="1">
-    <div class="container">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow" data-reveal><span class="idx">04</span>Client work</p>
-          <h2 class="h2" data-split>Real <em>commissions.</em></h2>
-        </div>
-        <p class="lead" data-reveal>Paid work, for paying clients. Kept separate from the concepts above.</p>
-      </div>
+          <fieldset class="calc-block">
+            <legend class="calc-legend"><span class="idx">01</span>Base package</legend>
+            <div class="pick-grid">
+            <label class="pick">
+              <input type="radio" name="pkg" value="standard" checked>
+              <span class="pick-body">
+                <span class="pick-head"><span class="pick-name">Standard</span><span class="pick-price">MVR 5,000+</span></span>
+                <span class="pick-desc">Simple brochure/portfolio sites, up to 3–4 pages, no CMS/login</span>
+              </span>
+            </label>
+            <label class="pick">
+              <input type="radio" name="pkg" value="premium">
+              <span class="pick-body">
+                <span class="pick-head"><span class="pick-name">Premium</span><span class="pick-price">MVR 10,000+</span></span>
+                <span class="pick-desc">Larger multi-page sites with custom logic, up to 6–8 pages</span>
+              </span>
+            </label>
+            </div>
+          </fieldset>
 
-      <div class="empty-state" data-reveal>
-        <span class="empty-face" aria-hidden="true">:(</span>
-        <h3>Nothing here yet.</h3>
-        <p>We are new. The first site we are commissioned to build will land right here.</p>
-        <a class="btn btn-primary magnetic" href="mailto:nuitworksmv@gmail.com?subject=I%27d%20like%20to%20be%20your%20first%20client" data-cursor>
-          <span class="btn-label">Be the first</span>
-          <svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Process -->
-  <section id="process" class="section process" data-shape="3" data-rotx="1.15" data-x="0" data-y="0.1" data-scale="1.15" data-opacity="0.5" data-spin="0.1" data-disperse="1">
-    <div class="container">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow" data-reveal><span class="idx">05</span>How it works</p>
-          <h2 class="h2" data-split>From start to <em>launch.</em></h2>
-        </div>
-        <p class="lead" data-reveal>A simple, step-by-step process designed to make working together easy.</p>
-      </div>
-      <div class="steps" data-reveal-group>
-        <div class="process-line"><i></i></div>
-        <div class="step" data-reveal><div class="step-num">01</div><h3>Inquiry</h3><p>Reach out and tell us about your business, your goals, and what you need for your website.</p></div>
-        <div class="step" data-reveal><div class="step-num">02</div><h3>Free mockup</h3><p>We create an initial concept for your homepage so you can see the design direction before making any commitment.</p></div>
-        <div class="step" data-reveal><div class="step-num">03</div><h3>Build</h3><p>Once you approve the concept, we build out the full site, ensuring every page looks great and works smoothly on all devices.</p></div>
-        <div class="step" data-reveal><div class="step-num">04</div><h3>Launch</h3><p>We test, launch, and hand over full ownership. Monthly maintenance plans are available for ongoing updates.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Pricing -->
-  <section id="pricing" class="section pricing" data-shape="3" data-rotx="1.15" data-x="0" data-y="0.6" data-scale="1.9" data-opacity="0.42" data-spin="0.04" data-disperse="1">
-    <div class="container">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow" data-reveal><span class="idx">06</span>Pricing</p>
-          <h2 class="h2" data-split>Transparent <em>pricing.</em></h2>
-        </div>
-        <p class="lead" data-reveal>Fair rates tailored for local businesses and international clients. All prices listed in Maldivian Rufiyaa (MVR).</p>
-      </div>
-
-      <div class="tiers" data-reveal-group>
-        <article class="tier" data-reveal>
-          <header><h3>Standard</h3><p class="tier-for">For simple brochure/portfolio sites — think Akiri Studio or Blanc Studios-style builds without custom backend logic.</p></header>
-          <div class="price"><span class="cur">MVR</span>5,000+</div>
-          <ul class="feats">
-            <li>Up to 3–4 pages (Home, About, Services/Products, Contact)</li>
-            <li>Responsive design, standard animations/transitions</li>
-            <li>Basic contact form</li>
-            <li>No CMS/login system</li>
-          </ul>
-          <a class="btn btn-ghost magnetic tier-cta" href="mailto:nuitworksmv@gmail.com?subject=Standard%20%E2%80%94%20free%20mockup" data-cursor><span class="btn-label">Start with a free mockup</span></a>
-        </article>
-
-        <article class="tier" data-reveal>
-          <header><h3>Premium</h3><p class="tier-for">For larger or functionally complex sites — think Aina Residency, UBE Academy, or anything needing logic beyond static pages.</p></header>
-          <div class="price"><span class="cur">MVR</span>10,000+</div>
-          <ul class="feats">
-            <li>Up to 6–8 pages</li>
-            <li>Custom animations/motion graphics integration</li>
-            <li>Forms with logic (multi-step, conditional)</li>
-            <li>Basic post-launch support window</li>
-          </ul>
-          <a class="btn btn-primary magnetic tier-cta" href="mailto:nuitworksmv@gmail.com?subject=Premium%20%E2%80%94%20free%20mockup" data-cursor><span class="btn-label">Start with a free mockup</span><svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-        </article>
-      </div>
-      <p class="tiers-note" data-reveal>The final price within a tier depends on design complexity and how much custom work (vs. templated structure) it needs.</p>
-      <div class="tiers-cta" data-reveal>
-        <a class="btn btn-ghost magnetic" href="calculate.html" data-cursor>
-          <span class="btn-label">Calculate your website</span>
-          <svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-      </div>
-
-      <div class="addons" data-reveal-group>
-        <div data-reveal>
-          <h3 class="addons-h">Add-ons</h3>
-          <p class="fine">Optional extra services available for any package.</p>
-        </div>
-        <ul data-reveal>
-          <li><span>Extra page (beyond tier limit)</span><i></i><b>+500–1,000</b></li>
-          <li><span>E-commerce/shop functionality</span><i></i><b>+2,000–4,000</b></li>
-          <li><span>Booking/reservation system</span><i></i><b>+1,500–3,000</b></li>
-          <li><span>Password-protected/member area</span><i></i><b>+1,500–2,500</b></li>
-          <li><span>Admin dashboard / CMS-style editing</span><i></i><b>+2,000–4,000</b></li>
-          <li><span>Multi-language support</span><i></i><b>+1,000–2,000<small>per language</small></b></li>
-          <li><span>Social media feed integration</span><i></i><b>+300–500</b></li>
-          <li><span>Basic SEO setup</span><i></i><b>+500–1,000</b></li>
-          <li><span>Rush delivery (under 5 days)</span><i></i><b>+20–30%<small>of total</small></b></li>
-        </ul>
-      </div>
-
-      <div class="addons subs" data-reveal-group>
-        <div data-reveal>
-          <h3 class="addons-h">Subscriptions</h3>
-          <p class="fine">Ongoing maintenance plans, billed monthly.</p>
-        </div>
-        <ul data-reveal>
-          <li data-reveal>
-            <span class="sub-row"><span>Hosting Plan</span><i></i><b>MVR 750<small>/month</small></b></span>
-            <small class="sub-note">Website hosting + bi-weekly check-ups to confirm everything is running well.</small>
+          <fieldset class="calc-block">
+            <legend class="calc-legend"><span class="idx">02</span>Add-ons</legend>
+            <ul class="opt-list">
+          <li class="opt">
+            <label class="opt-main">
+              <input type="checkbox" data-opt="page">
+              <span class="opt-box" aria-hidden="true"></span>
+              <span class="opt-name">Extra page (beyond tier limit)</span>
+            </label>
+            <span class="opt-price">+500–1,000<small>each</small></span>
+            <span class="stepper" data-stepper="page"><button type="button" class="step-btn" data-step="-1" aria-label="Fewer: Extra pages">&minus;</button><output class="step-val" data-count="page">1</output><button type="button" class="step-btn" data-step="1" aria-label="More: Extra pages">+</button></span>
           </li>
-          <li data-reveal>
-            <span class="sub-row"><span>Plus Plan</span><i></i><b>MVR 1,000<small>/month</small></b></span>
-            <small class="sub-note">Everything in the Hosting Plan + monthly edits to the website at the customer’s desire.</small>
+          <li class="opt">
+            <label class="opt-main">
+              <input type="checkbox" data-opt="ecom">
+              <span class="opt-box" aria-hidden="true"></span>
+              <span class="opt-name">E-commerce/shop functionality</span>
+            </label>
+            <span class="opt-price">+2,000–4,000</span>
           </li>
-        </ul>
-      </div>
-    </div>
-  </section>
+          <li class="opt">
+            <label class="opt-main">
+              <input type="checkbox" data-opt="book">
+              <span class="opt-box" aria-hidden="true"></span>
+              <span class="opt-name">Booking/reservation system</span>
+            </label>
+            <span class="opt-price">+1,500–3,000</span>
+          </li>
+          <li class="opt">
+            <label class="opt-main">
+              <input type="checkbox" data-opt="member">
+              <span class="opt-box" aria-hidden="true"></span>
+              <span class="opt-name">Password-protected/member area</span>
+            </label>
+            <span class="opt-price">+1,500–2,500</span>
+          </li>
+          <li class="opt">
+            <label class="opt-main">
+              <input type="checkbox" data-opt="cms">
+              <span class="opt-box" aria-hidden="true"></span>
+              <span class="opt-name">Admin dashboard / CMS-style editing</span>
+            </label>
+            <span class="opt-price">+2,000–4,000</span>
+          </li>
+          <li class="opt">
+            <label class="opt-main">
+              <input type="checkbox" data-opt="lang">
+              <span class="opt-box" aria-hidden="true"></span>
+              <span class="opt-name">Multi-language support</span>
+            </label>
+            <span class="opt-price">+1,000–2,000<small>per language</small></span>
+            <span class="stepper" data-stepper="lang"><button type="button" class="step-btn" data-step="-1" aria-label="Fewer: Extra languages">&minus;</button><output class="step-val" data-count="lang">1</output><button type="button" class="step-btn" data-step="1" aria-label="More: Extra languages">+</button></span>
+          </li>
+          <li class="opt">
+            <label class="opt-main">
+              <input type="checkbox" data-opt="social">
+              <span class="opt-box" aria-hidden="true"></span>
+              <span class="opt-name">Social media feed integration</span>
+            </label>
+            <span class="opt-price">+300–500</span>
+          </li>
+          <li class="opt">
+            <label class="opt-main">
+              <input type="checkbox" data-opt="seo">
+              <span class="opt-box" aria-hidden="true"></span>
+              <span class="opt-name">Basic SEO setup</span>
+            </label>
+            <span class="opt-price">+500–1,000</span>
+          </li>
+          <li class="opt">
+            <label class="opt-main">
+              <input type="checkbox" data-opt="rush">
+              <span class="opt-box" aria-hidden="true"></span>
+              <span class="opt-name">Rush delivery (under 5 days)</span>
+            </label>
+            <span class="opt-price">+20–30%<small>of total</small></span>
+          </li>
+            </ul>
+          </fieldset>
 
-  <!-- Final CTA -->
-  <section id="contact" class="section final center" data-shape="4" data-rotx="0.12" data-x="0" data-y="-0.35" data-scale="1.05" data-opacity="0.5" data-spin="0.28" data-disperse="1">
-    <div class="container narrow">
-      <p class="eyebrow" data-reveal><span class="idx">07</span>Get in touch</p>
-      <h2 class="display" data-typewriter>Get your initial design mockup for <em>free.</em></h2>
-      <p class="lead" data-reveal>Tell us about your business goals and we will create an initial homepage concept before you commit to anything. If you like the direction, we move forward. If not, there is no obligation.</p>
-      <div class="cta-row" data-reveal>
-        <a class="btn btn-primary btn-lg magnetic" href="mailto:nuitworksmv@gmail.com?subject=Free%20mockup%20for%20my%20business" data-cursor>
-          <span class="btn-label">Get a free mockup</span>
-          <svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
-        <a class="btn btn-ghost btn-lg magnetic" href="https://instagram.com/nuit.works" target="_blank" rel="noopener" data-cursor>
-          <span class="btn-label">DM @nuit.works</span>
-          <svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </a>
+          <fieldset class="calc-block">
+            <legend class="calc-legend"><span class="idx">03</span>Subscription</legend>
+            <div class="pick-grid pick-grid-3">
+            <label class="pick">
+              <input type="radio" name="sub" value="none" checked>
+              <span class="pick-body">
+                <span class="pick-head"><span class="pick-name">None</span><span class="pick-price">&mdash;</span></span>
+                <span class="pick-desc">No ongoing plan</span>
+              </span>
+            </label>
+            <label class="pick">
+              <input type="radio" name="sub" value="hosting">
+              <span class="pick-body">
+                <span class="pick-head"><span class="pick-name">Hosting Plan</span><span class="pick-price">MVR 750/mo</span></span>
+                <span class="pick-desc">Hosting + bi-weekly check-ups</span>
+              </span>
+            </label>
+            <label class="pick">
+              <input type="radio" name="sub" value="plus">
+              <span class="pick-body">
+                <span class="pick-head"><span class="pick-name">Plus Plan</span><span class="pick-price">MVR 1,000/mo</span></span>
+                <span class="pick-desc">Hosting + check-ups + monthly edits</span>
+              </span>
+            </label>
+            </div>
+          </fieldset>
+
+        </form>
+
+        <aside class="calc-summary">
+          <div class="sum-card">
+            <p class="sum-label">Estimated one-time cost</p>
+            <p class="sum-total" data-total aria-live="polite">MVR 5,000</p>
+            <p class="sum-month" data-month hidden></p>
+            <ul class="sum-lines" data-lines></ul>
+            <p class="sum-note">This is a rough estimate. Final pricing is confirmed after a discovery call.</p>
+            <a class="btn btn-primary magnetic sum-cta" data-quote href="mailto:nuitworksmv@gmail.com" data-cursor>
+              <span class="btn-label">Get this quote</span>
+              <svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </a>
+          </div>
+        </aside>
+
       </div>
-      <p class="contact-line" data-reveal><a class="ul" href="mailto:nuitworksmv@gmail.com" data-cursor>nuitworksmv@gmail.com</a><span>·</span><a class="ul" href="https://instagram.com/nuit.works" target="_blank" rel="noopener" data-cursor>@nuit.works</a></p>
     </div>
   </section>
 
@@ -971,9 +900,9 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
       <div class="footer-links">
         <div class="footer-col">
           <h4>Site</h4>
-          <a href="#work" data-cursor>Work</a>
-          <a href="#pricing" data-cursor>Pricing</a>
-          <a href="#contact" data-cursor>Contact</a>
+          <a href="index.html#work" data-cursor>Work</a>
+          <a href="index.html#pricing" data-cursor>Pricing</a>
+          <a href="index.html#contact" data-cursor>Contact</a>
         </div>
         <div class="footer-col">
           <h4>Contact</h4>
@@ -2281,3 +2210,205 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot); else boot();
 })();
 </script>
+<script>
+/* =====================================================================
+   Nuit Works — calc.js
+   Live cost estimator for calculate.html. Pure arithmetic on the form
+   controls; nothing is submitted and nothing leaves the page.
+
+   Every figure below is a low–high range, so the running total is a range
+   too. Rush delivery is the exception: it is a percentage of everything
+   else, so it is applied last, to both ends.
+   ===================================================================== */
+(function () {
+  'use strict';
+
+  const form = document.getElementById('calc-form');
+  if (!form) return;
+
+  const $ = (s, c) => (c || document).querySelector(s);
+  const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
+
+  const PACKAGES = {
+    standard: { name: 'Standard', price: 5000 },
+    premium:  { name: 'Premium',  price: 10000 }
+  };
+
+  // `each` marks the two add-ons that can be bought more than once; their
+  // stepper multiplies the range. `pct` marks the multiplier row.
+  const ADDONS = {
+    page:   { name: 'Extra page',                 low: 500,  high: 1000, each: true },
+    ecom:   { name: 'E-commerce/shop',            low: 2000, high: 4000 },
+    book:   { name: 'Booking/reservation system', low: 1500, high: 3000 },
+    member: { name: 'Member area',                low: 1500, high: 2500 },
+    cms:    { name: 'Admin dashboard / CMS',      low: 2000, high: 4000 },
+    lang:   { name: 'Multi-language',             low: 1000, high: 2000, each: true },
+    social: { name: 'Social media feed',          low: 300,  high: 500 },
+    seo:    { name: 'Basic SEO setup',            low: 500,  high: 1000 },
+    rush:   { name: 'Rush delivery',              pct: [0.20, 0.30] }
+  };
+
+  const SUBS = {
+    none:    { name: 'None',         price: 0 },
+    hosting: { name: 'Hosting Plan', price: 750 },
+    plus:    { name: 'Plus Plan',    price: 1000 }
+  };
+
+  const nf = new Intl.NumberFormat('en-US');
+  const mvr = (n) => 'MVR ' + nf.format(Math.round(n));
+  const range = (lo, hi) => (Math.round(lo) === Math.round(hi))
+    ? mvr(lo)
+    : mvr(lo) + ' – ' + nf.format(Math.round(hi));
+
+  const totalEl = $('[data-total]');
+  const monthEl = $('[data-month]');
+  const linesEl = $('[data-lines]');
+  const quoteEl = $('[data-quote]');
+
+  // Quantities live here rather than in the DOM so a toggled-off add-on
+  // remembers its count if the visitor turns it back on.
+  const counts = { page: 1, lang: 1 };
+
+  const boxFor = (id) => $('[data-opt="' + id + '"]');
+
+  function syncSteppers() {
+    Object.keys(counts).forEach((id) => {
+      const wrap = $('[data-stepper="' + id + '"]');
+      if (!wrap) return;
+      const on = boxFor(id) && boxFor(id).checked;
+      wrap.classList.toggle('is-off', !on);
+      $$('button', wrap).forEach((b) => { b.disabled = !on; });
+      const out = $('[data-count="' + id + '"]', wrap);
+      if (out) out.textContent = String(counts[id]);
+    });
+  }
+
+  function compute() {
+    const pkgKey = (form.querySelector('input[name="pkg"]:checked') || {}).value || 'standard';
+    const pkg = PACKAGES[pkgKey];
+    const subKey = (form.querySelector('input[name="sub"]:checked') || {}).value || 'none';
+    const sub = SUBS[subKey];
+
+    let lo = pkg.price, hi = pkg.price;
+    const lines = [{ label: pkg.name + ' package', value: mvr(pkg.price) }];
+
+    Object.keys(ADDONS).forEach((id) => {
+      const box = boxFor(id);
+      if (!box || !box.checked || ADDONS[id].pct) return;
+      const a = ADDONS[id];
+      const qty = a.each ? counts[id] : 1;
+      const l = a.low * qty, h = a.high * qty;
+      lo += l; hi += h;
+      lines.push({
+        label: a.name + (a.each && qty > 1 ? ' × ' + qty : ''),
+        value: '+' + (l === h ? nf.format(l) : nf.format(l) + '–' + nf.format(h))
+      });
+    });
+
+    // Applied last: a percentage of everything above it.
+    const rush = boxFor('rush');
+    if (rush && rush.checked) {
+      const p = ADDONS.rush.pct;
+      const addLo = lo * p[0], addHi = hi * p[1];
+      lines.push({
+        label: 'Rush delivery (+20–30%)',
+        value: '+' + nf.format(Math.round(addLo)) + '–' + nf.format(Math.round(addHi))
+      });
+      lo += addLo; hi += addHi;
+    }
+
+    return { lo: lo, hi: hi, lines: lines, sub: sub, subKey: subKey, pkg: pkg };
+  }
+
+  function render() {
+    const r = compute();
+
+    totalEl.textContent = range(r.lo, r.hi);
+
+    if (r.subKey === 'none') {
+      monthEl.hidden = true;
+      monthEl.textContent = '';
+    } else {
+      monthEl.hidden = false;
+      monthEl.textContent = '+ ' + mvr(r.sub.price) + '/month ongoing';
+    }
+
+    linesEl.innerHTML = '';
+    r.lines.forEach((ln) => {
+      const li = document.createElement('li');
+      const a = document.createElement('span');
+      a.textContent = ln.label;
+      const b = document.createElement('b');
+      b.textContent = ln.value;
+      li.appendChild(a); li.appendChild(b);
+      linesEl.appendChild(li);
+    });
+    if (r.subKey !== 'none') {
+      const li = document.createElement('li');
+      li.className = 'is-sub';
+      const a = document.createElement('span');
+      a.textContent = r.sub.name;
+      const b = document.createElement('b');
+      b.textContent = mvr(r.sub.price) + '/mo';
+      li.appendChild(a); li.appendChild(b);
+      linesEl.appendChild(li);
+    }
+
+    // The site has no form to post to, so the quote travels in a mailto body.
+    const body = []
+      .concat(['My estimate from the Nuit Works calculator:', ''])
+      .concat(r.lines.map((l) => '- ' + l.label + ': ' + l.value))
+      .concat(r.subKey !== 'none' ? ['- ' + r.sub.name + ': ' + mvr(r.sub.price) + '/month ongoing'] : [])
+      .concat(['', 'Estimated one-time cost: ' + range(r.lo, r.hi), '', 'A bit about my business:'])
+      .join('\n');
+    quoteEl.href = 'mailto:nuitworksmv@gmail.com'
+      + '?subject=' + encodeURIComponent('Quote request — ' + r.pkg.name + ' (' + range(r.lo, r.hi) + ')')
+      + '&body=' + encodeURIComponent(body);
+
+    syncSteppers();
+  }
+
+  form.addEventListener('change', render);
+
+  form.addEventListener('click', (e) => {
+    const btn = e.target.closest('.step-btn');
+    if (!btn) return;
+    e.preventDefault();
+    const wrap = btn.closest('[data-stepper]');
+    const id = wrap.getAttribute('data-stepper');
+    const next = counts[id] + (+btn.getAttribute('data-step'));
+    counts[id] = Math.max(1, Math.min(20, next));
+    render();
+  });
+
+  // Selected cards get a class so the styling does not depend on :has().
+  const markPicked = () => {
+    $$('.pick').forEach((el) => {
+      const input = $('input', el);
+      el.classList.toggle('is-picked', !!input && input.checked);
+    });
+    $$('.opt').forEach((el) => {
+      const input = $('input[type="checkbox"]', el);
+      el.classList.toggle('is-on', !!input && input.checked);
+    });
+  };
+  form.addEventListener('change', markPicked);
+
+  // On mobile the summary is docked to the bottom edge. Retire it once the footer
+  // reaches the upper part of the viewport, so it never sits on top of the footer.
+  // Watching the footer rather than the controls: the calculator section is taller
+  // than the screen, so it still counts as intersecting at the very bottom of the page.
+  const summary = $('.calc-summary');
+  const footer = $('.footer');
+  if (summary && footer && 'IntersectionObserver' in window) {
+    new IntersectionObserver(([e]) => {
+      summary.classList.toggle('is-away', e.isIntersecting);
+    }, { rootMargin: '0px 0px -40% 0px' }).observe(footer);
+  }
+
+  markPicked();
+  render();
+})();
+</script>
+</body>
+</html>

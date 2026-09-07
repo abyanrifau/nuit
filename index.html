@@ -30,6 +30,14 @@
 <div class="grain" aria-hidden="true"></div>
 <div class="frame" aria-hidden="true"><span class="tl"></span><span class="tr"></span><span class="bl"></span><span class="br"></span></div>
 <div class="hud" aria-hidden="true"><span class="hud-loc">Maldives</span><span class="hud-time" id="clock">--:--</span></div>
+<div class="player">
+  <button class="player-btn" type="button" data-cursor aria-pressed="false" aria-label="Play Aphex Twin — #3">
+    <span class="player-eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+    <span class="player-state">Play</span>
+    <span class="player-track">Aphex Twin — #3</span>
+  </button>
+  <audio class="player-audio" src="assets/aphex-twin-3.mp3" preload="none" loop></audio>
+</div>
 <div class="cursor-trail" aria-hidden="true"></div>
 <div class="cursor cursor-dot" aria-hidden="true"></div>
 <div class="cursor cursor-ring" aria-hidden="true"><span></span></div>
@@ -47,7 +55,7 @@
 <main id="top">
 
   <!-- Hero -->
-  <section class="hero section" data-shape="0" data-rotx="1.05" data-x="1.15" data-y="0.05" data-scale="1" data-opacity="1" data-spin="0.12">
+  <section class="hero section" data-shape="0" data-rotx="1.05" data-x="1.15" data-y="0.05" data-scale="1" data-opacity="1" data-spin="0.12" data-m-opacity="0.85">
     <div class="hero-inner">
       <p class="eyebrow hero-eyebrow"><span class="dot"></span>Taking new projects — first mockup free</p>
       <h1 class="display" data-typewriter>We build websites that turn visitors into <em>customers.</em></h1>
@@ -63,18 +71,8 @@
     <div class="scroll-hint" aria-hidden="true"><span>Scroll</span><i></i></div>
   </section>
 
-  <!-- Ticker -->
-  <div class="ticker" aria-hidden="true">
-    <div class="ticker-track">
-      <div class="ticker-group"><span>Jewelry brands</span><span>Restaurants</span><span>Cafés</span><span>Retail</span><span>Design agencies</span><span>Academies</span><span>Hospitality</span><span>Salons</span><span>Clinics</span></div>
-      <div class="ticker-group"><span>Jewelry brands</span><span>Restaurants</span><span>Cafés</span><span>Retail</span><span>Design agencies</span><span>Academies</span><span>Hospitality</span><span>Salons</span><span>Clinics</span></div>
-      <div class="ticker-group"><span>Jewelry brands</span><span>Restaurants</span><span>Cafés</span><span>Retail</span><span>Design agencies</span><span>Academies</span><span>Hospitality</span><span>Salons</span><span>Clinics</span></div>
-      <div class="ticker-group"><span>Jewelry brands</span><span>Restaurants</span><span>Cafés</span><span>Retail</span><span>Design agencies</span><span>Academies</span><span>Hospitality</span><span>Salons</span><span>Clinics</span></div>
-    </div>
-  </div>
-
   <!-- Positioning -->
-  <section id="studio" class="section positioning" data-shape="1" data-rotx="0.35" data-x="0" data-y="0" data-scale="1.35" data-opacity="0.42" data-spin="0.08">
+  <section id="studio" class="section positioning" data-shape="1" data-rotx="0.35" data-x="0" data-y="0" data-scale="1.35" data-opacity="0.5" data-spin="0.08" data-disperse="1">
     <div class="container narrow center">
       <p class="eyebrow" data-reveal><span class="idx">01</span>The studio</p>
       <h2 class="h2 statement" data-split>Tailored digital solutions built around your <em>business goals.</em></h2>
@@ -88,7 +86,7 @@
   </section>
 
   <!-- Services -->
-  <section id="services" class="section services" data-shape="2" data-rotx="0.5" data-x="-1.25" data-y="-0.1" data-scale="0.85" data-opacity="0.9" data-spin="0.18">
+  <section id="services" class="section services" data-shape="2" data-rotx="0.5" data-x="-1.25" data-y="-0.1" data-scale="0.85" data-opacity="0.55" data-spin="0.18" data-disperse="1">
     <div class="container split">
       <div class="split-left">
         <div class="sticky">
@@ -120,52 +118,72 @@
     </div>
   </section>
 
-  <!-- Work -->
-  <section id="work" class="section work" data-shape="2" data-rotx="0.5" data-x="0" data-y="0.3" data-scale="1.7" data-opacity="0.14" data-spin="0.05">
+  <!-- Concept work — self-initiated mockups, clearly labelled as such -->
+  <section id="work" class="section work" data-shape="2" data-rotx="0.5" data-x="0" data-y="0.3" data-scale="1.7" data-opacity="0.45" data-spin="0.05" data-disperse="1">
     <div class="container">
       <div class="section-head">
         <div>
-          <p class="eyebrow" data-reveal><span class="idx">03</span>Selected work</p>
-          <h2 class="h2" data-split>Featured <em>Projects</em></h2>
+          <p class="eyebrow" data-reveal><span class="idx">03</span>Concept work</p>
+          <h2 class="h2" data-split>Concept <em>builds.</em></h2>
         </div>
-        <p class="lead" data-reveal>A selection of websites built for growing businesses and brands.</p>
+        <p class="lead" data-reveal>Real places in the Maldives, reimagined on our own initiative to show how we work.</p>
       </div>
+
       <div class="work-grid" data-reveal-group>
-        <!-- To use real project images: replace <div class="art"></div> with <img class="art" src="..." alt=""> and drop the data-art attribute. -->
-        <a class="card" href="#contact" data-art="1" data-cursor="View" data-reveal>
-          <div class="cover"><div class="art"></div><div class="shine"></div></div>
-          <div class="card-meta"><span class="tag">E-commerce</span><h3>Aurelle Fine Jewelry <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>A jewel-box storefront with slow, gleaming product reveals.</p></div>
+        <!-- Each cover is the live concept in a frame, rendered at desktop width and scaled to fit,
+             so it can never go stale. The gradient .art behind it is the fallback if a frame is
+             blocked or offline. -->
+        <a class="card" href="https://cafe-moka-mu.vercel.app/" target="_blank" rel="noopener" data-art="moka" data-cursor="Visit" data-reveal>
+          <div class="cover">
+            <div class="art"></div>
+            <img class="shot" data-shot="cafe-moka" alt="" loading="lazy" decoding="async">
+            <iframe class="preview" data-src="https://cafe-moka-mu.vercel.app/" title="Live preview of the Café Moka concept site" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true" sandbox="allow-scripts allow-same-origin"></iframe>
+            <div class="shine"></div>
+          </div>
+          <div class="card-meta"><span class="tag">Concept · Café</span><h3>Café Moka <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>Menu, hours and directions for a late-night coffee bar off the north harbour.</p></div>
         </a>
-        <a class="card" href="#contact" data-art="2" data-cursor="View" data-reveal>
-          <div class="cover"><div class="art"></div><div class="shine"></div></div>
-          <div class="card-meta"><span class="tag">Brand site</span><h3>Saltwind Restaurant <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>Menu, reservations, and the mood of the room before you arrive.</p></div>
+        <a class="card" href="https://akiristudiosite.vercel.app/" target="_blank" rel="noopener" data-art="akiri" data-cursor="Visit" data-reveal>
+          <div class="cover">
+            <div class="art"></div>
+            <img class="shot" data-shot="akiri" alt="" loading="lazy" decoding="async">
+            <iframe class="preview" data-src="https://akiristudiosite.vercel.app/" title="Live preview of the Akiri Studio concept site" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true" sandbox="allow-scripts allow-same-origin"></iframe>
+            <div class="shine"></div>
+          </div>
+          <div class="card-meta"><span class="tag">Concept · Jewellery</span><h3>Akiri Studio <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>A quiet editorial storefront for a Maldivian jewellery label and its first collection.</p></div>
         </a>
-        <a class="card" href="#contact" data-art="3" data-cursor="View" data-reveal>
-          <div class="cover"><div class="art"></div><div class="shine"></div></div>
-          <div class="card-meta"><span class="tag">E-commerce</span><h3>Noor Fragrance House <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>Scent notes that unfold one by one as you scroll.</p></div>
-        </a>
-        <a class="card" href="#contact" data-art="4" data-cursor="View" data-reveal>
-          <div class="cover"><div class="art"></div><div class="shine"></div></div>
-          <div class="card-meta"><span class="tag">Agency site</span><h3>Studio Halo <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>A design agency's portfolio built to make their own clients jealous.</p></div>
-        </a>
-        <a class="card" href="#contact" data-art="5" data-cursor="View" data-reveal>
-          <div class="cover"><div class="art"></div><div class="shine"></div></div>
-          <div class="card-meta"><span class="tag">Landing page</span><h3>Tide Football Academy <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>An enrollment-first site for a youth sports academy.</p></div>
-        </a>
-        <a class="card" href="#contact" data-art="6" data-cursor="View" data-reveal>
-          <div class="cover"><div class="art"></div><div class="shine"></div></div>
-          <div class="card-meta"><span class="tag">Brand site</span><h3>Ember &amp; Oat Café <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>Warm, quick, and built to fill tables on a Tuesday.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Client work — deliberately empty until there is something real to put here -->
+  <section id="clients" class="section clients" data-shape="3" data-rotx="0.8" data-x="0" data-y="0.1" data-scale="1.2" data-opacity="0.45" data-spin="0.08" data-disperse="1">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow" data-reveal><span class="idx">04</span>Client work</p>
+          <h2 class="h2" data-split>Real <em>commissions.</em></h2>
+        </div>
+        <p class="lead" data-reveal>Paid work, for paying clients. Kept separate from the concepts above.</p>
+      </div>
+
+      <div class="empty-state" data-reveal>
+        <span class="empty-face" aria-hidden="true">:(</span>
+        <h3>Nothing here yet.</h3>
+        <p>We are new. The first site we are commissioned to build will land right here.</p>
+        <a class="btn btn-primary magnetic" href="mailto:nuitworksmv@gmail.com?subject=I%27d%20like%20to%20be%20your%20first%20client" data-cursor>
+          <span class="btn-label">Be the first</span>
+          <svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
       </div>
     </div>
   </section>
 
   <!-- Process -->
-  <section id="process" class="section process" data-shape="3" data-rotx="1.15" data-x="0" data-y="0.1" data-scale="1.15" data-opacity="0.38" data-spin="0.1">
+  <section id="process" class="section process" data-shape="3" data-rotx="1.15" data-x="0" data-y="0.1" data-scale="1.15" data-opacity="0.5" data-spin="0.1" data-disperse="1">
     <div class="container">
       <div class="section-head">
         <div>
-          <p class="eyebrow" data-reveal><span class="idx">04</span>How it works</p>
+          <p class="eyebrow" data-reveal><span class="idx">05</span>How it works</p>
           <h2 class="h2" data-split>From start to <em>launch.</em></h2>
         </div>
         <p class="lead" data-reveal>A simple, step-by-step process designed to make working together easy.</p>
@@ -181,54 +199,47 @@
   </section>
 
   <!-- Pricing -->
-  <section id="pricing" class="section pricing" data-shape="3" data-rotx="1.15" data-x="0" data-y="0.6" data-scale="1.9" data-opacity="0.1" data-spin="0.04">
+  <section id="pricing" class="section pricing" data-shape="3" data-rotx="1.15" data-x="0" data-y="0.6" data-scale="1.9" data-opacity="0.42" data-spin="0.04" data-disperse="1">
     <div class="container">
       <div class="section-head">
         <div>
-          <p class="eyebrow" data-reveal><span class="idx">05</span>Pricing</p>
+          <p class="eyebrow" data-reveal><span class="idx">06</span>Pricing</p>
           <h2 class="h2" data-split>Transparent <em>pricing.</em></h2>
         </div>
-        <p class="lead" data-reveal>Fair rates tailored for local businesses and international clients. All prices listed in Maldivian Rufiyaa (MVR) and USD.</p>
+        <p class="lead" data-reveal>Fair rates tailored for local businesses and international clients. All prices listed in Maldivian Rufiyaa (MVR).</p>
       </div>
 
       <div class="tiers" data-reveal-group>
         <article class="tier" data-reveal>
-          <header><h3>Starter</h3><p class="tier-for">Ideal for small businesses needing a clean, professional online presence.</p></header>
-          <div class="price"><span class="cur">MVR</span>3,500<span class="usd">$200 USD</span></div>
+          <header><h3>Standard</h3><p class="tier-for">For simple brochure/portfolio sites — think Akiri Studio or Blanc Studios-style builds without custom backend logic.</p></header>
+          <div class="price"><span class="cur">MVR</span>5,000+</div>
           <ul class="feats">
-            <li>Single-page site with up to 4 sections</li>
-            <li>Mobile-responsive layout</li>
-            <li>Smooth page animations</li>
-            <li>Contact form or WhatsApp / Instagram integration</li>
+            <li>Up to 3–4 pages (Home, About, Services/Products, Contact)</li>
+            <li>Responsive design, standard animations/transitions</li>
+            <li>Basic contact form</li>
+            <li>No CMS/login system</li>
           </ul>
-          <a class="btn btn-ghost magnetic tier-cta" href="mailto:nuitworksmv@gmail.com?subject=Starter%20%E2%80%94%20free%20mockup" data-cursor><span class="btn-label">Start with a free mockup</span></a>
-        </article>
-
-        <article class="tier featured" data-reveal>
-          <span class="badge">Most popular</span>
-          <header><h3>Signature</h3><p class="tier-for">Ideal for businesses wanting a full multi-section site to showcase their brand.</p></header>
-          <div class="price"><span class="cur">MVR</span>6,500<span class="usd">$375 USD</span></div>
-          <ul class="feats">
-            <li>Multi-section site (up to 8 sections)</li>
-            <li>Unique visual design matching your brand</li>
-            <li>Interactive animations throughout</li>
-            <li>Portfolio, gallery, or product showcase section</li>
-            <li>Basic search engine setup (SEO)</li>
-          </ul>
-          <a class="btn btn-primary magnetic tier-cta" href="mailto:nuitworksmv@gmail.com?subject=Signature%20%E2%80%94%20free%20mockup" data-cursor><span class="btn-label">Start with a free mockup</span><svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <a class="btn btn-ghost magnetic tier-cta" href="mailto:nuitworksmv@gmail.com?subject=Standard%20%E2%80%94%20free%20mockup" data-cursor><span class="btn-label">Start with a free mockup</span></a>
         </article>
 
         <article class="tier" data-reveal>
-          <header><h3>Flagship</h3><p class="tier-for">Ideal for brands looking for a high-impact, feature-rich website.</p></header>
-          <div class="price"><span class="cur">MVR</span>11,000<span class="usd">$650 USD</span></div>
+          <header><h3>Premium</h3><p class="tier-for">For larger or functionally complex sites — think Aina Residency, UBE Academy, or anything needing logic beyond static pages.</p></header>
+          <div class="price"><span class="cur">MVR</span>10,000+</div>
           <ul class="feats">
-            <li class="plus">Everything in Signature, plus:</li>
-            <li>Advanced interactive 3D and scroll effects</li>
-            <li>High-end motion design and smooth page transitions</li>
-            <li>Fast-track build priority timeline</li>
+            <li>Up to 6–8 pages</li>
+            <li>Custom animations/motion graphics integration</li>
+            <li>Forms with logic (multi-step, conditional)</li>
+            <li>Basic post-launch support window</li>
           </ul>
-          <a class="btn btn-ghost magnetic tier-cta" href="mailto:nuitworksmv@gmail.com?subject=Flagship%20%E2%80%94%20free%20mockup" data-cursor><span class="btn-label">Start with a free mockup</span></a>
+          <a class="btn btn-primary magnetic tier-cta" href="mailto:nuitworksmv@gmail.com?subject=Premium%20%E2%80%94%20free%20mockup" data-cursor><span class="btn-label">Start with a free mockup</span><svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </article>
+      </div>
+      <p class="tiers-note" data-reveal>The final price within a tier depends on design complexity and how much custom work (vs. templated structure) it needs.</p>
+      <div class="tiers-cta" data-reveal>
+        <a class="btn btn-ghost magnetic" href="calculate.html" data-cursor>
+          <span class="btn-label">Calculate your website</span>
+          <svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
       </div>
 
       <div class="addons" data-reveal-group>
@@ -237,20 +248,41 @@
           <p class="fine">Optional extra services available for any package.</p>
         </div>
         <ul data-reveal>
-          <li><span>Monthly maintenance &amp; updates</span><i></i><b>MVR 500/mo<small>/ $30/mo</small></b></li>
-          <li><span>Extra page or section</span><i></i><b>MVR 700<small>/ $40 each</small></b></li>
-          <li><span>Social media content package</span><i></i><b>MVR 1,200<small>/ $70</small></b></li>
-          <li><span>E-commerce setup</span><i></i><b>from MVR 2,500<small>/ $150</small></b></li>
-          <li><span>Hosting setup</span><i></i><b>Priced based on<small>domain &amp; traffic</small></b></li>
+          <li><span>Extra page (beyond tier limit)</span><i></i><b>+500–1,000</b></li>
+          <li><span>E-commerce/shop functionality</span><i></i><b>+2,000–4,000</b></li>
+          <li><span>Booking/reservation system</span><i></i><b>+1,500–3,000</b></li>
+          <li><span>Password-protected/member area</span><i></i><b>+1,500–2,500</b></li>
+          <li><span>Admin dashboard / CMS-style editing</span><i></i><b>+2,000–4,000</b></li>
+          <li><span>Multi-language support</span><i></i><b>+1,000–2,000<small>per language</small></b></li>
+          <li><span>Social media feed integration</span><i></i><b>+300–500</b></li>
+          <li><span>Basic SEO setup</span><i></i><b>+500–1,000</b></li>
+          <li><span>Rush delivery (under 5 days)</span><i></i><b>+20–30%<small>of total</small></b></li>
+        </ul>
+      </div>
+
+      <div class="addons subs" data-reveal-group>
+        <div data-reveal>
+          <h3 class="addons-h">Subscriptions</h3>
+          <p class="fine">Ongoing maintenance plans, billed monthly.</p>
+        </div>
+        <ul data-reveal>
+          <li data-reveal>
+            <span class="sub-row"><span>Hosting Plan</span><i></i><b>MVR 750<small>/month</small></b></span>
+            <small class="sub-note">Website hosting + bi-weekly check-ups to confirm everything is running well.</small>
+          </li>
+          <li data-reveal>
+            <span class="sub-row"><span>Plus Plan</span><i></i><b>MVR 1,000<small>/month</small></b></span>
+            <small class="sub-note">Everything in the Hosting Plan + monthly edits to the website at the customer’s desire.</small>
+          </li>
         </ul>
       </div>
     </div>
   </section>
 
   <!-- Final CTA -->
-  <section id="contact" class="section final center" data-shape="4" data-rotx="0.12" data-x="0" data-y="-0.35" data-scale="1.05" data-opacity="1" data-spin="0.28">
+  <section id="contact" class="section final center" data-shape="4" data-rotx="0.12" data-x="0" data-y="-0.35" data-scale="1.05" data-opacity="0.5" data-spin="0.28" data-disperse="1">
     <div class="container narrow">
-      <p class="eyebrow" data-reveal><span class="idx">06</span>Get in touch</p>
+      <p class="eyebrow" data-reveal><span class="idx">07</span>Get in touch</p>
       <h2 class="display" data-typewriter>Get your initial design mockup for <em>free.</em></h2>
       <p class="lead" data-reveal>Tell us about your business goals and we will create an initial homepage concept before you commit to anything. If you like the direction, we move forward. If not, there is no obligation.</p>
       <div class="cta-row" data-reveal>
@@ -270,23 +302,25 @@
 </main>
 
 <!-- Footer -->
-<footer class="footer" data-shape="4" data-rotx="0.12" data-x="0" data-y="-0.9" data-scale="1.05" data-opacity="0.55" data-spin="0.28">
+<footer class="footer" data-shape="4" data-rotx="0" data-roty="0" data-x="0" data-y="0.1" data-fit="width" data-scale="0.72" data-opacity="1" data-spin="0">
   <div class="container">
     <div class="footer-grid">
-      <div class="footer-brand">
-        <a href="#top" class="wordmark" data-cursor aria-label="Nuit Works — back to top"><span class="logo">NUIT</span></a>
-        <p>A web design and development studio crafting clean, modern websites built to elevate growing businesses.</p>
+      <div class="footer-lead">
+        <a class="footer-mail" href="mailto:nuitworksmv@gmail.com?subject=Free%20mockup%20for%20my%20business" data-cursor>nuitworksmv@gmail.com</a>
+        <p class="footer-note">Web design and development for growing businesses.</p>
       </div>
-      <div class="footer-col">
-        <h4>Site</h4>
-        <a href="#work" data-cursor>Work</a>
-        <a href="#pricing" data-cursor>Pricing</a>
-        <a href="#contact" data-cursor>Contact</a>
-      </div>
-      <div class="footer-col">
-        <h4>Contact</h4>
-        <a href="mailto:nuitworksmv@gmail.com" data-cursor>nuitworksmv@gmail.com</a>
-        <a href="https://instagram.com/nuit.works" target="_blank" rel="noopener" data-cursor>@nuit.works</a>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>Site</h4>
+          <a href="#work" data-cursor>Work</a>
+          <a href="#pricing" data-cursor>Pricing</a>
+          <a href="#contact" data-cursor>Contact</a>
+        </div>
+        <div class="footer-col">
+          <h4>Contact</h4>
+          <a href="mailto:nuitworksmv@gmail.com" data-cursor>nuitworksmv@gmail.com</a>
+          <a href="https://instagram.com/nuit.works" target="_blank" rel="noopener" data-cursor>@nuit.works</a>
+        </div>
       </div>
     </div>
     <div class="footer-bottom">
