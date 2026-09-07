@@ -88,7 +88,7 @@
 
   const VERT = [
     'precision highp float;',
-    'attribute vec3 aP0; attribute vec3 aP1; attribute vec3 aP2; attribute vec3 aP3; attribute vec3 aP4;',
+    'attribute vec3 aP0; attribute vec3 aP1;',
     'attribute vec4 aRand;',
     'uniform mat4 uProj;',
     'uniform float uTime; uniform float uProgress; uniform float uRotX; uniform float uRotY;',
@@ -99,18 +99,11 @@
     'mat3 rotX(float a){ float c = cos(a); float s = sin(a); return mat3(1.0,0.0,0.0, 0.0,c,s, 0.0,-s,c); }',
     'mat3 rotY(float a){ float c = cos(a); float s = sin(a); return mat3(c,0.0,-s, 0.0,1.0,0.0, s,0.0,c); }',
     'void main(){',
-    '  float p = clamp(uProgress, 0.0, 4.0);',
-    '  float seg = floor(min(p, 3.999));',
-    '  float f = p - seg;',
+    '  float f = clamp(uProgress, 0.0, 1.0);',
     '  float st = aRand.z * 0.4;',
     '  f = clamp((f - st) / 0.6, 0.0, 1.0);',
     '  f = f * f * (3.0 - 2.0 * f);',
-    '  vec3 a; vec3 b;',
-    '  if (seg < 0.5) { a = aP0; b = aP1; }',
-    '  else if (seg < 1.5) { a = aP1; b = aP2; }',
-    '  else if (seg < 2.5) { a = aP2; b = aP3; }',
-    '  else { a = aP3; b = aP4; }',
-    '  vec3 pos = mix(a, b, f);',
+    '  vec3 pos = mix(aP0, aP1, f);',
     '  float burst = sin(f * 3.14159265);',
     '  pos += normalize(pos + vec3(0.001)) * burst * (0.3 + 0.35 * aRand.y);',
     '  float t = uTime * (0.5 + aRand.w * 0.7);',
@@ -359,55 +352,6 @@
     }
     return finish(pts);
   }
-  function genSphere(N) {
-    const pts = [];
-    const ga = Math.PI * (3 - Math.sqrt(5));
-    for (let i = 0; i < N; i++) {
-      const y0 = 1 - 2 * (i + 0.5) / N;
-      const rr = Math.sqrt(1 - y0 * y0);
-      const phi = i * ga;
-      const rad = rnd() < 0.72 ? 1.08 + 0.1 * rnd() : 1.12 * Math.sqrt(rnd());
-      pts.push([Math.cos(phi) * rr * rad, y0 * rad, Math.sin(phi) * rr * rad, 0]);
-    }
-    return finish(pts);
-  }
-  function genKnot(N) {
-    const pts = [];
-    const p = 2, q = 3, S = 0.44;
-    for (let i = 0; i < N; i++) {
-      const t = rnd() * TAU;
-      const r = 2 + Math.cos(q * t);
-      let x = r * Math.cos(p * t), y = r * Math.sin(p * t), z = -Math.sin(q * t);
-      const tr = 0.42 * Math.cbrt(rnd());
-      const th = rnd() * TAU, ph = Math.acos(2 * rnd() - 1);
-      x += tr * Math.sin(ph) * Math.cos(th); y += tr * Math.sin(ph) * Math.sin(th); z += tr * Math.cos(ph);
-      pts.push([x * S, z * S * 1.6, y * S, 0]);
-    }
-    return finish(pts);
-  }
-  function genRing(N) {
-    const pts = [];
-    for (let i = 0; i < N; i++) {
-      const k = rnd();
-      if (k < 0.14) {
-        const r = Math.sqrt(rnd()) * 1.25, th = rnd() * TAU;
-        pts.push([r * Math.cos(th), (rnd() - 0.5) * 0.04, r * Math.sin(th), 0]);
-      } else if (k < 0.24) {
-        const r = 0.28 * Math.cbrt(rnd()), th = rnd() * TAU, ph = Math.acos(2 * rnd() - 1);
-        pts.push([r * Math.sin(ph) * Math.cos(th), r * Math.cos(ph), r * Math.sin(ph) * Math.sin(th), 0]);
-      } else {
-        const R = 1.48, tube = 0.035 + 0.1 * Math.pow(rnd(), 2.2);
-        const th = rnd() * TAU, ph = rnd() * TAU;
-        const rr = R + tube * Math.cos(ph);
-        pts.push([rr * Math.cos(th), tube * Math.sin(ph), rr * Math.sin(th), 0]);
-      }
-    }
-    return finish(pts);
-  }
-  /* --- Wordmark. Particles sampled from the opaque pixels of a rendering of the
-     NUIT logo, normalised to x in [-1,1] (y follows the logo's aspect) so a section
-     can scale it to whatever share of the viewport width it wants. --------------- */
-  const LOGO_RATIO = 3.082;
   function sampleAlpha(ctx, W, H, N) {
     const data = ctx.getImageData(0, 0, W, H).data;
     const hits = [];
@@ -434,6 +378,10 @@
   }
   // Synchronous fallback so the buffer is never empty; replaced by the real logo
   // artwork as soon as it decodes (see loadLogoWordmark).
+  /* --- Wordmark. Particles sampled from the opaque pixels of a rendering of the
+     NUIT logo, normalised to x in [-1,1] (y follows the logo's aspect) so a section
+     can scale it to whatever share of the viewport width it wants. --------------- */
+  const LOGO_RATIO = 3.082;
   function genWordmark(N) {
     const { ctx, W, H } = wordmarkCanvas();
     ctx.fillStyle = '#fff';
@@ -463,7 +411,12 @@
     };
     img.src = m[1];
   }
-  const SHAPES = [genGalaxy, genSphere, genKnot, genRing, genWordmark];
+  // Two forms: the galaxy the hero opens on, and the wordmark the footer lands on.
+  // Sections in between ask for the galaxy and disperse it. See shapes-parked.js
+  // for the generators that used to sit between them.
+  const SHAPES = [genGalaxy, genWordmark];
+  const LAST_I = SHAPES.length - 1;          // highest data-shape a section may use
+  const WORDMARK_I = SHAPES.indexOf(genWordmark);
 
   function genRandoms(N) {
     const r = new Float32Array(N * 4);
@@ -497,7 +450,7 @@
       this.ndc = { x: 9, y: 9, tx: 9, ty: 9 };
       this.scroll = 0; this.boost = 0; this.time = 0;
 
-      this.prog = createProgram(gl, VERT, FRAG, ['aP0', 'aP1', 'aP2', 'aP3', 'aP4', 'aRand']);
+      this.prog = createProgram(gl, VERT, FRAG, ['aP0', 'aP1', 'aRand']);
       this.dprog = createProgram(gl, DVERT, DFRAG, ['aPos', 'aSeed']);
       this.u = uniformMap(gl, this.prog);
       this.du = uniformMap(gl, this.dprog);
@@ -536,10 +489,10 @@
       this.scatterX = this.halfW * 1.35;
       this.scatterY = this.halfH * 1.35;
     }
-    // Swap the wordmark shape (buffer 4) for a better sampling once the logo decodes.
+    // Swap the wordmark shape for a better sampling once the logo decodes.
     setWordmark(data) {
       const gl = this.gl;
-      gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers[4]);
+      gl.bindBuffer(gl.ARRAY_BUFFER, this.buffers[WORDMARK_I]);
       gl.bufferData(gl.ARRAY_BUFFER, applyOrder(data, this.order), gl.STATIC_DRAW);
     }
     setPointer(px, py) {
@@ -617,10 +570,10 @@
       gl.uniform2f(this.u.uMouse, this.mouse.x, this.mouse.y);
       gl.uniform1f(this.u.uOpacity, s.opacity * s.intro);
       gl.uniform3f(this.u.uColor, 0.79, 0.79, 0.82);
-      for (let i = 0; i < 5; i++) bindAttrib(gl, this.buffers[i], i, 3);
-      bindAttrib(gl, this.randBuf, 5, 4);
+      for (let i = 0; i < SHAPES.length; i++) bindAttrib(gl, this.buffers[i], i, 3);
+      bindAttrib(gl, this.randBuf, SHAPES.length, 4);
       gl.drawArrays(gl.POINTS, 0, this.drawCount);
-      for (let i = 0; i < 6; i++) gl.disableVertexAttribArray(i);
+      for (let i = 0; i <= SHAPES.length; i++) gl.disableVertexAttribArray(i);
     }
   }
 
@@ -911,6 +864,13 @@
         };
       };
       let activeSec = null;
+      /* A page that only uses a couple of the shapes has nothing to gain from morphing
+         through the ones in between: walking galaxy → sphere → knot → ring on the way to
+         the wordmark just shows forms belonging to sections that page does not have.
+         Opting in with data-shape-snap on <body> reuses the fling technique below for
+         every shape change — scatter to the haze, swap the index while it cannot be seen,
+         then condense — so only the shapes a page actually declares are ever visible. */
+      const snapShapes = document.body.hasAttribute('data-shape-snap');
       const go = (sec) => {
         activeSec = sec;
         const cfg = cfgFor(sec);
@@ -927,12 +887,23 @@
           lock = target + Math.round((field.state.rotY - target) / TAU) * TAU;
           cfg.rotY = lock;
         }
-        gsap.to(field.state, Object.assign({
+        const tween = Object.assign({
           duration: 1.5,
           ease: 'power3.inOut',
           overwrite: 'auto',
           onComplete: () => { if (lock !== null && activeSec === sec) field.state.rotY = lock; }
-        }, cfg));
+        }, cfg);
+
+        if (snapShapes && Math.round(field.state.progress) !== +sec.dataset.shape) {
+          // Named properties only, for the same reason as the fling path below.
+          gsap.killTweensOf(field.state, 'progress,rotX,rotY,scale,offX,offY,opacity,spin,disperse');
+          gsap.timeline()
+            .to(field.state, { disperse: 1, duration: 0.4, ease: 'power2.out' })
+            .set(field.state, { progress: +sec.dataset.shape })
+            .to(field.state, Object.assign({}, tween, { duration: 1.1, ease: 'power3.out' }));
+          return;
+        }
+        gsap.to(field.state, tween);
       };
       /* Flinging across the page fires every section's trigger in turn, and each one
          starting its own 1.5s morph means you sit and watch the shape crawl back down
