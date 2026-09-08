@@ -713,12 +713,14 @@
     opts = opts || {};
     return new Promise((resolve) => {
       const chars = el._tw || (el._tw = splitChars(el));
-      if (reduced) { chars.forEach((c) => c.classList.add('on')); resolve(); return; }
+      if (reduced) { el.classList.remove('is-typing'); chars.forEach((c) => c.classList.add('on')); resolve(); return; }
+      el.classList.add('is-typing');
       let i = 0, caret = null;
       const setCaret = (c) => { if (caret) caret.classList.remove('caret'); caret = c; if (c) c.classList.add('caret'); };
       setCaret(chars[0]);
       const step = () => {
         if (i >= chars.length) {
+          el.classList.remove('is-typing');
           setTimeout(() => { if (caret) caret.classList.add('caret-off'); resolve(); }, opts.hold != null ? opts.hold : 1800);
           return;
         }
@@ -806,6 +808,7 @@
     $$('[data-typewriter]').forEach((el) => {
       if (el === heroH1) return;
       el._tw = splitChars(el);
+      el.classList.add('is-typing');
       ScrollTrigger.create({ trigger: el, start: 'top 88%', once: true, onEnter: () => typewrite(el, { speed: 40 }) });
     });
 
@@ -1107,6 +1110,7 @@
     if (!hasGSAP) { pre.remove(); if (heroH1) splitChars(heroH1).forEach((c) => c.classList.add('on')); return; }
     if (lenis) lenis.stop();
     heroH1._tw = splitChars(heroH1);
+    heroH1.classList.add('is-typing');
     if (reduced) { pre.remove(); startHero(); return; }
     gsap.set(heroBits, { opacity: 0 });
     let seen = false;

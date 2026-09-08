@@ -29,6 +29,9 @@
   --ease-inout:cubic-bezier(.76,0,.24,1);
   --gutter:clamp(20px,5vw,80px);
   --radius:18px;
+  /* Base colour of the metallic shimmer gradient. Also the flat fill used while a
+     heading types, so the handover to the gradient is invisible. */
+  --shimmer-base:#b0b0b8;
 }
 
 *,*::before,*::after{box-sizing:border-box}
@@ -625,7 +628,7 @@ html.has-cursor .step-btn:not(:disabled):hover{border-color:var(--silver-hi);col
 @supports ((-webkit-background-clip:text) or (background-clip:text)){
   .display em,.h2 em,
   .display em .wi,.h2 em .wi{
-    background-image:linear-gradient(96deg,#b0b0b8 0%,#b0b0b8 33%,#fff 45%,#fbfbfd 51%,#b0b0b8 63%,#b0b0b8 100%);
+    background-image:linear-gradient(96deg,var(--shimmer-base) 0%,var(--shimmer-base) 33%,#fff 45%,#fbfbfd 51%,var(--shimmer-base) 63%,var(--shimmer-base) 100%);
     background-size:260% 100%;background-position:170% 0;
     /* background-clip:text only paints inside the box, so italic glyph ink that hangs
        below or beside it renders as nothing. Pad the paint box out on all three sides;
@@ -644,6 +647,25 @@ html.has-cursor .step-btn:not(:disabled):hover{border-color:var(--silver-hi);col
   }
   .display em,.h2 em{margin:0 -.18em}
   .display em .wi,.h2 em .wi{margin:0 -.18em -.3em}
+  /* From the moment a heading's characters are split until the line finishes typing,
+     fill the emphasis word flat instead of letting
+     the ancestor paint it through background-clip:text. A text-clipped ancestor
+     builds its mask from its own glyphs, and WebKit includes glyphs that are
+     visibility:hidden in that mask — so on iOS the silver word was painted in full
+     while the plain letters beside it were still waiting their turn. With a flat
+     fill nothing paints through, and per-character visibility alone decides what is
+     drawn.
+
+     The flat fill is the gradient's own base colour and `animation:none` holds the
+     sweep at frame 0, whose 170% position parks the highlight off the end of the
+     word — so the word is uniformly that colour on both sides of the handover and
+     the swap cannot be seen. The shimmer then runs from the top. */
+  .display.is-typing em,.h2.is-typing em{
+    background-image:none;
+    -webkit-text-fill-color:var(--shimmer-base);
+    color:var(--shimmer-base);
+    animation:none;
+  }
   .positioning em,.positioning em .wi{animation-delay:.7s}
   .services em,.services em .wi{animation-delay:1.4s}
   .work em,.work em .wi{animation-delay:2.1s}
@@ -1711,12 +1733,14 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
     opts = opts || {};
     return new Promise((resolve) => {
       const chars = el._tw || (el._tw = splitChars(el));
-      if (reduced) { chars.forEach((c) => c.classList.add('on')); resolve(); return; }
+      if (reduced) { el.classList.remove('is-typing'); chars.forEach((c) => c.classList.add('on')); resolve(); return; }
+      el.classList.add('is-typing');
       let i = 0, caret = null;
       const setCaret = (c) => { if (caret) caret.classList.remove('caret'); caret = c; if (c) c.classList.add('caret'); };
       setCaret(chars[0]);
       const step = () => {
         if (i >= chars.length) {
+          el.classList.remove('is-typing');
           setTimeout(() => { if (caret) caret.classList.add('caret-off'); resolve(); }, opts.hold != null ? opts.hold : 1800);
           return;
         }
@@ -1804,6 +1828,7 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
     $$('[data-typewriter]').forEach((el) => {
       if (el === heroH1) return;
       el._tw = splitChars(el);
+      el.classList.add('is-typing');
       ScrollTrigger.create({ trigger: el, start: 'top 88%', once: true, onEnter: () => typewrite(el, { speed: 40 }) });
     });
 
@@ -2105,6 +2130,7 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
     if (!hasGSAP) { pre.remove(); if (heroH1) splitChars(heroH1).forEach((c) => c.classList.add('on')); return; }
     if (lenis) lenis.stop();
     heroH1._tw = splitChars(heroH1);
+    heroH1.classList.add('is-typing');
     if (reduced) { pre.remove(); startHero(); return; }
     gsap.set(heroBits, { opacity: 0 });
     let seen = false;
