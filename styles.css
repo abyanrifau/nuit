@@ -27,7 +27,14 @@
 }
 
 *,*::before,*::after{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;background:var(--bg)}
+html{-webkit-text-size-adjust:100%;background:var(--bg);scrollbar-width:thin;scrollbar-color:rgba(242,242,240,.2) transparent}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-corner{background:transparent}
+/* Padded with a transparent border so the thumb reads as a thin pill inside the
+   gutter rather than filling its full width. */
+::-webkit-scrollbar-thumb{background:rgba(242,242,240,.18);background-clip:content-box;border:3px solid transparent;border-radius:999px}
+::-webkit-scrollbar-thumb:hover{background:rgba(242,242,240,.34);background-clip:content-box;border:3px solid transparent}
 html.lenis,html.lenis body{height:auto}
 .lenis.lenis-smooth{scroll-behavior:auto!important}
 .lenis.lenis-stopped{overflow:hidden}
@@ -108,8 +115,11 @@ html.has-cursor .player-btn:hover,.player-btn:focus-visible{color:var(--fg)}
 .pre-bar i{display:block;height:100%;background:var(--silver-hi);transform-origin:left center;transform:scaleX(0)}
 
 /* ---------- Custom cursor ---------- */
-.cursor{position:fixed;top:0;left:0;z-index:100;pointer-events:none;display:none;will-change:transform}
-.cursor-trail{position:fixed;top:0;left:0;z-index:99;pointer-events:none;display:none}
+/* Top of everything, deliberately above the preloader (200) as well as the
+   quick-look overlay (120). has-cursor forces cursor:none on every element, so
+   anything that paints over these two leaves that area with no pointer at all. */
+.cursor{position:fixed;top:0;left:0;z-index:250;pointer-events:none;display:none;will-change:transform}
+.cursor-trail{position:fixed;top:0;left:0;z-index:249;pointer-events:none;display:none}
 @media (hover:hover) and (pointer:fine){
   html.has-cursor,html.has-cursor *{cursor:none!important}
   .cursor{display:block}
@@ -135,12 +145,12 @@ html.has-cursor .player-btn:hover,.player-btn:focus-visible{color:var(--fg)}
 /* ---------- Nav ---------- */
 .nav{
   position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;
-  padding:32px var(--gutter);transition:padding .6s var(--ease-out);
+  padding:22px var(--gutter);transition:padding .6s var(--ease-out);
 }
-.nav::before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(10,10,12,.92),rgba(10,10,12,0));opacity:0;transition:opacity .6s;pointer-events:none}
-.nav.is-scrolled{padding:18px var(--gutter)}
-.nav.is-scrolled::before{opacity:1}
-.wordmark{--logo-size:19px;display:inline-flex;align-items:center;text-decoration:none;color:var(--fg)}
+.nav::before{content:'';position:absolute;inset:0;z-index:-1;background:rgba(10,10,12,.4);backdrop-filter:blur(14px);border-bottom:1px solid transparent;opacity:0;transition:opacity .6s;pointer-events:none}
+.nav.is-scrolled{padding:14px var(--gutter)}
+.nav.is-scrolled::before{opacity:1;border-bottom-color:var(--line)}
+.wordmark{--logo-size:22px;display:inline-flex;align-items:center;text-decoration:none;color:var(--fg)}
 /* Hidden while the particle wordmark holds the footer — see is-eclipsed in app.js */
 .nav .wordmark{transition:opacity .7s var(--ease-out),transform .7s var(--ease-out)}
 .nav .wordmark.is-eclipsed{opacity:0;transform:translateY(-8px);pointer-events:none}
@@ -152,12 +162,16 @@ html.has-cursor .wordmark:hover .logo{opacity:.68}
 .wordmark:focus-visible{outline:1px solid var(--silver-hi);outline-offset:8px}
 .nav-links{display:flex;gap:36px}
 .nav-links a{
-  position:relative;font-size:11.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);text-decoration:none;
+  position:relative;font-size:12.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;
   padding:6px 0;transition:color .35s;
 }
 .nav-links a::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--fg);transform:scaleX(0);transform-origin:right;transition:transform .5s var(--ease-out)}
 html.has-cursor .nav-links a:hover{color:var(--fg)}
 html.has-cursor .nav-links a:hover::after{transform:scaleX(1);transform-origin:left}
+.nav-right{display:flex;align-items:center;gap:28px}
+/* Same pill button language as every other CTA on the page, just sized for a
+   persistent header: no arrow glyph, tighter padding, smaller type. */
+.nav-cta{padding:12px 22px;font-size:12px;gap:0}
 
 /* ---------- Layout ---------- */
 main,footer{position:relative;z-index:4}
@@ -183,7 +197,7 @@ main,footer{position:relative;z-index:4}
 .h2{font:400 clamp(2.5rem,5.6vw,5.2rem)/1.02 var(--serif);letter-spacing:-.012em;text-wrap:balance}
 .h2.statement{font-size:clamp(2.1rem,4.4vw,4rem);line-height:1.12;max-width:22ch;margin:0 auto}
 em{font-style:italic;color:var(--silver-hi)}
-.lead{font-size:clamp(1rem,1.15vw,1.15rem);line-height:1.65;color:var(--soft);max-width:54ch}
+.lead{font-size:clamp(1rem,1.15vw,1.15rem);line-height:1.65;color:var(--fg);max-width:54ch}
 .center .lead{margin-left:auto;margin-right:auto}
 
 /* ---------- Buttons ---------- */
@@ -248,7 +262,7 @@ html.has-cursor .btn-ghost:hover{color:var(--bg);border-color:var(--fg)}
 .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:72px;text-align:left}
 .pillars li{border-top:1px solid var(--line-strong);padding-top:20px}
 .pillars span{display:block;font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px}
-.pillars small{font-size:14px;color:var(--muted)}
+.pillars small{font-size:14px;color:var(--fg)}
 
 /* ---------- Services ---------- */
 .split{display:grid;grid-template-columns:1fr 1.25fr;gap:clamp(48px,7vw,120px);align-items:start}
@@ -259,41 +273,36 @@ html.has-cursor .btn-ghost:hover{color:var(--bg);border-color:var(--fg)}
 .callout-idx{position:absolute;left:0;top:46px;font:italic 400 1.35rem var(--serif);color:var(--silver)}
 .callout-h{font-size:12.5px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--fg);margin-bottom:18px}
 .callout-tag{font-size:clamp(1.25rem,1.7vw,1.6rem);font-weight:600;letter-spacing:-.01em;line-height:1.25;margin-bottom:16px;max-width:24ch}
-.callout-p{color:var(--muted);font-size:15.5px;line-height:1.65;max-width:52ch}
+.callout-p{color:var(--fg);font-size:15.5px;line-height:1.65;max-width:52ch}
 .callout::after{content:'';position:absolute;left:0;right:0;top:-1px;height:1px;background:var(--silver-hi);transform:scaleX(0);transform-origin:left;transition:transform .9s var(--ease-out)}
 html.has-cursor .callout:hover::after{transform:scaleX(1)}
 
 /* ---------- Work ---------- */
-.work-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;perspective:1600px}
-.card{display:block;text-decoration:none;color:inherit;transform-style:preserve-3d;will-change:transform}
-.cover{position:relative;aspect-ratio:4/5;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:#0e0e11;transform:translateZ(0)}
+/* Two across, not three. These cards are the first thing under the hero and each
+   one now carries a real screenshot — at three across the screenshot is a
+   thumbnail, and the point of the section is that you can see the design. */
+.work-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(28px,3vw,48px);perspective:1600px}
+.card{display:block;transform-style:preserve-3d;will-change:transform}
+
+/* The cover opens the quick look, so it is a real <button> — hence the reset. */
+.cover{
+  position:relative;display:block;width:100%;margin:0;padding:0;
+  aspect-ratio:16/10;border-radius:var(--radius);overflow:hidden;
+  border:1px solid var(--line);background:#0e0e11;transform:translateZ(0);
+  font:inherit;color:inherit;text-align:left;cursor:pointer;
+  -webkit-tap-highlight-color:transparent
+}
+.cover:focus-visible{outline:1px solid var(--silver-hi);outline-offset:6px}
 .art{position:absolute;inset:-6% 0;transition:transform 1.3s var(--ease-out);will-change:transform;background-color:#0f0f12}
 html.has-cursor .card:hover .art{transform:scale(1.06)}
-.cover::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,12,0) 55%,rgba(10,10,12,.55));pointer-events:none}
+.cover::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,12,0) 52%,rgba(10,10,12,.58));pointer-events:none}
 .cover .shine{position:absolute;inset:0;background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(232,232,236,.12),transparent 60%);opacity:0;transition:opacity .5s;pointer-events:none}
 html.has-cursor .card:hover .shine{opacity:1}
-.card-meta{padding:22px 4px 0}
-.tag{display:inline-block;font-size:10.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:7px 11px;border-radius:999px}
-.card-meta h3{font:400 1.7rem/1.1 var(--serif);margin:16px 0 8px;display:flex;align-items:center;gap:10px}
-.card-meta h3 svg{width:14px;height:14px;opacity:0;transform:translate(-6px,6px);transition:opacity .4s,transform .5s var(--ease-out)}
-html.has-cursor .card:hover .card-meta h3 svg{opacity:1;transform:translate(0,0)}
-.card-meta p{color:var(--muted);font-size:14.5px}
 
-/* Auto-fit so the grid stays right whether there are two concepts or six. */
-.work-grid{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
-.work-grid .cover{aspect-ratio:16/10}
-
-
-/* Live preview. The frame is laid out at a desktop width and scaled down by --pv
-   (set in app.js from the cover width) so the page inside renders its desktop
-   layout rather than its mobile one. Never interactive — the card owns the click. */
-/* Transition is added by app.js after the first fit, so the initial scale lands
-   without animating up from the fallback value. */
-/* Screenshot layer: sits over the gradient, under the live frame. It is what phones
-   show (frames are desktop-only) and it fills the cover instantly on desktop while the
-   frame loads behind it. Stays hidden until a file actually loads — see app.js. */
-/* Starts transparent rather than display:none — a lazy image with no box never trips
-   its own intersection observer, so it would sit there never loading and never failing. */
+/* Screenshot layer, over the gradient fallback. Stays transparent until a file
+   actually loads (see app.js), so a missing capture leaves the gradient rather
+   than a broken image. Transparent and not display:none because a lazy image
+   with no box never trips its own intersection observer. */
 .shot{
   position:absolute;inset:0;width:100%;height:100%;
   object-fit:cover;object-position:50% 0;opacity:0;
@@ -301,15 +310,65 @@ html.has-cursor .card:hover .card-meta h3 svg{opacity:1;transform:translate(0,0)
 }
 .shot.is-on{opacity:1}
 .shot.is-off{display:none}
-html.has-cursor .card:hover .shot{transform:scale(1.07)}
-.preview[hidden]{display:none}
-.preview.is-fitted{transition:transform 1s var(--ease-out)}
-.preview{
-  position:absolute;left:50%;top:50%;width:1440px;height:900px;border:0;
-  transform-origin:50% 50%;transform:translate(-50%,-50%) scale(var(--pv,.45));
-  pointer-events:none;background:#0e0e11;color-scheme:light
+html.has-cursor .card:hover .shot{transform:scale(1.05)}
+
+.card-meta{padding:26px 4px 0}
+.tag{display:inline-block;font-size:10.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:7px 11px;border-radius:999px}
+.card-meta h3{font:400 clamp(1.8rem,2.1vw,2.25rem)/1.08 var(--serif);margin:18px 0 12px}
+/* An estimate, not a quote — the label stays muted so the figure reads first. */
+.card-est{margin-top:16px;font-size:13px;color:var(--muted)}
+.card-est b{font-weight:600;letter-spacing:.03em;color:var(--silver-hi)}
+.card-out{
+  display:inline-flex;align-items:center;gap:9px;margin-top:22px;
+  font-size:11.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;transition:color .35s
 }
-html.has-cursor .card:hover .preview{transform:translate(-50%,-50%) scale(calc(var(--pv,.45) * 1.07))}
+.card-out svg{width:12px;height:12px;transition:transform .45s var(--ease-out)}
+html.has-cursor .card-out:hover{color:var(--fg)}
+html.has-cursor .card-out:hover svg{transform:translate(2px,-2px)}
+.card-out:focus-visible{outline:1px solid var(--silver-hi);outline-offset:5px;border-radius:2px}
+
+/* ---------- Quick look ---------- */
+.lb{position:fixed;inset:0;z-index:120;display:grid;place-items:center;padding:clamp(14px,4vw,44px)}
+.lb[hidden]{display:none}
+.lb-scrim{position:absolute;inset:0;background:rgba(6,6,8,.8);backdrop-filter:blur(10px);opacity:0;transition:opacity .45s var(--ease-out)}
+/* Opaque rather than frosted: the sticky footer below has to paint over the
+   scrolling shots, and two translucent layers stacked read as a bright band.
+   The blurred scrim behind already separates the panel from the page. */
+.lb-panel{
+  position:relative;width:100%;max-width:1060px;max-height:100%;
+  display:flex;flex-direction:column;gap:22px;
+  padding:clamp(20px,2.4vw,34px) clamp(20px,2.4vw,34px) 0;border-radius:var(--radius);
+  background:#0e0e12;border:1px solid var(--line);
+  overflow-y:auto;overscroll-behavior:contain;
+  opacity:0;transform:translateY(20px) scale(.985);
+  transition:opacity .4s var(--ease-out),transform .55s var(--ease-out)
+}
+.lb.is-open .lb-scrim{opacity:1}
+.lb.is-open .lb-panel{opacity:1;transform:none}
+.lb-head{display:flex;align-items:flex-start;justify-content:space-between;gap:24px}
+.lb-name{font:400 clamp(1.7rem,2.3vw,2.3rem)/1.06 var(--serif);margin:14px 0 0}
+.lb-x{
+  flex:none;width:42px;height:42px;display:grid;place-items:center;
+  border-radius:50%;border:1px solid var(--line);background:transparent;
+  color:var(--fg);cursor:pointer;transition:background .35s,border-color .35s
+}
+.lb-x svg{width:15px;height:15px}
+html.has-cursor .lb-x:hover{background:rgba(242,242,240,.08);border-color:var(--silver-hi)}
+.lb-x:focus-visible{outline:1px solid var(--silver-hi);outline-offset:4px}
+/* Stacked, not side by side: two 16:10 frames in one row are too small to show
+   the thing they exist to show, and the panel scrolls anyway. */
+.lb-shots{display:grid;gap:16px}
+.lb-shots img{display:block;width:100%;height:auto;border-radius:calc(var(--radius) - 8px);border:1px solid var(--line);background:#0e0e11}
+/* Sticky, because two stacked 16:10 shots are taller than the panel on any
+   laptop — without this the one button in the overlay sits below the fold. */
+.lb-foot{
+  position:sticky;bottom:0;z-index:1;
+  display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;
+  padding:18px 0 clamp(20px,2.4vw,34px);
+  background:#0e0e12;border-top:1px solid var(--line)
+}
+.lb-note{color:var(--muted);font-size:13px}
 
 /* Placeholder cover art, keyed to the project. Swap the .art div for
    <img class="art" src="..."> as soon as a real screenshot exists. */
@@ -353,7 +412,7 @@ html.has-cursor .card:hover .preview{transform:translate(-50%,-50%) scale(calc(v
   margin-bottom:clamp(28px,4vw,44px)
 }
 .empty-state h3{margin:0 0 14px;font-family:var(--serif);font-weight:400;font-size:clamp(26px,3.4vw,38px);letter-spacing:-.01em}
-.empty-state p{margin:0 auto 34px;max-width:52ch;color:var(--muted);font-size:15px;line-height:1.7}
+.empty-state p{margin:0 auto 34px;max-width:52ch;color:var(--fg);font-size:15px;line-height:1.7}
 
 /* ---------- Process ---------- */
 .steps{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:40px;padding-top:44px}
@@ -361,10 +420,10 @@ html.has-cursor .card:hover .preview{transform:translate(-50%,-50%) scale(calc(v
 .process-line i{display:block;height:100%;background:var(--silver-hi);transform-origin:left;transform:scaleX(0)}
 .step-num{font:italic 400 3.2rem/1 var(--serif);color:var(--silver);margin-bottom:22px}
 .step h3{font-size:13px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;margin-bottom:14px}
-.step p{color:var(--muted);font-size:15px;line-height:1.65;max-width:30ch}
+.step p{color:var(--fg);font-size:15px;line-height:1.65;max-width:30ch}
 
 /* ---------- Pricing ---------- */
-.tiers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:stretch;max-width:948px;margin-inline:auto}
+.tiers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;align-items:stretch;max-width:1240px;margin-inline:auto}
 /* Same muted register as the section intro, set italic and centred under the pair. */
 .tiers-note{max-width:60ch;margin:30px auto 0;text-align:center;color:var(--muted);font-size:14px;line-height:1.65;font-style:italic}
 .tiers-cta{display:flex;justify-content:center;margin-top:26px}
@@ -388,20 +447,27 @@ html.has-cursor .card:hover .preview{transform:translate(-50%,-50%) scale(calc(v
 html.has-cursor .tier:hover::before,html.has-cursor .tier:hover::after{opacity:1}
 html.has-cursor .tier:hover{transform:translateY(-6px)}
 .tier h3{font:400 2rem/1 var(--serif);margin-bottom:12px}
-.tier-for{color:var(--muted);font-size:14.5px;line-height:1.55;max-width:30ch;min-height:3.1em}
+.tier-for{color:var(--fg);font-size:14.5px;line-height:1.55}
+.tier-for b{display:block;margin-bottom:8px;font:500 11.5px var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+/* The "Suited for" copy runs to different lengths per card. Subgrid puts every
+   card's header, price, bullets and button on shared row lines, so prices and
+   buttons sit level across the row instead of following each card's own text. */
+@supports (grid-template-rows:subgrid){
+  .tier{display:grid;grid-row:span 4;grid-template-rows:subgrid;row-gap:26px}
+}
 .price{display:flex;align-items:baseline;flex-wrap:wrap;gap:10px;font:400 3.1rem/1 var(--serif);letter-spacing:-.01em}
 .price .cur{font:500 11.5px var(--sans);letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
 .feats{display:grid;gap:12px;padding-top:24px;border-top:1px solid var(--line)}
-.feats li{position:relative;padding-left:22px;font-size:14.5px;line-height:1.5;color:var(--soft)}
+.feats li{position:relative;padding-left:22px;font-size:14.5px;line-height:1.5;color:var(--fg)}
 .feats li::before{content:'';position:absolute;left:0;top:.72em;width:10px;height:1px;background:var(--silver)}
 .feats li.plus{color:var(--fg);font-weight:500}
 .feats li.plus::before{width:6px;height:6px;top:.5em;border-radius:50%;background:var(--silver-hi)}
 .tier-cta{margin-top:auto;justify-content:center}
 .addons{display:grid;grid-template-columns:1fr 2.2fr;gap:48px;margin-top:88px;padding-top:56px;border-top:1px solid var(--line)}
 .addons-h{font:400 2.1rem/1 var(--serif);margin-bottom:14px}
-.addons .fine{color:var(--muted);font-size:13.5px;line-height:1.6;max-width:36ch}
+.addons .fine{color:var(--fg);font-size:13.5px;line-height:1.6;max-width:36ch}
 .addons ul{columns:2;column-gap:56px}
-.addons li{break-inside:avoid;display:flex;align-items:baseline;gap:12px;padding:12px 0;font-size:14.5px;color:var(--soft)}
+.addons li{break-inside:avoid;display:flex;align-items:baseline;gap:12px;padding:12px 0;font-size:14.5px;color:var(--fg)}
 .addons li i{flex:1;border-bottom:1px dotted rgba(242,242,240,.22);transform:translateY(-.3em)}
 .addons li b{font-weight:500;color:var(--fg);white-space:nowrap}
 .addons li b small{color:var(--muted);font-weight:400;font-size:12.5px;margin-left:4px}
@@ -409,7 +475,7 @@ html.has-cursor .tier:hover{transform:translateY(-6px)}
 .subs ul{columns:1}
 .subs li{display:block;padding:16px 0}
 .subs .sub-row{display:flex;align-items:baseline;gap:12px}
-.subs .sub-note{display:block;margin-top:8px;max-width:52ch;color:var(--muted);font-size:13px;line-height:1.6}
+.subs .sub-note{display:block;margin-top:8px;max-width:52ch;color:var(--fg);font-size:13px;line-height:1.6}
 
 /* ---------- Final CTA ---------- */
 /* The run-out below the CTA is deliberately long. The footer's shape trigger fires
@@ -448,7 +514,7 @@ html.has-cursor .ul:hover::after{transform:scaleX(0);transform-origin:right}
 .footer-mail::after{content:'';position:absolute;left:0;right:0;bottom:.06em;height:1px;background:currentColor;opacity:.32;transform:scaleX(1);transform-origin:left;transition:transform .55s var(--ease-out),opacity .3s}
 html.has-cursor .footer-mail:hover{color:var(--silver-hi)}
 html.has-cursor .footer-mail:hover::after{transform:scaleX(0);transform-origin:right}
-.footer-note{color:var(--muted);max-width:34ch;margin:18px 0 0;font-size:14px;line-height:1.6}
+.footer-note{color:var(--fg);max-width:34ch;margin:18px 0 0;font-size:14px;line-height:1.6}
 .footer-links{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,56px)}
 .footer-col h4{font-size:10.5px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin-bottom:22px}
 .footer-col a{display:block;width:max-content;text-decoration:none;color:var(--soft);font-size:15px;margin-bottom:12px;transition:color .3s,transform .5s var(--ease-out)}
@@ -475,6 +541,9 @@ html.has-cursor .footer-col a:hover{color:var(--fg);transform:translateX(6px)}
 /* Card-style single-select */
 .pick-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .pick-grid-3{grid-template-columns:repeat(3,1fr)}
+/* Site-type names are too long to share a line with the price at a third of the
+   width, so the price sits under the name instead of squeezing it. */
+.pick-grid-type .pick-head{flex-direction:column;align-items:flex-start;gap:8px}
 .pick{position:relative;display:block;cursor:pointer}
 .pick input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
 .pick-body{
@@ -485,7 +554,7 @@ html.has-cursor .footer-col a:hover{color:var(--fg);transform:translateX(6px)}
 .pick-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
 .pick-name{font:400 1.35rem/1 var(--serif);color:var(--fg)}
 .pick-price{font-size:12.5px;letter-spacing:.04em;color:var(--muted);white-space:nowrap}
-.pick-desc{display:block;font-size:13.5px;line-height:1.55;color:var(--muted)}
+.pick-desc{display:block;font-size:13.5px;line-height:1.55;color:var(--fg)}
 html.has-cursor .pick:hover .pick-body{border-color:var(--line-strong);transform:translateY(-3px)}
 .pick.is-picked .pick-body{border-color:rgba(201,201,207,.55);background:rgba(20,20,23,.94)}
 .pick.is-picked .pick-price{color:var(--soft)}
@@ -514,7 +583,7 @@ html.has-cursor .opt:hover{background:rgba(20,20,23,.5)}
 .opt.is-on .opt-box{background:var(--silver-hi);border-color:var(--silver-hi)}
 .opt.is-on .opt-box::after{opacity:1;transform:rotate(42deg) scale(1)}
 .opt-main input:focus-visible + .opt-box{outline:1px solid var(--silver-hi);outline-offset:3px}
-.opt-name{font-size:14.5px;line-height:1.45;color:var(--soft)}
+.opt-name{font-size:14.5px;line-height:1.45;color:var(--fg)}
 .opt.is-on .opt-name{color:var(--fg)}
 .opt-price{font-size:13.5px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
 .opt-price small{font-size:12px;margin-left:5px;opacity:.8}
@@ -582,12 +651,12 @@ html.has-cursor .step-btn:not(:disabled):hover{border-color:var(--silver-hi);col
 
 /* ---------- Responsive ---------- */
 @media (max-width:1100px){
-  .work-grid{grid-template-columns:repeat(2,1fr)}
   .tiers{grid-template-columns:1fr;max-width:640px;margin:0 auto}
   .steps{grid-template-columns:repeat(2,1fr)}
   .addons{grid-template-columns:1fr}
 }
 @media (max-width:860px){
+  .work-grid{grid-template-columns:1fr}
   .split{grid-template-columns:1fr;gap:56px}
   .sticky{position:static}
   .section-head{grid-template-columns:1fr;gap:20px}
@@ -595,13 +664,19 @@ html.has-cursor .step-btn:not(:disabled):hover{border-color:var(--silver-hi);col
   .pillars{grid-template-columns:1fr;gap:20px}
 }
 @media (max-width:640px){
-  .nav{padding:22px var(--gutter)}
-  .nav .wordmark{--logo-size:16px}
+  .card-meta{padding-top:20px}
+  .lb-panel{gap:18px}
+  .lb-head{gap:14px}
+  .lb-foot{flex-direction:column;align-items:stretch}
+  .lb-visit{justify-content:center}
+  .nav{padding:16px var(--gutter)}
+  .nav .wordmark{--logo-size:18px}
+  .nav-right{gap:16px}
   .nav-links{gap:22px}
-  .nav-links a{font-size:10.5px;letter-spacing:.16em}
+  .nav-links a{font-size:11px;letter-spacing:.15em}
+  .nav-cta{padding:10px 16px;font-size:11px}
   .hero{padding-top:120px;padding-bottom:110px}
   .hero .display{max-width:none}
-  .work-grid{grid-template-columns:1fr}
   .steps{grid-template-columns:1fr;gap:36px}
   .addons ul{columns:1}
   .hud{display:none}
@@ -622,6 +697,13 @@ html.has-cursor .step-btn:not(:disabled):hover{border-color:var(--silver-hi);col
   .footer-bottom{flex-direction:column}
 }
 
+@media (max-width:480px){
+  .nav-links{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .lb-panel{transform:none;transition:opacity .2s linear}
+  .lb-scrim{transition:opacity .2s linear}
+}
 @media (prefers-reduced-motion:reduce){
   .grain,.scroll-hint i::after,.eyebrow .dot,.player.is-playing .player-eq i{animation:none}
   .player.is-playing .player-eq i{height:9px}

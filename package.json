@@ -1,0 +1,11 @@
+{
+  "name": "nuit-works",
+  "private": true,
+  "description": "Static site. npm is only here for capture-concepts.mjs, the one-off screenshot tool behind assets/concepts/ — the site itself ships no JS dependencies.",
+  "scripts": {
+    "capture": "node capture-concepts.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.63.0"
+  }
+}

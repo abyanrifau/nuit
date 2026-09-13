@@ -768,7 +768,10 @@
     if (!hasGSAP) return;
 
     // Nav scrim
-    ScrollTrigger.create({ start: 'top -60', end: 'max', toggleClass: { targets: '.nav', className: 'is-scrolled' } });
+    // Solid/blurred once the hero has actually scrolled past, not after a token
+    // few pixels — the request was specifically "past the hero", and a fixed
+    // small offset would solidify the nav while hero copy still fills the screen.
+    ScrollTrigger.create({ trigger: '.hero', start: 'bottom top', end: 'max', toggleClass: { targets: '.nav', className: 'is-scrolled' } });
 
     // Two wordmarks at once reads badly, so the small one steps aside for the big one.
     // Same start as the footer's shape trigger, so the nav begins fading exactly as the
@@ -1189,7 +1192,7 @@
   }
 
   /* ------------------------------------------------------------------
-     Work card previews — scale each embedded site to fit its cover
+     Concept cards — cover screenshots and the quick-look overlay
      ------------------------------------------------------------------ */
   /* Cover screenshots. Drop a file into assets/ named after data-shot and it appears —
      no markup change needed. Several extensions are tried because a saved screenshot is
@@ -1207,61 +1210,79 @@
     tryNext();
   });
 
-  const previews = $$('.preview');
-  if (previews.length) {
-    // Each frame renders an entire other website at desktop size. That is far too much
-    // for a phone on top of the WebGL field — it stutters and runs out of memory — so
-    // previews are for cursor-driven, desktop-class devices only. The src lives in
-    // data-src until then, so on a phone nothing is ever fetched or rendered and the
-    // gradient cover art stands in.
-    const previewOK = () => finePointer && !reduced && tier !== 'low' && innerWidth > 760;
-    let previewsOn = null;
-    const syncPreviews = () => {
-      const on = previewOK();
-      if (on === previewsOn) return;   // only act on a real transition, not every resize
-      previewsOn = on;
-      previews.forEach((fr) => {
-        fr.hidden = !on;
-        if (on) {
-          if (!fr.hasAttribute('src') && fr.dataset.src) fr.src = fr.dataset.src;
-        } else if (fr.hasAttribute('src')) {
-          fr.removeAttribute('src');   // let the window drop the embedded page
-        }
+  /* Quick look. One overlay in the page, refilled from whichever card opened it.
+     The two extra shots are lazy by hand — src is assigned on open — so a visitor
+     who never opens a card never downloads twelve screenshots. */
+  const lb = $('#quicklook');
+  if (lb) {
+    const panel = $('.lb-panel', lb);
+    const nameEl = $('.lb-name', lb);
+    const tagEl = $('[data-lb-tag]', lb);
+    const visit = $('[data-lb-url]', lb);
+    const closeBtn = $('.lb-x', lb);
+    const shots = [1, 2, 3].map((n) => $('[data-lb-shot="' + n + '"]', lb));
+    let opener = null;
+    let closeTimer = 0;
+
+    const open = (card) => {
+      const d = card.dataset;
+      clearTimeout(closeTimer);
+      opener = card;
+      tagEl.textContent = d.lookTag || '';
+      nameEl.textContent = d.lookName || '';
+      visit.href = d.lookUrl || '#';
+      shots.forEach((img, n) => {
+        if (!img) return;
+        img.src = 'assets/concepts/' + d.look + '-' + (n + 1) + '.jpg';
+        // getAttribute rather than dataset: data-look-alt-1 keys as 'lookAlt-1',
+        // because a dash before a digit is not camel-cased away. Guessing
+        // 'lookAlt1' reads fine and fails silently as an empty alt.
+        img.alt = card.getAttribute('data-look-alt-' + (n + 1)) || '';
       });
+      lb.hidden = false;
+      panel.scrollTop = 0;
+      // Two frames: the first lets `hidden` actually drop and the closed styles
+      // apply, the second gives the browser a painted state to transition from.
+      // In one frame the class lands with the element still unstyled and it cuts.
+      requestAnimationFrame(() => requestAnimationFrame(() => lb.classList.add('is-open')));
+      // Lenis owns the wheel, so its own stop is what holds the page still;
+      // without it (reduced motion never starts Lenis) fall back to the document.
+      if (lenis) lenis.stop(); else html.style.overflow = 'hidden';
+      closeBtn.focus({ preventScroll: true });
     };
-    const fit = (fr) => {
-      const cover = fr.parentElement;
-      const w = fr.offsetWidth;
-      if (cover && w) fr.style.setProperty('--pv', (cover.clientWidth / w).toFixed(4));
+
+    const close = () => {
+      if (lb.hidden) return;
+      lb.classList.remove('is-open');
+      if (lenis) lenis.start(); else html.style.overflow = '';
+      const back = opener;
+      opener = null;
+      // Outlast the panel transition so it fades out instead of vanishing.
+      closeTimer = setTimeout(() => {
+        lb.hidden = true;
+        const cover = back && $('.cover', back);
+        if (cover) cover.focus({ preventScroll: true });
+      }, reduced ? 220 : 560);
     };
-    // Watch the cover itself rather than the window: the card is inside a responsive
-    // grid, so its width changes for reasons a resize event never sees, and a stale
-    // scale leaves the preview cropped or floating inside its frame.
-    const fitAll = () => { syncPreviews(); if (previewsOn) previews.forEach(fit); };
-    fitAll();
-    // Only now allow the transform to animate, so hover and resize ease but the initial
-    // scale is not seen ramping up from the stylesheet's fallback value.
-    setTimeout(() => previews.forEach((fr) => fr.classList.add('is-fitted')), 80);
-    // Both, deliberately. ResizeObserver catches width changes the window never hears
-    // about, but it is delivered with the rendering steps, so it goes quiet whenever the
-    // page is not painting; the resize listener still fires in that state.
-    if (typeof ResizeObserver !== 'undefined') {
-      const ro = new ResizeObserver((entries) => {
-        entries.forEach((e) => { const fr = e.target.querySelector('.preview'); if (fr) fit(fr); });
+
+    $$('.card .cover').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const card = btn.closest('.card');
+        if (card && card.dataset.look) open(card);
       });
-      previews.forEach((fr) => { if (fr.parentElement) ro.observe(fr.parentElement); });
-    }
-    window.addEventListener('resize', fitAll, { passive: true });
-    // The card is still settling when the script first runs — webfonts reflow the copy
-    // and a scrollbar can appear — so re-fit once the layout is final. Both are plain
-    // events, so they land even where the observer above is throttled.
-    window.addEventListener('load', fitAll);
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll, fitAll);
-    previews.forEach((fr) => {
-      fr.addEventListener('load', () => fit(fr));
-      // If the site refuses to be framed, hide the frame so the gradient behind it shows
-      // rather than leaving a blank white rectangle on the card.
-      fr.addEventListener('error', () => { fr.hidden = true; });
+    });
+    $$('[data-lb-close]', lb).forEach((el) => el.addEventListener('click', close));
+    addEventListener('keydown', (e) => {
+      if (lb.hidden) return;
+      if (e.key === 'Escape') { close(); return; }
+      if (e.key !== 'Tab') return;
+      // Hold Tab inside the panel while it is up, so the cards behind the scrim
+      // cannot take focus while they are unreachable by mouse.
+      const items = $$('a[href],button', panel);
+      if (!items.length) return;
+      const first = items[0], last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
     });
   }
 

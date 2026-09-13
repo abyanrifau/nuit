@@ -45,11 +45,16 @@
 <!-- Nav -->
 <header class="nav">
   <a href="#top" class="wordmark" data-cursor aria-label="Nuit Works — back to top"><span class="logo">NUIT</span></a>
-  <nav class="nav-links" aria-label="Primary">
-    <a href="#work" data-cursor>Work</a>
-    <a href="#pricing" data-cursor>Pricing</a>
-    <a href="#contact" data-cursor>Contact</a>
-  </nav>
+  <div class="nav-right">
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#work" data-cursor>Work</a>
+      <a href="#pricing" data-cursor>Pricing</a>
+      <a href="#contact" data-cursor>Contact</a>
+    </nav>
+    <a class="btn btn-primary nav-cta magnetic" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=hello%40nuit.works&amp;su=Free%20Mockup%20For%20My%20Business&amp;body=Hi%20Nuit%20Works%2C%0A%0AI%27d%20like%20a%20free%20mockup%20for%20my%20business.%0A%0ABusiness%20name%3A%20%0AWhat%20we%20do%3A%20%0AAnything%20you%27d%20like%20to%20see%3A%20%0A%0AThanks%2C%0A" target="_blank" rel="noopener" data-cursor>
+      <span class="btn-label">Get a mockup</span>
+    </a>
+  </div>
 </header>
 
 <main id="top">
@@ -61,7 +66,7 @@
       <h1 class="display" data-typewriter>We build websites that turn visitors into <em>customers.</em></h1>
       <p class="lead hero-sub">Nuit is a design studio that creates clear, fast, and high-quality websites. We use interactive design to help your business stand out online. And your first mockup is on us.</p>
       <div class="cta-row hero-cta">
-        <a class="btn btn-primary magnetic" href="mailto:nuitworksmv@gmail.com?subject=Free%20mockup%20for%20my%20business" data-cursor>
+        <a class="btn btn-primary magnetic" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=hello%40nuit.works&amp;su=Free%20Mockup%20For%20My%20Business&amp;body=Hi%20Nuit%20Works%2C%0A%0AI%27d%20like%20a%20free%20mockup%20for%20my%20business.%0A%0ABusiness%20name%3A%20%0AWhat%20we%20do%3A%20%0AAnything%20you%27d%20like%20to%20see%3A%20%0A%0AThanks%2C%0A" target="_blank" rel="noopener" data-cursor>
           <span class="btn-label">Get a free mockup</span>
           <svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
@@ -71,26 +76,12 @@
     <div class="scroll-hint" aria-hidden="true"><span>Scroll</span><i></i></div>
   </section>
 
-  <!-- Positioning -->
-  <section id="studio" class="section positioning" data-shape="0" data-rotx="0.35" data-x="0" data-y="0" data-scale="1.35" data-opacity="0.5" data-spin="0.08" data-disperse="1">
-    <div class="container narrow center">
-      <p class="eyebrow" data-reveal><span class="idx">01</span>The studio</p>
-      <h2 class="h2 statement" data-split>Tailored digital solutions built around your <em>business goals.</em></h2>
-      <p class="lead" data-reveal>We are a dedicated team managing every phase of your project, from initial strategy and design to launch and maintenance. By working directly with us, you get clear communication, fast turnaround times, and a website crafted to meet high standards.</p>
-      <ul class="pillars" data-reveal-group>
-        <li data-reveal><span>Custom design</span><small>Tailored specifically to match your brand and audience.</small></li>
-        <li data-reveal><span>Engaging motion</span><small>Smooth interactions that make your site easy and enjoyable to navigate.</small></li>
-        <li data-reveal><span>Full service</span><small>Strategy, design, and launch handled seamlessly in one place.</small></li>
-      </ul>
-    </div>
-  </section>
-
   <!-- Services -->
   <section id="services" class="section services" data-shape="0" data-rotx="0.5" data-x="-1.25" data-y="-0.1" data-scale="0.85" data-opacity="0.55" data-spin="0.18" data-disperse="1">
     <div class="container split">
       <div class="split-left">
         <div class="sticky">
-          <p class="eyebrow" data-reveal><span class="idx">02</span>Services</p>
+          <p class="eyebrow" data-reveal><span class="idx">01</span>Services</p>
           <h2 class="h2" data-typewriter>What we <em>build.</em></h2>
           <p class="lead" data-reveal>Tailored solutions designed around your business needs. Fast, reliable, and built to perform.</p>
         </div>
@@ -123,90 +114,124 @@
     <div class="container">
       <div class="section-head">
         <div>
-          <p class="eyebrow" data-reveal><span class="idx">03</span>Concept work</p>
+          <p class="eyebrow" data-reveal><span class="idx">02</span>Concept work</p>
           <h2 class="h2" data-split>Concept <em>builds.</em></h2>
         </div>
         <p class="lead" data-reveal>Made-up businesses, built to look and feel like the real ones we want to work with.</p>
       </div>
 
+      <!-- Each card carries its own quick-look data: the slug names the three files in
+           assets/concepts/ (see capture-concepts.mjs), and app.js reads the rest straight
+           off these attributes, so adding a concept never means touching the script. -->
       <div class="work-grid" data-reveal-group>
-        <!-- Each cover is the live concept in a frame, rendered at desktop width and scaled to fit,
-             so it can never go stale. The gradient .art behind it is the fallback if a frame is
-             blocked or offline. -->
-        <a class="card" href="https://cafe-nuit.vercel.app" target="_blank" rel="noopener" data-art="fuku-nuit" data-cursor="Visit" data-reveal>
-          <div class="cover">
-            <div class="art"></div>
-            <img class="shot" data-shot="fuku-nuit" alt="" loading="lazy" decoding="async">
-            <iframe class="preview" data-src="https://cafe-nuit.vercel.app" title="Live preview of the Fuku Coffee concept site" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true" sandbox="allow-scripts allow-same-origin"></iframe>
-            <div class="shine"></div>
+        <article class="card" data-art="fuku-nuit" data-reveal
+                 data-look="cafe-fuku" data-look-name="Fuku Coffee" data-look-tag="Concept · Café"
+                 data-look-url="https://cafe-nuit.vercel.app"
+                 data-look-alt-1="Fuku Coffee concept — the homepage, storefront and hanging greenery behind the headline"
+                 data-look-alt-2="Fuku Coffee concept — the story section, with the room shot and the three ideas behind the café"
+                 data-look-alt-3="Fuku Coffee concept — the short menu, priced in MVR, above a full-width macro pour">
+          <button class="cover" type="button" data-cursor="Quick look" aria-label="Quick look inside the Fuku Coffee concept">
+            <span class="art"></span>
+            <img class="shot" data-shot="concepts/cafe-fuku-1" alt="" loading="lazy" decoding="async">
+            <span class="shine"></span>
+          </button>
+          <div class="card-meta">
+            <span class="tag">Concept · Café</span>
+            <h3>Fuku Coffee</h3>
+            <p class="card-est">Starting around <b>MVR 5,000+</b></p>
+            <a class="card-out" href="https://cafe-nuit.vercel.app" target="_blank" rel="noopener" data-cursor="Visit">Visit full concept <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
-          <div class="card-meta"><span class="tag">Concept · Café</span><h3>Fuku Coffee <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>A quiet coffee room in Hulhumalé, built around the idea that nothing here should be rushed.</p></div>
-        </a>
-        <a class="card" href="https://guesthouse-nuit.vercel.app" target="_blank" rel="noopener" data-art="guesthouse-nuit" data-cursor="Visit" data-reveal>
-          <div class="cover">
-            <div class="art"></div>
-            <img class="shot" data-shot="guesthouse-nuit" alt="" loading="lazy" decoding="async">
-            <iframe class="preview" data-src="https://guesthouse-nuit.vercel.app" title="Live preview of the Driftwood concept site" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true" sandbox="allow-scripts allow-same-origin"></iframe>
-            <div class="shine"></div>
+        </article>
+        <article class="card" data-art="guesthouse-nuit" data-reveal
+                 data-look="driftwood" data-look-name="Driftwood" data-look-tag="Concept · Guesthouse"
+                 data-look-url="https://guesthouse-nuit.vercel.app"
+                 data-look-alt-1="Driftwood concept — the homepage, the deck and palms at golden hour"
+                 data-look-alt-2="Driftwood concept — the rooms listing, with rates and what each room looks out on"
+                 data-look-alt-3="Driftwood concept — the experiences section — reef trips and island mornings">
+          <button class="cover" type="button" data-cursor="Quick look" aria-label="Quick look inside the Driftwood concept">
+            <span class="art"></span>
+            <img class="shot" data-shot="concepts/driftwood-1" alt="" loading="lazy" decoding="async">
+            <span class="shine"></span>
+          </button>
+          <div class="card-meta">
+            <span class="tag">Concept · Guesthouse</span>
+            <h3>Driftwood</h3>
+            <p class="card-est">Starting around <b>MVR 10,000+</b></p>
+            <a class="card-out" href="https://guesthouse-nuit.vercel.app" target="_blank" rel="noopener" data-cursor="Visit">Visit full concept <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
-          <div class="card-meta"><span class="tag">Concept · Guesthouse</span><h3>Driftwood <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>Twelve rooms on Maafushi, booked straight from a homepage that feels like the reef outside it.</p></div>
-        </a>
-        <a class="card" href="https://skincare-nuit.vercel.app" target="_blank" rel="noopener" data-art="skincare-nuit" data-cursor="Visit" data-reveal>
-          <div class="cover">
-            <div class="art"></div>
-            <img class="shot" data-shot="skincare-nuit" alt="" loading="lazy" decoding="async">
-            <iframe class="preview" data-src="https://skincare-nuit.vercel.app" title="Live preview of the Verum concept site" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true" sandbox="allow-scripts allow-same-origin"></iframe>
-            <div class="shine"></div>
+        </article>
+        <article class="card" data-art="skincare-nuit" data-reveal
+                 data-look="verum" data-look-name="Verum" data-look-tag="Concept · Skincare"
+                 data-look-url="https://skincare-nuit.vercel.app"
+                 data-look-alt-1="Verum concept — the homepage, the shop headline beside the row of guarantees"
+                 data-look-alt-2="Verum concept — the formula quiz, which narrows the range by skin type"
+                 data-look-alt-3="Verum concept — the shop grid, priced and filterable by concern">
+          <button class="cover" type="button" data-cursor="Quick look" aria-label="Quick look inside the Verum concept">
+            <span class="art"></span>
+            <img class="shot" data-shot="concepts/verum-1" alt="" loading="lazy" decoding="async">
+            <span class="shine"></span>
+          </button>
+          <div class="card-meta">
+            <span class="tag">Concept · Skincare</span>
+            <h3>Verum</h3>
+            <p class="card-est">Starting around <b>MVR 10,000+</b></p>
+            <a class="card-out" href="https://skincare-nuit.vercel.app" target="_blank" rel="noopener" data-cursor="Visit">Visit full concept <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
-          <div class="card-meta"><span class="tag">Concept · Skincare</span><h3>Verum <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>A curated skincare shop for Malé, formula-checked and delivered free across the city.</p></div>
-        </a>
-        <a class="card" href="https://furniture-nuit.vercel.app" target="_blank" rel="noopener" data-art="furniture-nuit" data-cursor="Visit" data-reveal>
-          <div class="cover">
-            <div class="art"></div>
-            <img class="shot" data-shot="furniture-nuit" alt="" loading="lazy" decoding="async">
-            <iframe class="preview" data-src="https://furniture-nuit.vercel.app" title="Live preview of the Homestead concept site" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true" sandbox="allow-scripts allow-same-origin"></iframe>
-            <div class="shine"></div>
+        </article>
+        <article class="card" data-art="furniture-nuit" data-reveal
+                 data-look="homestead" data-look-name="Homestead" data-look-tag="Concept · Furniture"
+                 data-look-url="https://furniture-nuit.vercel.app"
+                 data-look-alt-1="Homestead concept — the homepage, the living-room collection in afternoon light"
+                 data-look-alt-2="Homestead concept — the collection grid, each piece named by its materials"
+                 data-look-alt-3="Homestead concept — a room set, showing the collection together in one space">
+          <button class="cover" type="button" data-cursor="Quick look" aria-label="Quick look inside the Homestead concept">
+            <span class="art"></span>
+            <img class="shot" data-shot="concepts/homestead-1" alt="" loading="lazy" decoding="async">
+            <span class="shine"></span>
+          </button>
+          <div class="card-meta">
+            <span class="tag">Concept · Furniture</span>
+            <h3>Homestead</h3>
+            <p class="card-est">Starting around <b>MVR 10,000+</b></p>
+            <a class="card-out" href="https://furniture-nuit.vercel.app" target="_blank" rel="noopener" data-cursor="Visit">Visit full concept <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
-          <div class="card-meta"><span class="tag">Concept · Furniture</span><h3>Homestead <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>A living-room collection shot in real light, sold the way it deserves to be shown.</p></div>
-        </a>
-        <a class="card" href="https://perfume-nuit.vercel.app" target="_blank" rel="noopener" data-art="perfume-nuit" data-cursor="Visit" data-reveal>
-          <div class="cover">
-            <div class="art"></div>
-            <img class="shot" data-shot="perfume-nuit" alt="" loading="lazy" decoding="async">
-            <iframe class="preview" data-src="https://perfume-nuit.vercel.app" title="Live preview of the Scentu concept site" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true" sandbox="allow-scripts allow-same-origin"></iframe>
-            <div class="shine"></div>
+        </article>
+        <article class="card" data-art="perfume-nuit" data-reveal
+                 data-look="scentu" data-look-name="Scentu" data-look-tag="Concept · Fragrance"
+                 data-look-url="https://perfume-nuit.vercel.app"
+                 data-look-alt-1="Scentu concept — the homepage, a single bottle lit against near-black"
+                 data-look-alt-2="Scentu concept — the scent families, which replace the usual brand list"
+                 data-look-alt-3="Scentu concept — the collection grid, priced and split by wear">
+          <button class="cover" type="button" data-cursor="Quick look" aria-label="Quick look inside the Scentu concept">
+            <span class="art"></span>
+            <img class="shot" data-shot="concepts/scentu-1" alt="" loading="lazy" decoding="async">
+            <span class="shine"></span>
+          </button>
+          <div class="card-meta">
+            <span class="tag">Concept · Fragrance</span>
+            <h3>Scentu</h3>
+            <p class="card-est">Starting around <b>MVR 10,000+</b></p>
+            <a class="card-out" href="https://perfume-nuit.vercel.app" target="_blank" rel="noopener" data-cursor="Visit">Visit full concept <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
-          <div class="card-meta"><span class="tag">Concept · Fragrance</span><h3>Scentu <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>A fragrance boutique that sorts bottles by what they actually smell like, not by house.</p></div>
-        </a>
-        <a class="card" href="https://cafe2-nuit.vercel.app" target="_blank" rel="noopener" data-art="nocturne-nuit" data-cursor="Visit" data-reveal>
-          <div class="cover">
-            <div class="art"></div>
-            <img class="shot" data-shot="nocturne-nuit" alt="" loading="lazy" decoding="async">
-            <iframe class="preview" data-src="https://cafe2-nuit.vercel.app" title="Live preview of the Nocturne concept site" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true" sandbox="allow-scripts allow-same-origin"></iframe>
-            <div class="shine"></div>
+        </article>
+        <article class="card" data-art="nocturne-nuit" data-reveal
+                 data-look="nocturne" data-look-name="Nocturne" data-look-tag="Concept · Café"
+                 data-look-url="https://cafe2-nuit.vercel.app"
+                 data-look-alt-1="Nocturne concept — the homepage, a macro pour filling the screen"
+                 data-look-alt-2="Nocturne concept — the daytime menu, espresso and pour-over"
+                 data-look-alt-3="Nocturne concept — the after-dark list, once the room turns into a bar">
+          <button class="cover" type="button" data-cursor="Quick look" aria-label="Quick look inside the Nocturne concept">
+            <span class="art"></span>
+            <img class="shot" data-shot="concepts/nocturne-1" alt="" loading="lazy" decoding="async">
+            <span class="shine"></span>
+          </button>
+          <div class="card-meta">
+            <span class="tag">Concept · Café</span>
+            <h3>Nocturne</h3>
+            <p class="card-est">Starting around <b>MVR 5,000+</b></p>
+            <a class="card-out" href="https://cafe2-nuit.vercel.app" target="_blank" rel="noopener" data-cursor="Visit">Visit full concept <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
-          <div class="card-meta"><span class="tag">Concept · Café</span><h3>Nocturne <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>An unmarked espresso bar in Malé that turns into a cocktail bar once the sun goes down.</p></div>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Process -->
-  <section id="process" class="section process" data-shape="0" data-rotx="1.15" data-x="0" data-y="0.1" data-scale="1.15" data-opacity="0.5" data-spin="0.1" data-disperse="1">
-    <div class="container">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow" data-reveal><span class="idx">05</span>How it works</p>
-          <h2 class="h2" data-split>From start to <em>launch.</em></h2>
-        </div>
-        <p class="lead" data-reveal>A simple, step-by-step process designed to make working together easy.</p>
-      </div>
-      <div class="steps" data-reveal-group>
-        <div class="process-line"><i></i></div>
-        <div class="step" data-reveal><div class="step-num">01</div><h3>Inquiry</h3><p>Reach out and tell us about your business, your goals, and what you need for your website.</p></div>
-        <div class="step" data-reveal><div class="step-num">02</div><h3>Free mockup</h3><p>We create an initial concept for your homepage so you can see the design direction before making any commitment.</p></div>
-        <div class="step" data-reveal><div class="step-num">03</div><h3>Build</h3><p>Once you approve the concept, we build out the full site, ensuring every page looks great and works smoothly on all devices.</p></div>
-        <div class="step" data-reveal><div class="step-num">04</div><h3>Launch</h3><p>We test, launch, and hand over full ownership. Monthly maintenance plans are available for ongoing updates.</p></div>
+        </article>
       </div>
     </div>
   </section>
@@ -216,7 +241,7 @@
     <div class="container">
       <div class="section-head">
         <div>
-          <p class="eyebrow" data-reveal><span class="idx">06</span>Pricing</p>
+          <p class="eyebrow" data-reveal><span class="idx">03</span>Pricing</p>
           <h2 class="h2" data-split>Transparent <em>pricing.</em></h2>
         </div>
         <p class="lead" data-reveal>Fair rates tailored for local businesses and international clients. All prices listed in Maldivian Rufiyaa (MVR).</p>
@@ -224,30 +249,36 @@
 
       <div class="tiers" data-reveal-group>
         <article class="tier" data-reveal>
-          <header><h3>Standard</h3><p class="tier-for">For simple brochure or portfolio sites that don’t need custom backend logic.</p></header>
-          <div class="price"><span class="cur">MVR</span>5,000+</div>
+          <header><h3>Informational Sites</h3><p class="tier-for"><b>Suited for</b>Portfolios, brochure sites, cafes &amp; service businesses without a reservation system</p></header>
+          <div class="price"><span class="cur">Starting from MVR</span>5,000</div>
           <ul class="feats">
-            <li>Up to 3–4 pages (Home, About, Services/Products, Contact)</li>
-            <li>Responsive design, standard animations/transitions</li>
-            <li>Basic contact form</li>
-            <li>No CMS/login system</li>
+            <li>Unlimited redos once you commit to working with us</li>
+            <li>Upfront payment depends on project size</li>
           </ul>
-          <a class="btn btn-ghost magnetic tier-cta" href="mailto:nuitworksmv@gmail.com?subject=Standard%20%E2%80%94%20free%20mockup" data-cursor><span class="btn-label">Start with a free mockup</span></a>
+          <a class="btn btn-ghost magnetic tier-cta" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=hello%40nuit.works&amp;su=Informational%20Site%20%E2%80%94%20Free%20Mockup&amp;body=Hi%20Nuit%20Works%2C%0A%0AI%27d%20like%20a%20free%20mockup%20for%20an%20informational%20site.%0A%0ABusiness%20name%3A%20%0AWhat%20we%20do%3A%20%0AAnything%20you%27d%20like%20to%20see%3A%20%0A%0AThanks%2C%0A" target="_blank" rel="noopener" data-cursor><span class="btn-label">Start with a free mockup</span><svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </article>
 
         <article class="tier" data-reveal>
-          <header><h3>Premium</h3><p class="tier-for">For larger, more complex sites that need logic beyond static pages.</p></header>
-          <div class="price"><span class="cur">MVR</span>10,000+</div>
+          <header><h3>Booking &amp; Reservation Sites</h3><p class="tier-for"><b>Suited for</b>Guesthouses, dive centers, restaurants, tour &amp; activity operators</p></header>
+          <div class="price"><span class="cur">Starting from MVR</span>8,500</div>
           <ul class="feats">
-            <li>Up to 6–8 pages</li>
-            <li>Custom animations/motion graphics integration</li>
-            <li>Forms with logic (multi-step, conditional)</li>
-            <li>Basic post-launch support window</li>
+            <li>Unlimited redos once you commit to working with us</li>
+            <li>Upfront payment depends on project size</li>
           </ul>
-          <a class="btn btn-primary magnetic tier-cta" href="mailto:nuitworksmv@gmail.com?subject=Premium%20%E2%80%94%20free%20mockup" data-cursor><span class="btn-label">Start with a free mockup</span><svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <a class="btn btn-ghost magnetic tier-cta" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=hello%40nuit.works&amp;su=Booking%20%26%20Reservation%20Site%20%E2%80%94%20Free%20Mockup&amp;body=Hi%20Nuit%20Works%2C%0A%0AI%27d%20like%20a%20free%20mockup%20for%20a%20booking%20and%20reservation%20site.%0A%0ABusiness%20name%3A%20%0AWhat%20we%20do%3A%20%0AAnything%20you%27d%20like%20to%20see%3A%20%0A%0AThanks%2C%0A" target="_blank" rel="noopener" data-cursor><span class="btn-label">Start with a free mockup</span><svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </article>
+
+        <article class="tier" data-reveal>
+          <header><h3>Retail &amp; E-Commerce Sites</h3><p class="tier-for"><b>Suited for</b>Shops and product sellers wanting to sell online (manual payment confirmation, no payment gateway integration)</p></header>
+          <div class="price"><span class="cur">Starting from MVR</span>10,000</div>
+          <ul class="feats">
+            <li>Unlimited redos once you commit to working with us</li>
+            <li>Upfront payment depends on project size</li>
+          </ul>
+          <a class="btn btn-ghost magnetic tier-cta" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=hello%40nuit.works&amp;su=Retail%20%26%20E-Commerce%20Site%20%E2%80%94%20Free%20Mockup&amp;body=Hi%20Nuit%20Works%2C%0A%0AI%27d%20like%20a%20free%20mockup%20for%20a%20retail%20and%20e-commerce%20site.%0A%0ABusiness%20name%3A%20%0AWhat%20we%20do%3A%20%0AAnything%20you%27d%20like%20to%20see%3A%20%0A%0AThanks%2C%0A" target="_blank" rel="noopener" data-cursor><span class="btn-label">Start with a free mockup</span><svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </article>
       </div>
-      <p class="tiers-note" data-reveal>The final price within a tier depends on design complexity and how much custom work (vs. templated structure) it needs.</p>
+      <p class="tiers-note" data-reveal>Your final price depends on the number of pages, features, and how custom the design needs to be. Get an exact quote tailored to your project.</p>
       <div class="tiers-cta" data-reveal>
         <a class="btn btn-ghost magnetic" href="/calculate" data-cursor>
           <span class="btn-label">Calculate your website</span>
@@ -262,10 +293,6 @@
         </div>
         <ul data-reveal>
           <li><span>Extra page (beyond tier limit)</span><i></i><b>+500–1,000</b></li>
-          <li><span>E-commerce/shop functionality</span><i></i><b>+2,000–4,000</b></li>
-          <li><span>Booking/reservation system</span><i></i><b>+1,500–3,000</b></li>
-          <li><span>Password-protected/member area</span><i></i><b>+1,500–2,500</b></li>
-          <li><span>Admin dashboard / CMS-style editing</span><i></i><b>+2,000–4,000</b></li>
           <li><span>Multi-language support</span><i></i><b>+1,000–2,000<small>per language</small></b></li>
           <li><span>Social media feed integration</span><i></i><b>+300–500</b></li>
           <li><span>Basic SEO setup</span><i></i><b>+500–1,000</b></li>
@@ -292,14 +319,48 @@
     </div>
   </section>
 
+  <!-- Positioning -->
+  <section id="studio" class="section positioning" data-shape="0" data-rotx="0.35" data-x="0" data-y="0" data-scale="1.35" data-opacity="0.5" data-spin="0.08" data-disperse="1">
+    <div class="container narrow center">
+      <p class="eyebrow" data-reveal><span class="idx">04</span>The studio</p>
+      <h2 class="h2 statement" data-split>Tailored digital solutions built around your <em>business goals.</em></h2>
+      <p class="lead" data-reveal>We are a dedicated team managing every phase of your project, from initial strategy and design to launch and maintenance. By working directly with us, you get clear communication, fast turnaround times, and a website crafted to meet high standards.</p>
+      <ul class="pillars" data-reveal-group>
+        <li data-reveal><span>Custom design</span><small>Tailored specifically to match your brand and audience.</small></li>
+        <li data-reveal><span>Engaging motion</span><small>Smooth interactions that make your site easy and enjoyable to navigate.</small></li>
+        <li data-reveal><span>Full service</span><small>Strategy, design, and launch handled seamlessly in one place.</small></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section id="process" class="section process" data-shape="0" data-rotx="1.15" data-x="0" data-y="0.1" data-scale="1.15" data-opacity="0.5" data-spin="0.1" data-disperse="1">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow" data-reveal><span class="idx">05</span>How it works</p>
+          <h2 class="h2" data-split>From start to <em>launch.</em></h2>
+        </div>
+        <p class="lead" data-reveal>A simple, step-by-step process designed to make working together easy.</p>
+      </div>
+      <div class="steps" data-reveal-group>
+        <div class="process-line"><i></i></div>
+        <div class="step" data-reveal><div class="step-num">01</div><h3>Inquiry</h3><p>Reach out and tell us about your business, your goals, and what you need for your website.</p></div>
+        <div class="step" data-reveal><div class="step-num">02</div><h3>Free mockup</h3><p>We create an initial concept for your homepage so you can see the design direction before making any commitment.</p></div>
+        <div class="step" data-reveal><div class="step-num">03</div><h3>Build</h3><p>Once you approve the concept, we build out the full site, ensuring every page looks great and works smoothly on all devices.</p></div>
+        <div class="step" data-reveal><div class="step-num">04</div><h3>Launch</h3><p>We test, launch, and hand over full ownership. Monthly maintenance plans are available for ongoing updates.</p></div>
+      </div>
+    </div>
+  </section>
+
   <!-- Final CTA -->
   <section id="contact" class="section final center" data-shape="2" data-rotx="0.12" data-x="0" data-y="-0.35" data-scale="1.05" data-opacity="0.5" data-spin="0.28" data-disperse="1">
     <div class="container narrow">
-      <p class="eyebrow" data-reveal><span class="idx">07</span>Get in touch</p>
+      <p class="eyebrow" data-reveal><span class="idx">06</span>Get in touch</p>
       <h2 class="display" data-typewriter>Get your initial design mockup for <em>free.</em></h2>
       <p class="lead" data-reveal>Tell us about your business goals and we will create an initial homepage concept before you commit to anything. If you like the direction, we move forward. If not, there is no obligation.</p>
       <div class="cta-row" data-reveal>
-        <a class="btn btn-primary btn-lg magnetic" href="mailto:nuitworksmv@gmail.com?subject=Free%20mockup%20for%20my%20business" data-cursor>
+        <a class="btn btn-primary btn-lg magnetic" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=hello%40nuit.works&amp;su=Free%20Mockup%20For%20My%20Business&amp;body=Hi%20Nuit%20Works%2C%0A%0AI%27d%20like%20a%20free%20mockup%20for%20my%20business.%0A%0ABusiness%20name%3A%20%0AWhat%20we%20do%3A%20%0AAnything%20you%27d%20like%20to%20see%3A%20%0A%0AThanks%2C%0A" target="_blank" rel="noopener" data-cursor>
           <span class="btn-label">Get a free mockup</span>
           <svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
@@ -308,7 +369,7 @@
           <svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
       </div>
-      <p class="contact-line" data-reveal><a class="ul" href="mailto:nuitworksmv@gmail.com" data-cursor>nuitworksmv@gmail.com</a><span>·</span><a class="ul" href="https://instagram.com/nuit.works" target="_blank" rel="noopener" data-cursor>@nuit.works</a></p>
+      <p class="contact-line" data-reveal><a class="ul" href="mailto:hello@nuit.works" data-cursor>hello@nuit.works</a><span>·</span><a class="ul" href="https://instagram.com/nuit.works" target="_blank" rel="noopener" data-cursor>@nuit.works</a></p>
     </div>
   </section>
 
@@ -319,7 +380,7 @@
   <div class="container">
     <div class="footer-grid">
       <div class="footer-lead">
-        <a class="footer-mail" href="mailto:nuitworksmv@gmail.com?subject=Free%20mockup%20for%20my%20business" data-cursor>nuitworksmv@gmail.com</a>
+        <a class="footer-mail" href="mailto:hello@nuit.works?subject=Free%20mockup%20for%20my%20business" data-cursor>hello@nuit.works</a>
         <p class="footer-note">Web design and development for growing businesses.</p>
       </div>
       <div class="footer-links">
@@ -331,7 +392,7 @@
         </div>
         <div class="footer-col">
           <h4>Contact</h4>
-          <a href="mailto:nuitworksmv@gmail.com" data-cursor>nuitworksmv@gmail.com</a>
+          <a href="mailto:hello@nuit.works" data-cursor>hello@nuit.works</a>
           <a href="https://instagram.com/nuit.works" target="_blank" rel="noopener" data-cursor>@nuit.works</a>
         </div>
       </div>
@@ -342,6 +403,39 @@
     </div>
   </div>
 </footer>
+
+<!-- Quick-look overlay. One instance, filled in from whichever card opened it. -->
+<div class="lb" id="quicklook" role="dialog" aria-modal="true" aria-labelledby="lb-name" hidden>
+  <div class="lb-scrim" data-lb-close></div>
+  <!-- data-lenis-prevent: the overlay stops Lenis so the page behind cannot
+       scroll, and a stopped Lenis swallows every wheel event on the document,
+       including the ones meant for this panel. Lenis checks for this attribute
+       before it checks whether it is stopped, so wheel events in here are left
+       alone and the panel scrolls natively. -->
+  <div class="lb-panel" data-lenis-prevent>
+    <header class="lb-head">
+      <div>
+        <span class="tag" data-lb-tag></span>
+        <h3 class="lb-name" id="lb-name"></h3>
+      </div>
+      <button class="lb-x" type="button" data-lb-close data-cursor="Close" aria-label="Close quick look">
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 3l10 10M13 3 3 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      </button>
+    </header>
+    <div class="lb-shots">
+      <img data-lb-shot="1" alt="" decoding="async">
+      <img data-lb-shot="2" alt="" decoding="async">
+      <img data-lb-shot="3" alt="" decoding="async">
+    </div>
+    <footer class="lb-foot">
+      <p class="lb-note">Three views from the live concept.</p>
+      <a class="btn btn-primary lb-visit magnetic" data-lb-url target="_blank" rel="noopener" data-cursor="Visit">
+        <span class="btn-label">Visit full concept</span>
+        <svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </footer>
+  </div>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>

@@ -35,7 +35,14 @@
 }
 
 *,*::before,*::after{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;background:var(--bg)}
+html{-webkit-text-size-adjust:100%;background:var(--bg);scrollbar-width:thin;scrollbar-color:rgba(242,242,240,.2) transparent}
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-corner{background:transparent}
+/* Padded with a transparent border so the thumb reads as a thin pill inside the
+   gutter rather than filling its full width. */
+::-webkit-scrollbar-thumb{background:rgba(242,242,240,.18);background-clip:content-box;border:3px solid transparent;border-radius:999px}
+::-webkit-scrollbar-thumb:hover{background:rgba(242,242,240,.34);background-clip:content-box;border:3px solid transparent}
 html.lenis,html.lenis body{height:auto}
 .lenis.lenis-smooth{scroll-behavior:auto!important}
 .lenis.lenis-stopped{overflow:hidden}
@@ -116,8 +123,11 @@ html.has-cursor .player-btn:hover,.player-btn:focus-visible{color:var(--fg)}
 .pre-bar i{display:block;height:100%;background:var(--silver-hi);transform-origin:left center;transform:scaleX(0)}
 
 /* ---------- Custom cursor ---------- */
-.cursor{position:fixed;top:0;left:0;z-index:100;pointer-events:none;display:none;will-change:transform}
-.cursor-trail{position:fixed;top:0;left:0;z-index:99;pointer-events:none;display:none}
+/* Top of everything, deliberately above the preloader (200) as well as the
+   quick-look overlay (120). has-cursor forces cursor:none on every element, so
+   anything that paints over these two leaves that area with no pointer at all. */
+.cursor{position:fixed;top:0;left:0;z-index:250;pointer-events:none;display:none;will-change:transform}
+.cursor-trail{position:fixed;top:0;left:0;z-index:249;pointer-events:none;display:none}
 @media (hover:hover) and (pointer:fine){
   html.has-cursor,html.has-cursor *{cursor:none!important}
   .cursor{display:block}
@@ -143,12 +153,12 @@ html.has-cursor .player-btn:hover,.player-btn:focus-visible{color:var(--fg)}
 /* ---------- Nav ---------- */
 .nav{
   position:fixed;top:0;left:0;right:0;z-index:50;display:flex;justify-content:space-between;align-items:center;
-  padding:32px var(--gutter);transition:padding .6s var(--ease-out);
+  padding:22px var(--gutter);transition:padding .6s var(--ease-out);
 }
-.nav::before{content:'';position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(10,10,12,.92),rgba(10,10,12,0));opacity:0;transition:opacity .6s;pointer-events:none}
-.nav.is-scrolled{padding:18px var(--gutter)}
-.nav.is-scrolled::before{opacity:1}
-.wordmark{--logo-size:19px;display:inline-flex;align-items:center;text-decoration:none;color:var(--fg)}
+.nav::before{content:'';position:absolute;inset:0;z-index:-1;background:rgba(10,10,12,.4);backdrop-filter:blur(14px);border-bottom:1px solid transparent;opacity:0;transition:opacity .6s;pointer-events:none}
+.nav.is-scrolled{padding:14px var(--gutter)}
+.nav.is-scrolled::before{opacity:1;border-bottom-color:var(--line)}
+.wordmark{--logo-size:22px;display:inline-flex;align-items:center;text-decoration:none;color:var(--fg)}
 /* Hidden while the particle wordmark holds the footer — see is-eclipsed in app.js */
 .nav .wordmark{transition:opacity .7s var(--ease-out),transform .7s var(--ease-out)}
 .nav .wordmark.is-eclipsed{opacity:0;transform:translateY(-8px);pointer-events:none}
@@ -160,12 +170,16 @@ html.has-cursor .wordmark:hover .logo{opacity:.68}
 .wordmark:focus-visible{outline:1px solid var(--silver-hi);outline-offset:8px}
 .nav-links{display:flex;gap:36px}
 .nav-links a{
-  position:relative;font-size:11.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);text-decoration:none;
+  position:relative;font-size:12.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);text-decoration:none;
   padding:6px 0;transition:color .35s;
 }
 .nav-links a::after{content:'';position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--fg);transform:scaleX(0);transform-origin:right;transition:transform .5s var(--ease-out)}
 html.has-cursor .nav-links a:hover{color:var(--fg)}
 html.has-cursor .nav-links a:hover::after{transform:scaleX(1);transform-origin:left}
+.nav-right{display:flex;align-items:center;gap:28px}
+/* Same pill button language as every other CTA on the page, just sized for a
+   persistent header: no arrow glyph, tighter padding, smaller type. */
+.nav-cta{padding:12px 22px;font-size:12px;gap:0}
 
 /* ---------- Layout ---------- */
 main,footer{position:relative;z-index:4}
@@ -191,7 +205,7 @@ main,footer{position:relative;z-index:4}
 .h2{font:400 clamp(2.5rem,5.6vw,5.2rem)/1.02 var(--serif);letter-spacing:-.012em;text-wrap:balance}
 .h2.statement{font-size:clamp(2.1rem,4.4vw,4rem);line-height:1.12;max-width:22ch;margin:0 auto}
 em{font-style:italic;color:var(--silver-hi)}
-.lead{font-size:clamp(1rem,1.15vw,1.15rem);line-height:1.65;color:var(--soft);max-width:54ch}
+.lead{font-size:clamp(1rem,1.15vw,1.15rem);line-height:1.65;color:var(--fg);max-width:54ch}
 .center .lead{margin-left:auto;margin-right:auto}
 
 /* ---------- Buttons ---------- */
@@ -256,7 +270,7 @@ html.has-cursor .btn-ghost:hover{color:var(--bg);border-color:var(--fg)}
 .pillars{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:72px;text-align:left}
 .pillars li{border-top:1px solid var(--line-strong);padding-top:20px}
 .pillars span{display:block;font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;margin-bottom:8px}
-.pillars small{font-size:14px;color:var(--muted)}
+.pillars small{font-size:14px;color:var(--fg)}
 
 /* ---------- Services ---------- */
 .split{display:grid;grid-template-columns:1fr 1.25fr;gap:clamp(48px,7vw,120px);align-items:start}
@@ -267,41 +281,36 @@ html.has-cursor .btn-ghost:hover{color:var(--bg);border-color:var(--fg)}
 .callout-idx{position:absolute;left:0;top:46px;font:italic 400 1.35rem var(--serif);color:var(--silver)}
 .callout-h{font-size:12.5px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--fg);margin-bottom:18px}
 .callout-tag{font-size:clamp(1.25rem,1.7vw,1.6rem);font-weight:600;letter-spacing:-.01em;line-height:1.25;margin-bottom:16px;max-width:24ch}
-.callout-p{color:var(--muted);font-size:15.5px;line-height:1.65;max-width:52ch}
+.callout-p{color:var(--fg);font-size:15.5px;line-height:1.65;max-width:52ch}
 .callout::after{content:'';position:absolute;left:0;right:0;top:-1px;height:1px;background:var(--silver-hi);transform:scaleX(0);transform-origin:left;transition:transform .9s var(--ease-out)}
 html.has-cursor .callout:hover::after{transform:scaleX(1)}
 
 /* ---------- Work ---------- */
-.work-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;perspective:1600px}
-.card{display:block;text-decoration:none;color:inherit;transform-style:preserve-3d;will-change:transform}
-.cover{position:relative;aspect-ratio:4/5;border-radius:var(--radius);overflow:hidden;border:1px solid var(--line);background:#0e0e11;transform:translateZ(0)}
+/* Two across, not three. These cards are the first thing under the hero and each
+   one now carries a real screenshot — at three across the screenshot is a
+   thumbnail, and the point of the section is that you can see the design. */
+.work-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:clamp(28px,3vw,48px);perspective:1600px}
+.card{display:block;transform-style:preserve-3d;will-change:transform}
+
+/* The cover opens the quick look, so it is a real <button> — hence the reset. */
+.cover{
+  position:relative;display:block;width:100%;margin:0;padding:0;
+  aspect-ratio:16/10;border-radius:var(--radius);overflow:hidden;
+  border:1px solid var(--line);background:#0e0e11;transform:translateZ(0);
+  font:inherit;color:inherit;text-align:left;cursor:pointer;
+  -webkit-tap-highlight-color:transparent
+}
+.cover:focus-visible{outline:1px solid var(--silver-hi);outline-offset:6px}
 .art{position:absolute;inset:-6% 0;transition:transform 1.3s var(--ease-out);will-change:transform;background-color:#0f0f12}
 html.has-cursor .card:hover .art{transform:scale(1.06)}
-.cover::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,12,0) 55%,rgba(10,10,12,.55));pointer-events:none}
+.cover::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,12,0) 52%,rgba(10,10,12,.58));pointer-events:none}
 .cover .shine{position:absolute;inset:0;background:radial-gradient(420px circle at var(--mx,50%) var(--my,50%),rgba(232,232,236,.12),transparent 60%);opacity:0;transition:opacity .5s;pointer-events:none}
 html.has-cursor .card:hover .shine{opacity:1}
-.card-meta{padding:22px 4px 0}
-.tag{display:inline-block;font-size:10.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:7px 11px;border-radius:999px}
-.card-meta h3{font:400 1.7rem/1.1 var(--serif);margin:16px 0 8px;display:flex;align-items:center;gap:10px}
-.card-meta h3 svg{width:14px;height:14px;opacity:0;transform:translate(-6px,6px);transition:opacity .4s,transform .5s var(--ease-out)}
-html.has-cursor .card:hover .card-meta h3 svg{opacity:1;transform:translate(0,0)}
-.card-meta p{color:var(--muted);font-size:14.5px}
 
-/* Auto-fit so the grid stays right whether there are two concepts or six. */
-.work-grid{grid-template-columns:repeat(auto-fit,minmax(320px,1fr))}
-.work-grid .cover{aspect-ratio:16/10}
-
-
-/* Live preview. The frame is laid out at a desktop width and scaled down by --pv
-   (set in app.js from the cover width) so the page inside renders its desktop
-   layout rather than its mobile one. Never interactive — the card owns the click. */
-/* Transition is added by app.js after the first fit, so the initial scale lands
-   without animating up from the fallback value. */
-/* Screenshot layer: sits over the gradient, under the live frame. It is what phones
-   show (frames are desktop-only) and it fills the cover instantly on desktop while the
-   frame loads behind it. Stays hidden until a file actually loads — see app.js. */
-/* Starts transparent rather than display:none — a lazy image with no box never trips
-   its own intersection observer, so it would sit there never loading and never failing. */
+/* Screenshot layer, over the gradient fallback. Stays transparent until a file
+   actually loads (see app.js), so a missing capture leaves the gradient rather
+   than a broken image. Transparent and not display:none because a lazy image
+   with no box never trips its own intersection observer. */
 .shot{
   position:absolute;inset:0;width:100%;height:100%;
   object-fit:cover;object-position:50% 0;opacity:0;
@@ -309,15 +318,65 @@ html.has-cursor .card:hover .card-meta h3 svg{opacity:1;transform:translate(0,0)
 }
 .shot.is-on{opacity:1}
 .shot.is-off{display:none}
-html.has-cursor .card:hover .shot{transform:scale(1.07)}
-.preview[hidden]{display:none}
-.preview.is-fitted{transition:transform 1s var(--ease-out)}
-.preview{
-  position:absolute;left:50%;top:50%;width:1440px;height:900px;border:0;
-  transform-origin:50% 50%;transform:translate(-50%,-50%) scale(var(--pv,.45));
-  pointer-events:none;background:#0e0e11;color-scheme:light
+html.has-cursor .card:hover .shot{transform:scale(1.05)}
+
+.card-meta{padding:26px 4px 0}
+.tag{display:inline-block;font-size:10.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:7px 11px;border-radius:999px}
+.card-meta h3{font:400 clamp(1.8rem,2.1vw,2.25rem)/1.08 var(--serif);margin:18px 0 12px}
+/* An estimate, not a quote — the label stays muted so the figure reads first. */
+.card-est{margin-top:16px;font-size:13px;color:var(--muted)}
+.card-est b{font-weight:600;letter-spacing:.03em;color:var(--silver-hi)}
+.card-out{
+  display:inline-flex;align-items:center;gap:9px;margin-top:22px;
+  font-size:11.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;transition:color .35s
 }
-html.has-cursor .card:hover .preview{transform:translate(-50%,-50%) scale(calc(var(--pv,.45) * 1.07))}
+.card-out svg{width:12px;height:12px;transition:transform .45s var(--ease-out)}
+html.has-cursor .card-out:hover{color:var(--fg)}
+html.has-cursor .card-out:hover svg{transform:translate(2px,-2px)}
+.card-out:focus-visible{outline:1px solid var(--silver-hi);outline-offset:5px;border-radius:2px}
+
+/* ---------- Quick look ---------- */
+.lb{position:fixed;inset:0;z-index:120;display:grid;place-items:center;padding:clamp(14px,4vw,44px)}
+.lb[hidden]{display:none}
+.lb-scrim{position:absolute;inset:0;background:rgba(6,6,8,.8);backdrop-filter:blur(10px);opacity:0;transition:opacity .45s var(--ease-out)}
+/* Opaque rather than frosted: the sticky footer below has to paint over the
+   scrolling shots, and two translucent layers stacked read as a bright band.
+   The blurred scrim behind already separates the panel from the page. */
+.lb-panel{
+  position:relative;width:100%;max-width:1060px;max-height:100%;
+  display:flex;flex-direction:column;gap:22px;
+  padding:clamp(20px,2.4vw,34px) clamp(20px,2.4vw,34px) 0;border-radius:var(--radius);
+  background:#0e0e12;border:1px solid var(--line);
+  overflow-y:auto;overscroll-behavior:contain;
+  opacity:0;transform:translateY(20px) scale(.985);
+  transition:opacity .4s var(--ease-out),transform .55s var(--ease-out)
+}
+.lb.is-open .lb-scrim{opacity:1}
+.lb.is-open .lb-panel{opacity:1;transform:none}
+.lb-head{display:flex;align-items:flex-start;justify-content:space-between;gap:24px}
+.lb-name{font:400 clamp(1.7rem,2.3vw,2.3rem)/1.06 var(--serif);margin:14px 0 0}
+.lb-x{
+  flex:none;width:42px;height:42px;display:grid;place-items:center;
+  border-radius:50%;border:1px solid var(--line);background:transparent;
+  color:var(--fg);cursor:pointer;transition:background .35s,border-color .35s
+}
+.lb-x svg{width:15px;height:15px}
+html.has-cursor .lb-x:hover{background:rgba(242,242,240,.08);border-color:var(--silver-hi)}
+.lb-x:focus-visible{outline:1px solid var(--silver-hi);outline-offset:4px}
+/* Stacked, not side by side: two 16:10 frames in one row are too small to show
+   the thing they exist to show, and the panel scrolls anyway. */
+.lb-shots{display:grid;gap:16px}
+.lb-shots img{display:block;width:100%;height:auto;border-radius:calc(var(--radius) - 8px);border:1px solid var(--line);background:#0e0e11}
+/* Sticky, because two stacked 16:10 shots are taller than the panel on any
+   laptop — without this the one button in the overlay sits below the fold. */
+.lb-foot{
+  position:sticky;bottom:0;z-index:1;
+  display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;
+  padding:18px 0 clamp(20px,2.4vw,34px);
+  background:#0e0e12;border-top:1px solid var(--line)
+}
+.lb-note{color:var(--muted);font-size:13px}
 
 /* Placeholder cover art, keyed to the project. Swap the .art div for
    <img class="art" src="..."> as soon as a real screenshot exists. */
@@ -361,7 +420,7 @@ html.has-cursor .card:hover .preview{transform:translate(-50%,-50%) scale(calc(v
   margin-bottom:clamp(28px,4vw,44px)
 }
 .empty-state h3{margin:0 0 14px;font-family:var(--serif);font-weight:400;font-size:clamp(26px,3.4vw,38px);letter-spacing:-.01em}
-.empty-state p{margin:0 auto 34px;max-width:52ch;color:var(--muted);font-size:15px;line-height:1.7}
+.empty-state p{margin:0 auto 34px;max-width:52ch;color:var(--fg);font-size:15px;line-height:1.7}
 
 /* ---------- Process ---------- */
 .steps{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:40px;padding-top:44px}
@@ -369,10 +428,10 @@ html.has-cursor .card:hover .preview{transform:translate(-50%,-50%) scale(calc(v
 .process-line i{display:block;height:100%;background:var(--silver-hi);transform-origin:left;transform:scaleX(0)}
 .step-num{font:italic 400 3.2rem/1 var(--serif);color:var(--silver);margin-bottom:22px}
 .step h3{font-size:13px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;margin-bottom:14px}
-.step p{color:var(--muted);font-size:15px;line-height:1.65;max-width:30ch}
+.step p{color:var(--fg);font-size:15px;line-height:1.65;max-width:30ch}
 
 /* ---------- Pricing ---------- */
-.tiers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:stretch;max-width:948px;margin-inline:auto}
+.tiers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;align-items:stretch;max-width:1240px;margin-inline:auto}
 /* Same muted register as the section intro, set italic and centred under the pair. */
 .tiers-note{max-width:60ch;margin:30px auto 0;text-align:center;color:var(--muted);font-size:14px;line-height:1.65;font-style:italic}
 .tiers-cta{display:flex;justify-content:center;margin-top:26px}
@@ -396,20 +455,27 @@ html.has-cursor .card:hover .preview{transform:translate(-50%,-50%) scale(calc(v
 html.has-cursor .tier:hover::before,html.has-cursor .tier:hover::after{opacity:1}
 html.has-cursor .tier:hover{transform:translateY(-6px)}
 .tier h3{font:400 2rem/1 var(--serif);margin-bottom:12px}
-.tier-for{color:var(--muted);font-size:14.5px;line-height:1.55;max-width:30ch;min-height:3.1em}
+.tier-for{color:var(--fg);font-size:14.5px;line-height:1.55}
+.tier-for b{display:block;margin-bottom:8px;font:500 11.5px var(--sans);letter-spacing:.2em;text-transform:uppercase;color:var(--muted)}
+/* The "Suited for" copy runs to different lengths per card. Subgrid puts every
+   card's header, price, bullets and button on shared row lines, so prices and
+   buttons sit level across the row instead of following each card's own text. */
+@supports (grid-template-rows:subgrid){
+  .tier{display:grid;grid-row:span 4;grid-template-rows:subgrid;row-gap:26px}
+}
 .price{display:flex;align-items:baseline;flex-wrap:wrap;gap:10px;font:400 3.1rem/1 var(--serif);letter-spacing:-.01em}
 .price .cur{font:500 11.5px var(--sans);letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
 .feats{display:grid;gap:12px;padding-top:24px;border-top:1px solid var(--line)}
-.feats li{position:relative;padding-left:22px;font-size:14.5px;line-height:1.5;color:var(--soft)}
+.feats li{position:relative;padding-left:22px;font-size:14.5px;line-height:1.5;color:var(--fg)}
 .feats li::before{content:'';position:absolute;left:0;top:.72em;width:10px;height:1px;background:var(--silver)}
 .feats li.plus{color:var(--fg);font-weight:500}
 .feats li.plus::before{width:6px;height:6px;top:.5em;border-radius:50%;background:var(--silver-hi)}
 .tier-cta{margin-top:auto;justify-content:center}
 .addons{display:grid;grid-template-columns:1fr 2.2fr;gap:48px;margin-top:88px;padding-top:56px;border-top:1px solid var(--line)}
 .addons-h{font:400 2.1rem/1 var(--serif);margin-bottom:14px}
-.addons .fine{color:var(--muted);font-size:13.5px;line-height:1.6;max-width:36ch}
+.addons .fine{color:var(--fg);font-size:13.5px;line-height:1.6;max-width:36ch}
 .addons ul{columns:2;column-gap:56px}
-.addons li{break-inside:avoid;display:flex;align-items:baseline;gap:12px;padding:12px 0;font-size:14.5px;color:var(--soft)}
+.addons li{break-inside:avoid;display:flex;align-items:baseline;gap:12px;padding:12px 0;font-size:14.5px;color:var(--fg)}
 .addons li i{flex:1;border-bottom:1px dotted rgba(242,242,240,.22);transform:translateY(-.3em)}
 .addons li b{font-weight:500;color:var(--fg);white-space:nowrap}
 .addons li b small{color:var(--muted);font-weight:400;font-size:12.5px;margin-left:4px}
@@ -417,7 +483,7 @@ html.has-cursor .tier:hover{transform:translateY(-6px)}
 .subs ul{columns:1}
 .subs li{display:block;padding:16px 0}
 .subs .sub-row{display:flex;align-items:baseline;gap:12px}
-.subs .sub-note{display:block;margin-top:8px;max-width:52ch;color:var(--muted);font-size:13px;line-height:1.6}
+.subs .sub-note{display:block;margin-top:8px;max-width:52ch;color:var(--fg);font-size:13px;line-height:1.6}
 
 /* ---------- Final CTA ---------- */
 /* The run-out below the CTA is deliberately long. The footer's shape trigger fires
@@ -456,7 +522,7 @@ html.has-cursor .ul:hover::after{transform:scaleX(0);transform-origin:right}
 .footer-mail::after{content:'';position:absolute;left:0;right:0;bottom:.06em;height:1px;background:currentColor;opacity:.32;transform:scaleX(1);transform-origin:left;transition:transform .55s var(--ease-out),opacity .3s}
 html.has-cursor .footer-mail:hover{color:var(--silver-hi)}
 html.has-cursor .footer-mail:hover::after{transform:scaleX(0);transform-origin:right}
-.footer-note{color:var(--muted);max-width:34ch;margin:18px 0 0;font-size:14px;line-height:1.6}
+.footer-note{color:var(--fg);max-width:34ch;margin:18px 0 0;font-size:14px;line-height:1.6}
 .footer-links{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,56px)}
 .footer-col h4{font-size:10.5px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);margin-bottom:22px}
 .footer-col a{display:block;width:max-content;text-decoration:none;color:var(--soft);font-size:15px;margin-bottom:12px;transition:color .3s,transform .5s var(--ease-out)}
@@ -483,6 +549,9 @@ html.has-cursor .footer-col a:hover{color:var(--fg);transform:translateX(6px)}
 /* Card-style single-select */
 .pick-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .pick-grid-3{grid-template-columns:repeat(3,1fr)}
+/* Site-type names are too long to share a line with the price at a third of the
+   width, so the price sits under the name instead of squeezing it. */
+.pick-grid-type .pick-head{flex-direction:column;align-items:flex-start;gap:8px}
 .pick{position:relative;display:block;cursor:pointer}
 .pick input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
 .pick-body{
@@ -493,7 +562,7 @@ html.has-cursor .footer-col a:hover{color:var(--fg);transform:translateX(6px)}
 .pick-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
 .pick-name{font:400 1.35rem/1 var(--serif);color:var(--fg)}
 .pick-price{font-size:12.5px;letter-spacing:.04em;color:var(--muted);white-space:nowrap}
-.pick-desc{display:block;font-size:13.5px;line-height:1.55;color:var(--muted)}
+.pick-desc{display:block;font-size:13.5px;line-height:1.55;color:var(--fg)}
 html.has-cursor .pick:hover .pick-body{border-color:var(--line-strong);transform:translateY(-3px)}
 .pick.is-picked .pick-body{border-color:rgba(201,201,207,.55);background:rgba(20,20,23,.94)}
 .pick.is-picked .pick-price{color:var(--soft)}
@@ -522,7 +591,7 @@ html.has-cursor .opt:hover{background:rgba(20,20,23,.5)}
 .opt.is-on .opt-box{background:var(--silver-hi);border-color:var(--silver-hi)}
 .opt.is-on .opt-box::after{opacity:1;transform:rotate(42deg) scale(1)}
 .opt-main input:focus-visible + .opt-box{outline:1px solid var(--silver-hi);outline-offset:3px}
-.opt-name{font-size:14.5px;line-height:1.45;color:var(--soft)}
+.opt-name{font-size:14.5px;line-height:1.45;color:var(--fg)}
 .opt.is-on .opt-name{color:var(--fg)}
 .opt-price{font-size:13.5px;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
 .opt-price small{font-size:12px;margin-left:5px;opacity:.8}
@@ -590,12 +659,12 @@ html.has-cursor .step-btn:not(:disabled):hover{border-color:var(--silver-hi);col
 
 /* ---------- Responsive ---------- */
 @media (max-width:1100px){
-  .work-grid{grid-template-columns:repeat(2,1fr)}
   .tiers{grid-template-columns:1fr;max-width:640px;margin:0 auto}
   .steps{grid-template-columns:repeat(2,1fr)}
   .addons{grid-template-columns:1fr}
 }
 @media (max-width:860px){
+  .work-grid{grid-template-columns:1fr}
   .split{grid-template-columns:1fr;gap:56px}
   .sticky{position:static}
   .section-head{grid-template-columns:1fr;gap:20px}
@@ -603,13 +672,19 @@ html.has-cursor .step-btn:not(:disabled):hover{border-color:var(--silver-hi);col
   .pillars{grid-template-columns:1fr;gap:20px}
 }
 @media (max-width:640px){
-  .nav{padding:22px var(--gutter)}
-  .nav .wordmark{--logo-size:16px}
+  .card-meta{padding-top:20px}
+  .lb-panel{gap:18px}
+  .lb-head{gap:14px}
+  .lb-foot{flex-direction:column;align-items:stretch}
+  .lb-visit{justify-content:center}
+  .nav{padding:16px var(--gutter)}
+  .nav .wordmark{--logo-size:18px}
+  .nav-right{gap:16px}
   .nav-links{gap:22px}
-  .nav-links a{font-size:10.5px;letter-spacing:.16em}
+  .nav-links a{font-size:11px;letter-spacing:.15em}
+  .nav-cta{padding:10px 16px;font-size:11px}
   .hero{padding-top:120px;padding-bottom:110px}
   .hero .display{max-width:none}
-  .work-grid{grid-template-columns:1fr}
   .steps{grid-template-columns:1fr;gap:36px}
   .addons ul{columns:1}
   .hud{display:none}
@@ -630,6 +705,13 @@ html.has-cursor .step-btn:not(:disabled):hover{border-color:var(--silver-hi);col
   .footer-bottom{flex-direction:column}
 }
 
+@media (max-width:480px){
+  .nav-links{display:none}
+}
+@media (prefers-reduced-motion:reduce){
+  .lb-panel{transform:none;transition:opacity .2s linear}
+  .lb-scrim{transition:opacity .2s linear}
+}
 @media (prefers-reduced-motion:reduce){
   .grain,.scroll-hint i::after,.eyebrow .dot,.player.is-playing .player-eq i{animation:none}
   .player.is-playing .player-eq i{height:9px}
@@ -745,11 +827,16 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
 <!-- Nav -->
 <header class="nav">
   <a href="#top" class="wordmark" data-cursor aria-label="Nuit Works — back to top"><span class="logo">NUIT</span></a>
-  <nav class="nav-links" aria-label="Primary">
-    <a href="#work" data-cursor>Work</a>
-    <a href="#pricing" data-cursor>Pricing</a>
-    <a href="#contact" data-cursor>Contact</a>
-  </nav>
+  <div class="nav-right">
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#work" data-cursor>Work</a>
+      <a href="#pricing" data-cursor>Pricing</a>
+      <a href="#contact" data-cursor>Contact</a>
+    </nav>
+    <a class="btn btn-primary nav-cta magnetic" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=hello%40nuit.works&amp;su=Free%20Mockup%20For%20My%20Business&amp;body=Hi%20Nuit%20Works%2C%0A%0AI%27d%20like%20a%20free%20mockup%20for%20my%20business.%0A%0ABusiness%20name%3A%20%0AWhat%20we%20do%3A%20%0AAnything%20you%27d%20like%20to%20see%3A%20%0A%0AThanks%2C%0A" target="_blank" rel="noopener" data-cursor>
+      <span class="btn-label">Get a mockup</span>
+    </a>
+  </div>
 </header>
 
 <main id="top">
@@ -761,7 +848,7 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
       <h1 class="display" data-typewriter>We build websites that turn visitors into <em>customers.</em></h1>
       <p class="lead hero-sub">Nuit is a design studio that creates clear, fast, and high-quality websites. We use interactive design to help your business stand out online. And your first mockup is on us.</p>
       <div class="cta-row hero-cta">
-        <a class="btn btn-primary magnetic" href="mailto:nuitworksmv@gmail.com?subject=Free%20mockup%20for%20my%20business" data-cursor>
+        <a class="btn btn-primary magnetic" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=hello%40nuit.works&amp;su=Free%20Mockup%20For%20My%20Business&amp;body=Hi%20Nuit%20Works%2C%0A%0AI%27d%20like%20a%20free%20mockup%20for%20my%20business.%0A%0ABusiness%20name%3A%20%0AWhat%20we%20do%3A%20%0AAnything%20you%27d%20like%20to%20see%3A%20%0A%0AThanks%2C%0A" target="_blank" rel="noopener" data-cursor>
           <span class="btn-label">Get a free mockup</span>
           <svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
@@ -771,26 +858,12 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
     <div class="scroll-hint" aria-hidden="true"><span>Scroll</span><i></i></div>
   </section>
 
-  <!-- Positioning -->
-  <section id="studio" class="section positioning" data-shape="0" data-rotx="0.35" data-x="0" data-y="0" data-scale="1.35" data-opacity="0.5" data-spin="0.08" data-disperse="1">
-    <div class="container narrow center">
-      <p class="eyebrow" data-reveal><span class="idx">01</span>The studio</p>
-      <h2 class="h2 statement" data-split>Tailored digital solutions built around your <em>business goals.</em></h2>
-      <p class="lead" data-reveal>We are a dedicated team managing every phase of your project, from initial strategy and design to launch and maintenance. By working directly with us, you get clear communication, fast turnaround times, and a website crafted to meet high standards.</p>
-      <ul class="pillars" data-reveal-group>
-        <li data-reveal><span>Custom design</span><small>Tailored specifically to match your brand and audience.</small></li>
-        <li data-reveal><span>Engaging motion</span><small>Smooth interactions that make your site easy and enjoyable to navigate.</small></li>
-        <li data-reveal><span>Full service</span><small>Strategy, design, and launch handled seamlessly in one place.</small></li>
-      </ul>
-    </div>
-  </section>
-
   <!-- Services -->
   <section id="services" class="section services" data-shape="0" data-rotx="0.5" data-x="-1.25" data-y="-0.1" data-scale="0.85" data-opacity="0.55" data-spin="0.18" data-disperse="1">
     <div class="container split">
       <div class="split-left">
         <div class="sticky">
-          <p class="eyebrow" data-reveal><span class="idx">02</span>Services</p>
+          <p class="eyebrow" data-reveal><span class="idx">01</span>Services</p>
           <h2 class="h2" data-typewriter>What we <em>build.</em></h2>
           <p class="lead" data-reveal>Tailored solutions designed around your business needs. Fast, reliable, and built to perform.</p>
         </div>
@@ -823,90 +896,124 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
     <div class="container">
       <div class="section-head">
         <div>
-          <p class="eyebrow" data-reveal><span class="idx">03</span>Concept work</p>
+          <p class="eyebrow" data-reveal><span class="idx">02</span>Concept work</p>
           <h2 class="h2" data-split>Concept <em>builds.</em></h2>
         </div>
         <p class="lead" data-reveal>Made-up businesses, built to look and feel like the real ones we want to work with.</p>
       </div>
 
+      <!-- Each card carries its own quick-look data: the slug names the three files in
+           assets/concepts/ (see capture-concepts.mjs), and app.js reads the rest straight
+           off these attributes, so adding a concept never means touching the script. -->
       <div class="work-grid" data-reveal-group>
-        <!-- Each cover is the live concept in a frame, rendered at desktop width and scaled to fit,
-             so it can never go stale. The gradient .art behind it is the fallback if a frame is
-             blocked or offline. -->
-        <a class="card" href="https://cafe-nuit.vercel.app" target="_blank" rel="noopener" data-art="fuku-nuit" data-cursor="Visit" data-reveal>
-          <div class="cover">
-            <div class="art"></div>
-            <img class="shot" data-shot="fuku-nuit" alt="" loading="lazy" decoding="async">
-            <iframe class="preview" data-src="https://cafe-nuit.vercel.app" title="Live preview of the Fuku Coffee concept site" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true" sandbox="allow-scripts allow-same-origin"></iframe>
-            <div class="shine"></div>
+        <article class="card" data-art="fuku-nuit" data-reveal
+                 data-look="cafe-fuku" data-look-name="Fuku Coffee" data-look-tag="Concept · Café"
+                 data-look-url="https://cafe-nuit.vercel.app"
+                 data-look-alt-1="Fuku Coffee concept — the homepage, storefront and hanging greenery behind the headline"
+                 data-look-alt-2="Fuku Coffee concept — the story section, with the room shot and the three ideas behind the café"
+                 data-look-alt-3="Fuku Coffee concept — the short menu, priced in MVR, above a full-width macro pour">
+          <button class="cover" type="button" data-cursor="Quick look" aria-label="Quick look inside the Fuku Coffee concept">
+            <span class="art"></span>
+            <img class="shot" data-shot="concepts/cafe-fuku-1" alt="" loading="lazy" decoding="async">
+            <span class="shine"></span>
+          </button>
+          <div class="card-meta">
+            <span class="tag">Concept · Café</span>
+            <h3>Fuku Coffee</h3>
+            <p class="card-est">Starting around <b>MVR 5,000+</b></p>
+            <a class="card-out" href="https://cafe-nuit.vercel.app" target="_blank" rel="noopener" data-cursor="Visit">Visit full concept <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
-          <div class="card-meta"><span class="tag">Concept · Café</span><h3>Fuku Coffee <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>A quiet coffee room in Hulhumalé, built around the idea that nothing here should be rushed.</p></div>
-        </a>
-        <a class="card" href="https://guesthouse-nuit.vercel.app" target="_blank" rel="noopener" data-art="guesthouse-nuit" data-cursor="Visit" data-reveal>
-          <div class="cover">
-            <div class="art"></div>
-            <img class="shot" data-shot="guesthouse-nuit" alt="" loading="lazy" decoding="async">
-            <iframe class="preview" data-src="https://guesthouse-nuit.vercel.app" title="Live preview of the Driftwood concept site" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true" sandbox="allow-scripts allow-same-origin"></iframe>
-            <div class="shine"></div>
+        </article>
+        <article class="card" data-art="guesthouse-nuit" data-reveal
+                 data-look="driftwood" data-look-name="Driftwood" data-look-tag="Concept · Guesthouse"
+                 data-look-url="https://guesthouse-nuit.vercel.app"
+                 data-look-alt-1="Driftwood concept — the homepage, the deck and palms at golden hour"
+                 data-look-alt-2="Driftwood concept — the rooms listing, with rates and what each room looks out on"
+                 data-look-alt-3="Driftwood concept — the experiences section — reef trips and island mornings">
+          <button class="cover" type="button" data-cursor="Quick look" aria-label="Quick look inside the Driftwood concept">
+            <span class="art"></span>
+            <img class="shot" data-shot="concepts/driftwood-1" alt="" loading="lazy" decoding="async">
+            <span class="shine"></span>
+          </button>
+          <div class="card-meta">
+            <span class="tag">Concept · Guesthouse</span>
+            <h3>Driftwood</h3>
+            <p class="card-est">Starting around <b>MVR 10,000+</b></p>
+            <a class="card-out" href="https://guesthouse-nuit.vercel.app" target="_blank" rel="noopener" data-cursor="Visit">Visit full concept <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
-          <div class="card-meta"><span class="tag">Concept · Guesthouse</span><h3>Driftwood <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>Twelve rooms on Maafushi, booked straight from a homepage that feels like the reef outside it.</p></div>
-        </a>
-        <a class="card" href="https://skincare-nuit.vercel.app" target="_blank" rel="noopener" data-art="skincare-nuit" data-cursor="Visit" data-reveal>
-          <div class="cover">
-            <div class="art"></div>
-            <img class="shot" data-shot="skincare-nuit" alt="" loading="lazy" decoding="async">
-            <iframe class="preview" data-src="https://skincare-nuit.vercel.app" title="Live preview of the Verum concept site" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true" sandbox="allow-scripts allow-same-origin"></iframe>
-            <div class="shine"></div>
+        </article>
+        <article class="card" data-art="skincare-nuit" data-reveal
+                 data-look="verum" data-look-name="Verum" data-look-tag="Concept · Skincare"
+                 data-look-url="https://skincare-nuit.vercel.app"
+                 data-look-alt-1="Verum concept — the homepage, the shop headline beside the row of guarantees"
+                 data-look-alt-2="Verum concept — the formula quiz, which narrows the range by skin type"
+                 data-look-alt-3="Verum concept — the shop grid, priced and filterable by concern">
+          <button class="cover" type="button" data-cursor="Quick look" aria-label="Quick look inside the Verum concept">
+            <span class="art"></span>
+            <img class="shot" data-shot="concepts/verum-1" alt="" loading="lazy" decoding="async">
+            <span class="shine"></span>
+          </button>
+          <div class="card-meta">
+            <span class="tag">Concept · Skincare</span>
+            <h3>Verum</h3>
+            <p class="card-est">Starting around <b>MVR 10,000+</b></p>
+            <a class="card-out" href="https://skincare-nuit.vercel.app" target="_blank" rel="noopener" data-cursor="Visit">Visit full concept <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
-          <div class="card-meta"><span class="tag">Concept · Skincare</span><h3>Verum <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>A curated skincare shop for Malé, formula-checked and delivered free across the city.</p></div>
-        </a>
-        <a class="card" href="https://furniture-nuit.vercel.app" target="_blank" rel="noopener" data-art="furniture-nuit" data-cursor="Visit" data-reveal>
-          <div class="cover">
-            <div class="art"></div>
-            <img class="shot" data-shot="furniture-nuit" alt="" loading="lazy" decoding="async">
-            <iframe class="preview" data-src="https://furniture-nuit.vercel.app" title="Live preview of the Homestead concept site" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true" sandbox="allow-scripts allow-same-origin"></iframe>
-            <div class="shine"></div>
+        </article>
+        <article class="card" data-art="furniture-nuit" data-reveal
+                 data-look="homestead" data-look-name="Homestead" data-look-tag="Concept · Furniture"
+                 data-look-url="https://furniture-nuit.vercel.app"
+                 data-look-alt-1="Homestead concept — the homepage, the living-room collection in afternoon light"
+                 data-look-alt-2="Homestead concept — the collection grid, each piece named by its materials"
+                 data-look-alt-3="Homestead concept — a room set, showing the collection together in one space">
+          <button class="cover" type="button" data-cursor="Quick look" aria-label="Quick look inside the Homestead concept">
+            <span class="art"></span>
+            <img class="shot" data-shot="concepts/homestead-1" alt="" loading="lazy" decoding="async">
+            <span class="shine"></span>
+          </button>
+          <div class="card-meta">
+            <span class="tag">Concept · Furniture</span>
+            <h3>Homestead</h3>
+            <p class="card-est">Starting around <b>MVR 10,000+</b></p>
+            <a class="card-out" href="https://furniture-nuit.vercel.app" target="_blank" rel="noopener" data-cursor="Visit">Visit full concept <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
-          <div class="card-meta"><span class="tag">Concept · Furniture</span><h3>Homestead <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>A living-room collection shot in real light, sold the way it deserves to be shown.</p></div>
-        </a>
-        <a class="card" href="https://perfume-nuit.vercel.app" target="_blank" rel="noopener" data-art="perfume-nuit" data-cursor="Visit" data-reveal>
-          <div class="cover">
-            <div class="art"></div>
-            <img class="shot" data-shot="perfume-nuit" alt="" loading="lazy" decoding="async">
-            <iframe class="preview" data-src="https://perfume-nuit.vercel.app" title="Live preview of the Scentu concept site" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true" sandbox="allow-scripts allow-same-origin"></iframe>
-            <div class="shine"></div>
+        </article>
+        <article class="card" data-art="perfume-nuit" data-reveal
+                 data-look="scentu" data-look-name="Scentu" data-look-tag="Concept · Fragrance"
+                 data-look-url="https://perfume-nuit.vercel.app"
+                 data-look-alt-1="Scentu concept — the homepage, a single bottle lit against near-black"
+                 data-look-alt-2="Scentu concept — the scent families, which replace the usual brand list"
+                 data-look-alt-3="Scentu concept — the collection grid, priced and split by wear">
+          <button class="cover" type="button" data-cursor="Quick look" aria-label="Quick look inside the Scentu concept">
+            <span class="art"></span>
+            <img class="shot" data-shot="concepts/scentu-1" alt="" loading="lazy" decoding="async">
+            <span class="shine"></span>
+          </button>
+          <div class="card-meta">
+            <span class="tag">Concept · Fragrance</span>
+            <h3>Scentu</h3>
+            <p class="card-est">Starting around <b>MVR 10,000+</b></p>
+            <a class="card-out" href="https://perfume-nuit.vercel.app" target="_blank" rel="noopener" data-cursor="Visit">Visit full concept <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
-          <div class="card-meta"><span class="tag">Concept · Fragrance</span><h3>Scentu <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>A fragrance boutique that sorts bottles by what they actually smell like, not by house.</p></div>
-        </a>
-        <a class="card" href="https://cafe2-nuit.vercel.app" target="_blank" rel="noopener" data-art="nocturne-nuit" data-cursor="Visit" data-reveal>
-          <div class="cover">
-            <div class="art"></div>
-            <img class="shot" data-shot="nocturne-nuit" alt="" loading="lazy" decoding="async">
-            <iframe class="preview" data-src="https://cafe2-nuit.vercel.app" title="Live preview of the Nocturne concept site" loading="lazy" scrolling="no" tabindex="-1" aria-hidden="true" sandbox="allow-scripts allow-same-origin"></iframe>
-            <div class="shine"></div>
+        </article>
+        <article class="card" data-art="nocturne-nuit" data-reveal
+                 data-look="nocturne" data-look-name="Nocturne" data-look-tag="Concept · Café"
+                 data-look-url="https://cafe2-nuit.vercel.app"
+                 data-look-alt-1="Nocturne concept — the homepage, a macro pour filling the screen"
+                 data-look-alt-2="Nocturne concept — the daytime menu, espresso and pour-over"
+                 data-look-alt-3="Nocturne concept — the after-dark list, once the room turns into a bar">
+          <button class="cover" type="button" data-cursor="Quick look" aria-label="Quick look inside the Nocturne concept">
+            <span class="art"></span>
+            <img class="shot" data-shot="concepts/nocturne-1" alt="" loading="lazy" decoding="async">
+            <span class="shine"></span>
+          </button>
+          <div class="card-meta">
+            <span class="tag">Concept · Café</span>
+            <h3>Nocturne</h3>
+            <p class="card-est">Starting around <b>MVR 5,000+</b></p>
+            <a class="card-out" href="https://cafe2-nuit.vercel.app" target="_blank" rel="noopener" data-cursor="Visit">Visit full concept <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
           </div>
-          <div class="card-meta"><span class="tag">Concept · Café</span><h3>Nocturne <svg viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></h3><p>An unmarked espresso bar in Malé that turns into a cocktail bar once the sun goes down.</p></div>
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Process -->
-  <section id="process" class="section process" data-shape="0" data-rotx="1.15" data-x="0" data-y="0.1" data-scale="1.15" data-opacity="0.5" data-spin="0.1" data-disperse="1">
-    <div class="container">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow" data-reveal><span class="idx">05</span>How it works</p>
-          <h2 class="h2" data-split>From start to <em>launch.</em></h2>
-        </div>
-        <p class="lead" data-reveal>A simple, step-by-step process designed to make working together easy.</p>
-      </div>
-      <div class="steps" data-reveal-group>
-        <div class="process-line"><i></i></div>
-        <div class="step" data-reveal><div class="step-num">01</div><h3>Inquiry</h3><p>Reach out and tell us about your business, your goals, and what you need for your website.</p></div>
-        <div class="step" data-reveal><div class="step-num">02</div><h3>Free mockup</h3><p>We create an initial concept for your homepage so you can see the design direction before making any commitment.</p></div>
-        <div class="step" data-reveal><div class="step-num">03</div><h3>Build</h3><p>Once you approve the concept, we build out the full site, ensuring every page looks great and works smoothly on all devices.</p></div>
-        <div class="step" data-reveal><div class="step-num">04</div><h3>Launch</h3><p>We test, launch, and hand over full ownership. Monthly maintenance plans are available for ongoing updates.</p></div>
+        </article>
       </div>
     </div>
   </section>
@@ -916,7 +1023,7 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
     <div class="container">
       <div class="section-head">
         <div>
-          <p class="eyebrow" data-reveal><span class="idx">06</span>Pricing</p>
+          <p class="eyebrow" data-reveal><span class="idx">03</span>Pricing</p>
           <h2 class="h2" data-split>Transparent <em>pricing.</em></h2>
         </div>
         <p class="lead" data-reveal>Fair rates tailored for local businesses and international clients. All prices listed in Maldivian Rufiyaa (MVR).</p>
@@ -924,30 +1031,36 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
 
       <div class="tiers" data-reveal-group>
         <article class="tier" data-reveal>
-          <header><h3>Standard</h3><p class="tier-for">For simple brochure or portfolio sites that don’t need custom backend logic.</p></header>
-          <div class="price"><span class="cur">MVR</span>5,000+</div>
+          <header><h3>Informational Sites</h3><p class="tier-for"><b>Suited for</b>Portfolios, brochure sites, cafes &amp; service businesses without a reservation system</p></header>
+          <div class="price"><span class="cur">Starting from MVR</span>5,000</div>
           <ul class="feats">
-            <li>Up to 3–4 pages (Home, About, Services/Products, Contact)</li>
-            <li>Responsive design, standard animations/transitions</li>
-            <li>Basic contact form</li>
-            <li>No CMS/login system</li>
+            <li>Unlimited redos once you commit to working with us</li>
+            <li>Upfront payment depends on project size</li>
           </ul>
-          <a class="btn btn-ghost magnetic tier-cta" href="mailto:nuitworksmv@gmail.com?subject=Standard%20%E2%80%94%20free%20mockup" data-cursor><span class="btn-label">Start with a free mockup</span></a>
+          <a class="btn btn-ghost magnetic tier-cta" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=hello%40nuit.works&amp;su=Informational%20Site%20%E2%80%94%20Free%20Mockup&amp;body=Hi%20Nuit%20Works%2C%0A%0AI%27d%20like%20a%20free%20mockup%20for%20an%20informational%20site.%0A%0ABusiness%20name%3A%20%0AWhat%20we%20do%3A%20%0AAnything%20you%27d%20like%20to%20see%3A%20%0A%0AThanks%2C%0A" target="_blank" rel="noopener" data-cursor><span class="btn-label">Start with a free mockup</span><svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </article>
 
         <article class="tier" data-reveal>
-          <header><h3>Premium</h3><p class="tier-for">For larger, more complex sites that need logic beyond static pages.</p></header>
-          <div class="price"><span class="cur">MVR</span>10,000+</div>
+          <header><h3>Booking &amp; Reservation Sites</h3><p class="tier-for"><b>Suited for</b>Guesthouses, dive centers, restaurants, tour &amp; activity operators</p></header>
+          <div class="price"><span class="cur">Starting from MVR</span>8,500</div>
           <ul class="feats">
-            <li>Up to 6–8 pages</li>
-            <li>Custom animations/motion graphics integration</li>
-            <li>Forms with logic (multi-step, conditional)</li>
-            <li>Basic post-launch support window</li>
+            <li>Unlimited redos once you commit to working with us</li>
+            <li>Upfront payment depends on project size</li>
           </ul>
-          <a class="btn btn-primary magnetic tier-cta" href="mailto:nuitworksmv@gmail.com?subject=Premium%20%E2%80%94%20free%20mockup" data-cursor><span class="btn-label">Start with a free mockup</span><svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+          <a class="btn btn-ghost magnetic tier-cta" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=hello%40nuit.works&amp;su=Booking%20%26%20Reservation%20Site%20%E2%80%94%20Free%20Mockup&amp;body=Hi%20Nuit%20Works%2C%0A%0AI%27d%20like%20a%20free%20mockup%20for%20a%20booking%20and%20reservation%20site.%0A%0ABusiness%20name%3A%20%0AWhat%20we%20do%3A%20%0AAnything%20you%27d%20like%20to%20see%3A%20%0A%0AThanks%2C%0A" target="_blank" rel="noopener" data-cursor><span class="btn-label">Start with a free mockup</span><svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </article>
+
+        <article class="tier" data-reveal>
+          <header><h3>Retail &amp; E-Commerce Sites</h3><p class="tier-for"><b>Suited for</b>Shops and product sellers wanting to sell online (manual payment confirmation, no payment gateway integration)</p></header>
+          <div class="price"><span class="cur">Starting from MVR</span>10,000</div>
+          <ul class="feats">
+            <li>Unlimited redos once you commit to working with us</li>
+            <li>Upfront payment depends on project size</li>
+          </ul>
+          <a class="btn btn-ghost magnetic tier-cta" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=hello%40nuit.works&amp;su=Retail%20%26%20E-Commerce%20Site%20%E2%80%94%20Free%20Mockup&amp;body=Hi%20Nuit%20Works%2C%0A%0AI%27d%20like%20a%20free%20mockup%20for%20a%20retail%20and%20e-commerce%20site.%0A%0ABusiness%20name%3A%20%0AWhat%20we%20do%3A%20%0AAnything%20you%27d%20like%20to%20see%3A%20%0A%0AThanks%2C%0A" target="_blank" rel="noopener" data-cursor><span class="btn-label">Start with a free mockup</span><svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
         </article>
       </div>
-      <p class="tiers-note" data-reveal>The final price within a tier depends on design complexity and how much custom work (vs. templated structure) it needs.</p>
+      <p class="tiers-note" data-reveal>Your final price depends on the number of pages, features, and how custom the design needs to be. Get an exact quote tailored to your project.</p>
       <div class="tiers-cta" data-reveal>
         <a class="btn btn-ghost magnetic" href="/calculate" data-cursor>
           <span class="btn-label">Calculate your website</span>
@@ -962,10 +1075,6 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
         </div>
         <ul data-reveal>
           <li><span>Extra page (beyond tier limit)</span><i></i><b>+500–1,000</b></li>
-          <li><span>E-commerce/shop functionality</span><i></i><b>+2,000–4,000</b></li>
-          <li><span>Booking/reservation system</span><i></i><b>+1,500–3,000</b></li>
-          <li><span>Password-protected/member area</span><i></i><b>+1,500–2,500</b></li>
-          <li><span>Admin dashboard / CMS-style editing</span><i></i><b>+2,000–4,000</b></li>
           <li><span>Multi-language support</span><i></i><b>+1,000–2,000<small>per language</small></b></li>
           <li><span>Social media feed integration</span><i></i><b>+300–500</b></li>
           <li><span>Basic SEO setup</span><i></i><b>+500–1,000</b></li>
@@ -992,14 +1101,48 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
     </div>
   </section>
 
+  <!-- Positioning -->
+  <section id="studio" class="section positioning" data-shape="0" data-rotx="0.35" data-x="0" data-y="0" data-scale="1.35" data-opacity="0.5" data-spin="0.08" data-disperse="1">
+    <div class="container narrow center">
+      <p class="eyebrow" data-reveal><span class="idx">04</span>The studio</p>
+      <h2 class="h2 statement" data-split>Tailored digital solutions built around your <em>business goals.</em></h2>
+      <p class="lead" data-reveal>We are a dedicated team managing every phase of your project, from initial strategy and design to launch and maintenance. By working directly with us, you get clear communication, fast turnaround times, and a website crafted to meet high standards.</p>
+      <ul class="pillars" data-reveal-group>
+        <li data-reveal><span>Custom design</span><small>Tailored specifically to match your brand and audience.</small></li>
+        <li data-reveal><span>Engaging motion</span><small>Smooth interactions that make your site easy and enjoyable to navigate.</small></li>
+        <li data-reveal><span>Full service</span><small>Strategy, design, and launch handled seamlessly in one place.</small></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section id="process" class="section process" data-shape="0" data-rotx="1.15" data-x="0" data-y="0.1" data-scale="1.15" data-opacity="0.5" data-spin="0.1" data-disperse="1">
+    <div class="container">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow" data-reveal><span class="idx">05</span>How it works</p>
+          <h2 class="h2" data-split>From start to <em>launch.</em></h2>
+        </div>
+        <p class="lead" data-reveal>A simple, step-by-step process designed to make working together easy.</p>
+      </div>
+      <div class="steps" data-reveal-group>
+        <div class="process-line"><i></i></div>
+        <div class="step" data-reveal><div class="step-num">01</div><h3>Inquiry</h3><p>Reach out and tell us about your business, your goals, and what you need for your website.</p></div>
+        <div class="step" data-reveal><div class="step-num">02</div><h3>Free mockup</h3><p>We create an initial concept for your homepage so you can see the design direction before making any commitment.</p></div>
+        <div class="step" data-reveal><div class="step-num">03</div><h3>Build</h3><p>Once you approve the concept, we build out the full site, ensuring every page looks great and works smoothly on all devices.</p></div>
+        <div class="step" data-reveal><div class="step-num">04</div><h3>Launch</h3><p>We test, launch, and hand over full ownership. Monthly maintenance plans are available for ongoing updates.</p></div>
+      </div>
+    </div>
+  </section>
+
   <!-- Final CTA -->
   <section id="contact" class="section final center" data-shape="2" data-rotx="0.12" data-x="0" data-y="-0.35" data-scale="1.05" data-opacity="0.5" data-spin="0.28" data-disperse="1">
     <div class="container narrow">
-      <p class="eyebrow" data-reveal><span class="idx">07</span>Get in touch</p>
+      <p class="eyebrow" data-reveal><span class="idx">06</span>Get in touch</p>
       <h2 class="display" data-typewriter>Get your initial design mockup for <em>free.</em></h2>
       <p class="lead" data-reveal>Tell us about your business goals and we will create an initial homepage concept before you commit to anything. If you like the direction, we move forward. If not, there is no obligation.</p>
       <div class="cta-row" data-reveal>
-        <a class="btn btn-primary btn-lg magnetic" href="mailto:nuitworksmv@gmail.com?subject=Free%20mockup%20for%20my%20business" data-cursor>
+        <a class="btn btn-primary btn-lg magnetic" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=hello%40nuit.works&amp;su=Free%20Mockup%20For%20My%20Business&amp;body=Hi%20Nuit%20Works%2C%0A%0AI%27d%20like%20a%20free%20mockup%20for%20my%20business.%0A%0ABusiness%20name%3A%20%0AWhat%20we%20do%3A%20%0AAnything%20you%27d%20like%20to%20see%3A%20%0A%0AThanks%2C%0A" target="_blank" rel="noopener" data-cursor>
           <span class="btn-label">Get a free mockup</span>
           <svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
@@ -1008,7 +1151,7 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
           <svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2 12 12 2M4 2h8v8" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </a>
       </div>
-      <p class="contact-line" data-reveal><a class="ul" href="mailto:nuitworksmv@gmail.com" data-cursor>nuitworksmv@gmail.com</a><span>·</span><a class="ul" href="https://instagram.com/nuit.works" target="_blank" rel="noopener" data-cursor>@nuit.works</a></p>
+      <p class="contact-line" data-reveal><a class="ul" href="mailto:hello@nuit.works" data-cursor>hello@nuit.works</a><span>·</span><a class="ul" href="https://instagram.com/nuit.works" target="_blank" rel="noopener" data-cursor>@nuit.works</a></p>
     </div>
   </section>
 
@@ -1019,7 +1162,7 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
   <div class="container">
     <div class="footer-grid">
       <div class="footer-lead">
-        <a class="footer-mail" href="mailto:nuitworksmv@gmail.com?subject=Free%20mockup%20for%20my%20business" data-cursor>nuitworksmv@gmail.com</a>
+        <a class="footer-mail" href="mailto:hello@nuit.works?subject=Free%20mockup%20for%20my%20business" data-cursor>hello@nuit.works</a>
         <p class="footer-note">Web design and development for growing businesses.</p>
       </div>
       <div class="footer-links">
@@ -1031,7 +1174,7 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
         </div>
         <div class="footer-col">
           <h4>Contact</h4>
-          <a href="mailto:nuitworksmv@gmail.com" data-cursor>nuitworksmv@gmail.com</a>
+          <a href="mailto:hello@nuit.works" data-cursor>hello@nuit.works</a>
           <a href="https://instagram.com/nuit.works" target="_blank" rel="noopener" data-cursor>@nuit.works</a>
         </div>
       </div>
@@ -1042,6 +1185,39 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
     </div>
   </div>
 </footer>
+
+<!-- Quick-look overlay. One instance, filled in from whichever card opened it. -->
+<div class="lb" id="quicklook" role="dialog" aria-modal="true" aria-labelledby="lb-name" hidden>
+  <div class="lb-scrim" data-lb-close></div>
+  <!-- data-lenis-prevent: the overlay stops Lenis so the page behind cannot
+       scroll, and a stopped Lenis swallows every wheel event on the document,
+       including the ones meant for this panel. Lenis checks for this attribute
+       before it checks whether it is stopped, so wheel events in here are left
+       alone and the panel scrolls natively. -->
+  <div class="lb-panel" data-lenis-prevent>
+    <header class="lb-head">
+      <div>
+        <span class="tag" data-lb-tag></span>
+        <h3 class="lb-name" id="lb-name"></h3>
+      </div>
+      <button class="lb-x" type="button" data-lb-close data-cursor="Close" aria-label="Close quick look">
+        <svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M3 3l10 10M13 3 3 13" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+      </button>
+    </header>
+    <div class="lb-shots">
+      <img data-lb-shot="1" alt="" decoding="async">
+      <img data-lb-shot="2" alt="" decoding="async">
+      <img data-lb-shot="3" alt="" decoding="async">
+    </div>
+    <footer class="lb-foot">
+      <p class="lb-note">Three views from the live concept.</p>
+      <a class="btn btn-primary lb-visit magnetic" data-lb-url target="_blank" rel="noopener" data-cursor="Visit">
+        <span class="btn-label">Visit full concept</span>
+        <svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </a>
+    </footer>
+  </div>
+</div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
@@ -1817,7 +1993,10 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
     if (!hasGSAP) return;
 
     // Nav scrim
-    ScrollTrigger.create({ start: 'top -60', end: 'max', toggleClass: { targets: '.nav', className: 'is-scrolled' } });
+    // Solid/blurred once the hero has actually scrolled past, not after a token
+    // few pixels — the request was specifically "past the hero", and a fixed
+    // small offset would solidify the nav while hero copy still fills the screen.
+    ScrollTrigger.create({ trigger: '.hero', start: 'bottom top', end: 'max', toggleClass: { targets: '.nav', className: 'is-scrolled' } });
 
     // Two wordmarks at once reads badly, so the small one steps aside for the big one.
     // Same start as the footer's shape trigger, so the nav begins fading exactly as the
@@ -2238,7 +2417,7 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
   }
 
   /* ------------------------------------------------------------------
-     Work card previews — scale each embedded site to fit its cover
+     Concept cards — cover screenshots and the quick-look overlay
      ------------------------------------------------------------------ */
   /* Cover screenshots. Drop a file into assets/ named after data-shot and it appears —
      no markup change needed. Several extensions are tried because a saved screenshot is
@@ -2256,61 +2435,79 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
     tryNext();
   });
 
-  const previews = $$('.preview');
-  if (previews.length) {
-    // Each frame renders an entire other website at desktop size. That is far too much
-    // for a phone on top of the WebGL field — it stutters and runs out of memory — so
-    // previews are for cursor-driven, desktop-class devices only. The src lives in
-    // data-src until then, so on a phone nothing is ever fetched or rendered and the
-    // gradient cover art stands in.
-    const previewOK = () => finePointer && !reduced && tier !== 'low' && innerWidth > 760;
-    let previewsOn = null;
-    const syncPreviews = () => {
-      const on = previewOK();
-      if (on === previewsOn) return;   // only act on a real transition, not every resize
-      previewsOn = on;
-      previews.forEach((fr) => {
-        fr.hidden = !on;
-        if (on) {
-          if (!fr.hasAttribute('src') && fr.dataset.src) fr.src = fr.dataset.src;
-        } else if (fr.hasAttribute('src')) {
-          fr.removeAttribute('src');   // let the window drop the embedded page
-        }
+  /* Quick look. One overlay in the page, refilled from whichever card opened it.
+     The two extra shots are lazy by hand — src is assigned on open — so a visitor
+     who never opens a card never downloads twelve screenshots. */
+  const lb = $('#quicklook');
+  if (lb) {
+    const panel = $('.lb-panel', lb);
+    const nameEl = $('.lb-name', lb);
+    const tagEl = $('[data-lb-tag]', lb);
+    const visit = $('[data-lb-url]', lb);
+    const closeBtn = $('.lb-x', lb);
+    const shots = [1, 2, 3].map((n) => $('[data-lb-shot="' + n + '"]', lb));
+    let opener = null;
+    let closeTimer = 0;
+
+    const open = (card) => {
+      const d = card.dataset;
+      clearTimeout(closeTimer);
+      opener = card;
+      tagEl.textContent = d.lookTag || '';
+      nameEl.textContent = d.lookName || '';
+      visit.href = d.lookUrl || '#';
+      shots.forEach((img, n) => {
+        if (!img) return;
+        img.src = 'assets/concepts/' + d.look + '-' + (n + 1) + '.jpg';
+        // getAttribute rather than dataset: data-look-alt-1 keys as 'lookAlt-1',
+        // because a dash before a digit is not camel-cased away. Guessing
+        // 'lookAlt1' reads fine and fails silently as an empty alt.
+        img.alt = card.getAttribute('data-look-alt-' + (n + 1)) || '';
       });
+      lb.hidden = false;
+      panel.scrollTop = 0;
+      // Two frames: the first lets `hidden` actually drop and the closed styles
+      // apply, the second gives the browser a painted state to transition from.
+      // In one frame the class lands with the element still unstyled and it cuts.
+      requestAnimationFrame(() => requestAnimationFrame(() => lb.classList.add('is-open')));
+      // Lenis owns the wheel, so its own stop is what holds the page still;
+      // without it (reduced motion never starts Lenis) fall back to the document.
+      if (lenis) lenis.stop(); else html.style.overflow = 'hidden';
+      closeBtn.focus({ preventScroll: true });
     };
-    const fit = (fr) => {
-      const cover = fr.parentElement;
-      const w = fr.offsetWidth;
-      if (cover && w) fr.style.setProperty('--pv', (cover.clientWidth / w).toFixed(4));
+
+    const close = () => {
+      if (lb.hidden) return;
+      lb.classList.remove('is-open');
+      if (lenis) lenis.start(); else html.style.overflow = '';
+      const back = opener;
+      opener = null;
+      // Outlast the panel transition so it fades out instead of vanishing.
+      closeTimer = setTimeout(() => {
+        lb.hidden = true;
+        const cover = back && $('.cover', back);
+        if (cover) cover.focus({ preventScroll: true });
+      }, reduced ? 220 : 560);
     };
-    // Watch the cover itself rather than the window: the card is inside a responsive
-    // grid, so its width changes for reasons a resize event never sees, and a stale
-    // scale leaves the preview cropped or floating inside its frame.
-    const fitAll = () => { syncPreviews(); if (previewsOn) previews.forEach(fit); };
-    fitAll();
-    // Only now allow the transform to animate, so hover and resize ease but the initial
-    // scale is not seen ramping up from the stylesheet's fallback value.
-    setTimeout(() => previews.forEach((fr) => fr.classList.add('is-fitted')), 80);
-    // Both, deliberately. ResizeObserver catches width changes the window never hears
-    // about, but it is delivered with the rendering steps, so it goes quiet whenever the
-    // page is not painting; the resize listener still fires in that state.
-    if (typeof ResizeObserver !== 'undefined') {
-      const ro = new ResizeObserver((entries) => {
-        entries.forEach((e) => { const fr = e.target.querySelector('.preview'); if (fr) fit(fr); });
+
+    $$('.card .cover').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const card = btn.closest('.card');
+        if (card && card.dataset.look) open(card);
       });
-      previews.forEach((fr) => { if (fr.parentElement) ro.observe(fr.parentElement); });
-    }
-    window.addEventListener('resize', fitAll, { passive: true });
-    // The card is still settling when the script first runs — webfonts reflow the copy
-    // and a scrollbar can appear — so re-fit once the layout is final. Both are plain
-    // events, so they land even where the observer above is throttled.
-    window.addEventListener('load', fitAll);
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitAll, fitAll);
-    previews.forEach((fr) => {
-      fr.addEventListener('load', () => fit(fr));
-      // If the site refuses to be framed, hide the frame so the gradient behind it shows
-      // rather than leaving a blank white rectangle on the card.
-      fr.addEventListener('error', () => { fr.hidden = true; });
+    });
+    $$('[data-lb-close]', lb).forEach((el) => el.addEventListener('click', close));
+    addEventListener('keydown', (e) => {
+      if (lb.hidden) return;
+      if (e.key === 'Escape') { close(); return; }
+      if (e.key !== 'Tab') return;
+      // Hold Tab inside the panel while it is up, so the cards behind the scrim
+      // cannot take focus while they are unreachable by mouse.
+      const items = $$('a[href],button', panel);
+      if (!items.length) return;
+      const first = items[0], last = items[items.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
     });
   }
 

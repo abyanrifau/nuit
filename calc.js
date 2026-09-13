@@ -16,19 +16,18 @@
   const $ = (s, c) => (c || document).querySelector(s);
   const $$ = (s, c) => Array.from((c || document).querySelectorAll(s));
 
+  // Starting price per type of site. Design complexity has no control here: it is
+  // priced from the brief, which is why the page gives an estimate, not a quote.
   const PACKAGES = {
-    standard: { name: 'Standard', price: 5000 },
-    premium:  { name: 'Premium',  price: 10000 }
+    informational: { name: 'Informational site',         price: 5000 },
+    booking:       { name: 'Booking & reservation site', price: 8500 },
+    retail:        { name: 'Retail & e-commerce site',   price: 10000 }
   };
 
   // `each` marks the two add-ons that can be bought more than once; their
   // stepper multiplies the range. `pct` marks the multiplier row.
   const ADDONS = {
     page:   { name: 'Extra page',                 low: 500,  high: 1000, each: true },
-    ecom:   { name: 'E-commerce/shop',            low: 2000, high: 4000 },
-    book:   { name: 'Booking/reservation system', low: 1500, high: 3000 },
-    member: { name: 'Member area',                low: 1500, high: 2500 },
-    cms:    { name: 'Admin dashboard / CMS',      low: 2000, high: 4000 },
     lang:   { name: 'Multi-language',             low: 1000, high: 2000, each: true },
     social: { name: 'Social media feed',          low: 300,  high: 500 },
     seo:    { name: 'Basic SEO setup',            low: 500,  high: 1000 },
@@ -71,13 +70,13 @@
   }
 
   function compute() {
-    const pkgKey = (form.querySelector('input[name="pkg"]:checked') || {}).value || 'standard';
+    const pkgKey = (form.querySelector('input[name="pkg"]:checked') || {}).value || 'informational';
     const pkg = PACKAGES[pkgKey];
     const subKey = (form.querySelector('input[name="sub"]:checked') || {}).value || 'none';
     const sub = SUBS[subKey];
 
     let lo = pkg.price, hi = pkg.price;
-    const lines = [{ label: pkg.name + ' package', value: mvr(pkg.price) }];
+    const lines = [{ label: pkg.name + ' (starting from)', value: mvr(pkg.price) }];
 
     Object.keys(ADDONS).forEach((id) => {
       const box = boxFor(id);
@@ -141,15 +140,18 @@
       linesEl.appendChild(li);
     }
 
-    // The site has no form to post to, so the quote travels in a mailto body.
+    // The site has no form to post to, so the quote travels as a pre-written email.
+    // Gmail's web compose screen rather than mailto: a mailto link does nothing on a
+    // computer with no mail app set up, and the button would look broken.
     const body = []
-      .concat(['My estimate from the Nuit Works calculator:', ''])
+      .concat(["Hi Nuit Works,", '', "I'd like a quote based on my estimate from your calculator:", ''])
       .concat(r.lines.map((l) => '- ' + l.label + ': ' + l.value))
       .concat(r.subKey !== 'none' ? ['- ' + r.sub.name + ': ' + mvr(r.sub.price) + '/month ongoing'] : [])
-      .concat(['', 'Estimated one-time cost: ' + range(r.lo, r.hi), '', 'A bit about my business:'])
+      .concat(['', 'Estimated one-time cost: ' + range(r.lo, r.hi), '', 'Business name: ', 'What we do: ', '', 'Thanks,'])
       .join('\n');
-    quoteEl.href = 'mailto:nuitworksmv@gmail.com'
-      + '?subject=' + encodeURIComponent('Quote request — ' + r.pkg.name + ' (' + range(r.lo, r.hi) + ')')
+    const titleCase = (s) => s.replace(/(^|[\s-])([a-z])/g, (m, a, b) => a + b.toUpperCase());
+    quoteEl.href = 'https://mail.google.com/mail/?view=cm&fs=1&to=' + encodeURIComponent('hello@nuit.works')
+      + '&su=' + encodeURIComponent('Quote Request — ' + titleCase(r.pkg.name) + ' (' + range(r.lo, r.hi) + ')')
       + '&body=' + encodeURIComponent(body);
 
     syncSteppers();
