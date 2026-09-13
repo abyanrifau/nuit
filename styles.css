@@ -28,6 +28,12 @@
 
 *,*::before,*::after{box-sizing:border-box}
 html{-webkit-text-size-adjust:100%;background:var(--bg);scrollbar-width:thin;scrollbar-color:rgba(242,242,240,.2) transparent}
+/* The grain and glow layers are deliberately larger than the screen, which let a
+   phone pan the page sideways. clip rather than hidden: clip does not turn html or
+   body into a scroll container, so window scrolling, Lenis and the fixed nav are
+   unaffected. hidden stays as the fallback for browsers without clip; both on html
+   and body because iOS Safari ignores it on body alone. */
+html,body{overflow-x:hidden;overflow-x:clip}
 ::-webkit-scrollbar{width:10px;height:10px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-corner{background:transparent}
