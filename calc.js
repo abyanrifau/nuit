@@ -19,6 +19,7 @@
   // Starting price per type of site. Design complexity has no control here: it is
   // priced from the brief, which is why the page gives an estimate, not a quote.
   const PACKAGES = {
+    entry:         { name: 'Entry site',                 price: 3500 },
     informational: { name: 'Informational site',         price: 5000 },
     booking:       { name: 'Booking & reservation site', price: 8500 },
     retail:        { name: 'Retail & e-commerce site',   price: 10000 }
@@ -34,10 +35,12 @@
     rush:   { name: 'Rush delivery',              pct: [0.20, 0.30] }
   };
 
+  // Both plans bundle hosting, which is quoted per project, so only the support
+  // fee is a known number; the copy always says "hosting quote +" in front of it.
   const SUBS = {
-    none:    { name: 'None',         price: 0 },
-    hosting: { name: 'Hosting Plan', price: 750 },
-    plus:    { name: 'Plus Plan',    price: 1000 }
+    none:     { name: 'None',          price: 0 },
+    standard: { name: 'Standard Plan', price: 300 },
+    priority: { name: 'Priority Plan', price: 500 }
   };
 
   const nf = new Intl.NumberFormat('en-US');
@@ -116,7 +119,7 @@
       monthEl.textContent = '';
     } else {
       monthEl.hidden = false;
-      monthEl.textContent = '+ ' + mvr(r.sub.price) + '/month ongoing';
+      monthEl.textContent = '+ hosting quote + ' + mvr(r.sub.price) + '/month ongoing';
     }
 
     linesEl.innerHTML = '';
@@ -135,7 +138,7 @@
       const a = document.createElement('span');
       a.textContent = r.sub.name;
       const b = document.createElement('b');
-      b.textContent = mvr(r.sub.price) + '/mo';
+      b.textContent = 'Hosting quote + ' + mvr(r.sub.price) + '/mo';
       li.appendChild(a); li.appendChild(b);
       linesEl.appendChild(li);
     }
@@ -146,7 +149,7 @@
     const body = []
       .concat(["Hi Nuit Works,", '', "I'd like a quote based on my estimate from your calculator:", ''])
       .concat(r.lines.map((l) => '- ' + l.label + ': ' + l.value))
-      .concat(r.subKey !== 'none' ? ['- ' + r.sub.name + ': ' + mvr(r.sub.price) + '/month ongoing'] : [])
+      .concat(r.subKey !== 'none' ? ['- ' + r.sub.name + ': hosting quote + ' + mvr(r.sub.price) + '/month ongoing'] : [])
       .concat(['', 'Estimated one-time cost: ' + range(r.lo, r.hi), '', 'Business name: ', 'What we do: ', '', 'Thanks,'])
       .join('\n');
     const titleCase = (s) => s.replace(/(^|[\s-])([a-z])/g, (m, a, b) => a + b.toUpperCase());

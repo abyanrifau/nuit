@@ -429,7 +429,9 @@ html.has-cursor .lb-x:hover{background:rgba(242,242,240,.08);border-color:var(--
 .step p{color:var(--fg);font-size:15px;line-height:1.65;max-width:30ch}
 
 /* ---------- Pricing ---------- */
-.tiers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;align-items:stretch;max-width:1240px;margin-inline:auto}
+/* Two across, so four cards read as a 2x2: four in one row leave each card too
+   narrow for the price and "Suited for" copy to sit without crowding. */
+.tiers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:stretch;max-width:1000px;margin-inline:auto}
 /* Same muted register as the section intro, set italic and centred under the pair. */
 .tiers-note{max-width:60ch;margin:30px auto 0;text-align:center;color:var(--muted);font-size:14px;line-height:1.65;font-style:italic}
 .tiers-cta{display:flex;justify-content:center;margin-top:26px}
@@ -463,7 +465,9 @@ html.has-cursor .tier:hover{transform:translateY(-6px)}
 }
 .price{display:flex;align-items:baseline;flex-wrap:wrap;gap:10px;font:400 3.1rem/1 var(--serif);letter-spacing:-.01em}
 .price .cur{font:500 11.5px var(--sans);letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
-.feats{display:grid;gap:12px;padding-top:24px;border-top:1px solid var(--line)}
+/* align-content:start: cards sharing a row share its bullet-list height, and a
+   shorter list would otherwise spread its bullets out to fill that height. */
+.feats{display:grid;gap:12px;align-content:start;padding-top:24px;border-top:1px solid var(--line)}
 .feats li{position:relative;padding-left:22px;font-size:14.5px;line-height:1.5;color:var(--fg)}
 .feats li::before{content:'';position:absolute;left:0;top:.72em;width:10px;height:1px;background:var(--silver)}
 .feats li.plus{color:var(--fg);font-weight:500}
@@ -488,7 +492,9 @@ html.has-cursor .tier:hover{transform:translateY(-6px)}
    when this section's bottom edge reaches 55% of the viewport, so anything shorter
    than 55vh leaves the copy still on screen while the wordmark morphs across it on
    the way back up. 62vh keeps the text clear with room to spare at any height. */
-.final{padding-top:clamp(120px,22vh,260px);padding-bottom:max(300px,62vh)}
+/* Normal bottom padding: the footer wordmark is placed by the footer itself (above its
+   email), so Contact no longer holds a screen of empty space in front of it. */
+.final{padding-top:clamp(120px,22vh,260px);padding-bottom:clamp(80px,10vh,140px)}
 .final .display{max-width:16ch;margin:0 auto 32px}
 .final .lead{margin-bottom:48px}
 .contact-line{margin-top:40px;font-size:14px;color:var(--muted);display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
@@ -500,7 +506,10 @@ html.has-cursor .ul:hover::after{transform:scaleX(0);transform-origin:right}
 /* ---------- Footer ---------- */
 /* Full-height footer: the particle wordmark occupies the empty upper half, the
    links sit on the floor of the viewport. */
-.footer{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;/* Bottom padding clears the fixed player + HUD that sit in this corner (see .player/.hud). */padding:clamp(140px,42vh,460px) var(--gutter) 104px;background:linear-gradient(180deg,rgba(10,10,12,0),rgba(10,10,12,.6))}
+/* min-height 50vh, content packed to the top: any spare height goes below the copyright
+   rather than above the wordmark, and 50vh still puts the footer's top edge at or above
+   the 55% line at the page bottom, which is what makes the wordmark form. */
+.footer{position:relative;min-height:50vh;display:flex;flex-direction:column;justify-content:flex-start;/* Bottom padding clears the fixed player + HUD that sit in this corner (see .player/.hud). */padding:var(--mark-space,clamp(140px,42vh,460px)) var(--gutter) 104px;background:linear-gradient(180deg,rgba(10,10,12,0),rgba(10,10,12,.6))}
 /* Two parts: the address as a display heading, then the link columns beside it.
    Heights here are deliberately restrained — the footer must stay within 100vh or
    its top edge lifts and takes the anchored particle wordmark with it. */
@@ -549,7 +558,7 @@ html.has-cursor .footer-col a:hover{color:var(--fg);transform:translateX(6px)}
 .pick-grid-3{grid-template-columns:repeat(3,1fr)}
 /* Site-type names are too long to share a line with the price at a third of the
    width, so the price sits under the name instead of squeezing it. */
-.pick-grid-type .pick-head{flex-direction:column;align-items:flex-start;gap:8px}
+.pick-grid-stack .pick-head{flex-direction:column;align-items:flex-start;gap:8px}
 .pick{position:relative;display:block;cursor:pointer}
 .pick input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
 .pick-body{
@@ -670,6 +679,9 @@ html.has-cursor .step-btn:not(:disabled):hover{border-color:var(--silver-hi);col
   .pillars{grid-template-columns:1fr;gap:20px}
 }
 @media (max-width:640px){
+  .subs .sub-row{flex-wrap:wrap;row-gap:4px}
+  .subs .sub-row i{display:none}
+  .subs .sub-row b{flex-basis:100%}
   .card-meta{padding-top:20px}
   .lb-panel{gap:18px}
   .lb-head{gap:14px}

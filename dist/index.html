@@ -458,7 +458,9 @@ html.has-cursor .lb-x:hover{background:rgba(242,242,240,.08);border-color:var(--
 .step p{color:var(--fg);font-size:15px;line-height:1.65;max-width:30ch}
 
 /* ---------- Pricing ---------- */
-.tiers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;align-items:stretch;max-width:1240px;margin-inline:auto}
+/* Two across, so four cards read as a 2x2: four in one row leave each card too
+   narrow for the price and "Suited for" copy to sit without crowding. */
+.tiers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;align-items:stretch;max-width:1000px;margin-inline:auto}
 /* Same muted register as the section intro, set italic and centred under the pair. */
 .tiers-note{max-width:60ch;margin:30px auto 0;text-align:center;color:var(--muted);font-size:14px;line-height:1.65;font-style:italic}
 .tiers-cta{display:flex;justify-content:center;margin-top:26px}
@@ -492,7 +494,9 @@ html.has-cursor .tier:hover{transform:translateY(-6px)}
 }
 .price{display:flex;align-items:baseline;flex-wrap:wrap;gap:10px;font:400 3.1rem/1 var(--serif);letter-spacing:-.01em}
 .price .cur{font:500 11.5px var(--sans);letter-spacing:.2em;color:var(--muted);text-transform:uppercase}
-.feats{display:grid;gap:12px;padding-top:24px;border-top:1px solid var(--line)}
+/* align-content:start: cards sharing a row share its bullet-list height, and a
+   shorter list would otherwise spread its bullets out to fill that height. */
+.feats{display:grid;gap:12px;align-content:start;padding-top:24px;border-top:1px solid var(--line)}
 .feats li{position:relative;padding-left:22px;font-size:14.5px;line-height:1.5;color:var(--fg)}
 .feats li::before{content:'';position:absolute;left:0;top:.72em;width:10px;height:1px;background:var(--silver)}
 .feats li.plus{color:var(--fg);font-weight:500}
@@ -517,7 +521,9 @@ html.has-cursor .tier:hover{transform:translateY(-6px)}
    when this section's bottom edge reaches 55% of the viewport, so anything shorter
    than 55vh leaves the copy still on screen while the wordmark morphs across it on
    the way back up. 62vh keeps the text clear with room to spare at any height. */
-.final{padding-top:clamp(120px,22vh,260px);padding-bottom:max(300px,62vh)}
+/* Normal bottom padding: the footer wordmark is placed by the footer itself (above its
+   email), so Contact no longer holds a screen of empty space in front of it. */
+.final{padding-top:clamp(120px,22vh,260px);padding-bottom:clamp(80px,10vh,140px)}
 .final .display{max-width:16ch;margin:0 auto 32px}
 .final .lead{margin-bottom:48px}
 .contact-line{margin-top:40px;font-size:14px;color:var(--muted);display:flex;gap:18px;justify-content:center;flex-wrap:wrap}
@@ -529,7 +535,10 @@ html.has-cursor .ul:hover::after{transform:scaleX(0);transform-origin:right}
 /* ---------- Footer ---------- */
 /* Full-height footer: the particle wordmark occupies the empty upper half, the
    links sit on the floor of the viewport. */
-.footer{position:relative;min-height:100vh;display:flex;flex-direction:column;justify-content:flex-end;/* Bottom padding clears the fixed player + HUD that sit in this corner (see .player/.hud). */padding:clamp(140px,42vh,460px) var(--gutter) 104px;background:linear-gradient(180deg,rgba(10,10,12,0),rgba(10,10,12,.6))}
+/* min-height 50vh, content packed to the top: any spare height goes below the copyright
+   rather than above the wordmark, and 50vh still puts the footer's top edge at or above
+   the 55% line at the page bottom, which is what makes the wordmark form. */
+.footer{position:relative;min-height:50vh;display:flex;flex-direction:column;justify-content:flex-start;/* Bottom padding clears the fixed player + HUD that sit in this corner (see .player/.hud). */padding:var(--mark-space,clamp(140px,42vh,460px)) var(--gutter) 104px;background:linear-gradient(180deg,rgba(10,10,12,0),rgba(10,10,12,.6))}
 /* Two parts: the address as a display heading, then the link columns beside it.
    Heights here are deliberately restrained — the footer must stay within 100vh or
    its top edge lifts and takes the anchored particle wordmark with it. */
@@ -578,7 +587,7 @@ html.has-cursor .footer-col a:hover{color:var(--fg);transform:translateX(6px)}
 .pick-grid-3{grid-template-columns:repeat(3,1fr)}
 /* Site-type names are too long to share a line with the price at a third of the
    width, so the price sits under the name instead of squeezing it. */
-.pick-grid-type .pick-head{flex-direction:column;align-items:flex-start;gap:8px}
+.pick-grid-stack .pick-head{flex-direction:column;align-items:flex-start;gap:8px}
 .pick{position:relative;display:block;cursor:pointer}
 .pick input{position:absolute;opacity:0;width:1px;height:1px;pointer-events:none}
 .pick-body{
@@ -699,6 +708,9 @@ html.has-cursor .step-btn:not(:disabled):hover{border-color:var(--silver-hi);col
   .pillars{grid-template-columns:1fr;gap:20px}
 }
 @media (max-width:640px){
+  .subs .sub-row{flex-wrap:wrap;row-gap:4px}
+  .subs .sub-row i{display:none}
+  .subs .sub-row b{flex-basis:100%}
   .card-meta{padding-top:20px}
   .lb-panel{gap:18px}
   .lb-head{gap:14px}
@@ -1060,6 +1072,17 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
 
       <div class="tiers" data-reveal-group>
         <article class="tier" data-reveal>
+          <header><h3>Entry Sites</h3><p class="tier-for"><b>Suited for</b>Small businesses that want to stand out with a clean, simple site. One page, no complex features.</p></header>
+          <div class="price"><span class="cur">Starting from MVR</span>3,500</div>
+          <ul class="feats">
+            <li>Unlimited redos once you commit to working with us</li>
+            <li>Upfront payment depends on project size</li>
+            <li>Upgrade anytime to a bigger package, loyalty discount applied to the price difference</li>
+          </ul>
+          <a class="btn btn-ghost magnetic tier-cta" href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=hello%40nuit.works&amp;su=Entry%20Site%20%E2%80%94%20Free%20Mockup&amp;body=Hi%20Nuit%20Works%2C%0A%0AI%27d%20like%20a%20free%20mockup%20for%20an%20entry%20site.%0A%0ABusiness%20name%3A%20%0AWhat%20we%20do%3A%20%0AAnything%20you%27d%20like%20to%20see%3A%20%0A%0AThanks%2C%0A" target="_blank" rel="noopener" data-cursor><span class="btn-label">Start with a free mockup</span><svg class="arr" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M1 7h11M7.5 1.5 13 7l-5.5 5.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        </article>
+
+        <article class="tier" data-reveal>
           <header><h3>Informational Sites</h3><p class="tier-for"><b>Suited for</b>Portfolios, brochure sites, cafes &amp; service businesses without a reservation system</p></header>
           <div class="price"><span class="cur">Starting from MVR</span>5,000</div>
           <ul class="feats">
@@ -1114,16 +1137,16 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
       <div class="addons subs" data-reveal-group>
         <div data-reveal>
           <h3 class="addons-h">Subscriptions</h3>
-          <p class="fine">Ongoing maintenance plans, billed monthly.</p>
+          <p class="fine">Hosting and full support, bundled into one plan. Choose the response time that fits your business.</p>
         </div>
         <ul data-reveal>
           <li data-reveal>
-            <span class="sub-row"><span>Hosting Plan</span><i></i><b>MVR 750<small>/month</small></b></span>
-            <small class="sub-note">Website hosting + bi-weekly check-ups to confirm everything is running well.</small>
+            <span class="sub-row"><span>Standard Plan</span><i></i><b>Hosting quote + MVR 300<small>/month</small></b></span>
+            <small class="sub-note">Hosting + full support, we handle all website needs so you never have to touch it yourself. Since priority clients are attended to first, response times may take a little longer.</small>
           </li>
           <li data-reveal>
-            <span class="sub-row"><span>Plus Plan</span><i></i><b>MVR 1,000<small>/month</small></b></span>
-            <small class="sub-note">Everything in the Hosting Plan + monthly edits to the website at the customer’s desire.</small>
+            <span class="sub-row"><span>Priority Plan</span><i></i><b>Hosting quote + MVR 500<small>/month</small></b></span>
+            <small class="sub-note">Hosting + full support, with faster response times. Priority clients are attended to first.</small>
           </li>
         </ul>
       </div>
@@ -1187,7 +1210,7 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
 </main>
 
 <!-- Footer -->
-<footer class="footer" data-shape="2" data-rotx="0" data-roty="0" data-x="0" data-y="0.1" data-fit="width" data-scale="0.72" data-opacity="1" data-spin="0">
+<footer class="footer" data-shape="2" data-rotx="0" data-roty="0" data-x="0" data-y="0.1" data-fit="width" data-scale="0.72" data-opacity="1" data-spin="0" data-anchor=".footer-mail">
   <div class="container">
     <div class="footer-grid">
       <div class="footer-lead">
@@ -1319,6 +1342,30 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
       else target.scrollIntoView({ behavior: reduced ? 'auto' : 'smooth' });
     });
   });
+
+  // Links from another page to a section of the home page ("/#pricing"). Followed
+  // normally they leave "#pricing" in the address bar, so the section is handed
+  // over in sessionStorage instead and startHero() scrolls to it on arrival. The
+  // href stays as the fallback for modified clicks, new tabs and no storage.
+  const GOTO_KEY = 'nuit-goto';
+  $$('a[href^="/#"]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      try { sessionStorage.setItem(GOTO_KEY, a.getAttribute('href').slice(1)); } catch (err) { return; }
+      e.preventDefault();
+      location.href = '/';
+    });
+  });
+
+  // The section asked for on arrival — handed over by the links above, or a hash in
+  // the URL — with the hash cleared from the address bar either way.
+  function arrivalTarget() {
+    let id = null;
+    try { id = sessionStorage.getItem(GOTO_KEY); sessionStorage.removeItem(GOTO_KEY); } catch (e) { /* private mode */ }
+    if (!id && location.hash.length > 1) id = location.hash;
+    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+    try { return id ? $(id) : null; } catch (e) { return null; }
+  }
 
   /* ------------------------------------------------------------------
      Pointer state (shared by cursor, glow and particles)
@@ -2109,12 +2156,47 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
       // with its section and stays in the space reserved for it. With the footer parked
       // at the top of the viewport (page bottom) this returns exactly what the old
       // fixed-fraction maths did, so the settled composition is unchanged.
-      const anchorFor = (sec) => () => {
-        const scale = field.halfW * +sec.dataset.scale;
-        const halfFrac = (scale / LOGO_RATIO) / (2 * field.halfH);
-        const topFrac = sec.getBoundingClientRect().top / innerHeight;
-        return field.halfH * (1 - 2 * (topFrac + +sec.dataset.y + halfFrac));
+      // A width-fitted mark's world scale, capped so it is never taller than MARK_MAX_H of
+      // the viewport. Width alone makes it outgrow short screens: a landscape phone or an
+      // ultrawide monitor got a wordmark filling the screen, too sparse to read, with the
+      // footer copy shoved off the bottom.
+      const MARK_MAX_H = 0.42;
+      const fitScale = (sec) => Math.min(field.halfW * +sec.dataset.scale, field.halfH * LOGO_RATIO * MARK_MAX_H);
+      // Height of a width-fitted mark, in CSS pixels.
+      const markHeight = (sec) => (fitScale(sec) / LOGO_RATIO) / field.halfH * innerHeight;
+      const markGap = (h) => Math.max(28, h * 0.16);
+      const anchorFor = (sec) => {
+        // data-anchor names the element the mark sits directly above (the footer email).
+        // Hanging it off the section's top edge instead put it wherever the aspect ratio
+        // left it: a width-fitted mark is short on a tall phone, so it floated near the top
+        // with the copy pinned far below at the bottom of a full-height footer.
+        const below = sec.dataset.anchor ? $(sec.dataset.anchor, sec) : null;
+        return () => {
+          const h = markHeight(sec);
+          const halfFrac = h / (2 * innerHeight);
+          const centreFrac = below
+            ? (below.getBoundingClientRect().top - markGap(h)) / innerHeight - halfFrac
+            : sec.getBoundingClientRect().top / innerHeight + +sec.dataset.y + halfFrac;
+          return field.halfH * (1 - 2 * centreFrac);
+        };
       };
+      // Reserve the room above the anchor as the section's top padding: a little breathing
+      // space, the mark, and the gap under it. Measured from the mark's real height, so
+      // the footer copy starts where the wordmark ends on every screen shape. No nav
+      // clearance: the footer no longer fills the screen, so its top edge sits below the
+      // section above rather than under the fixed nav.
+      const reserveMarks = () => {
+        let changed = false;
+        $$('[data-fit="width"][data-anchor]').forEach((sec) => {
+          const h = markHeight(sec);
+          const above = Math.max(24, h * 0.12);
+          const px = Math.round(above + h + markGap(h)) + 'px';
+          if (sec.style.getPropertyValue('--mark-space') !== px) { sec.style.setProperty('--mark-space', px); changed = true; }
+        });
+        if (changed) ScrollTrigger.refresh();
+      };
+      reserveMarks();
+      window.addEventListener('resize', reserveMarks, { passive: true });
       const cfgFor = (sec) => {
         const m = mobile();
         // data-fit="width" sizes the shape as a share of the viewport width rather than
@@ -2123,7 +2205,7 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
         // anchoring its top (not its centre) is what keeps it clear of the footer copy
         // on every screen.
         const fit = sec.dataset.fit === 'width';
-        const scale = fit ? field.halfW * +sec.dataset.scale : +sec.dataset.scale * (m ? 0.72 : 1);
+        const scale = fit ? fitScale(sec) : +sec.dataset.scale * (m ? 0.72 : 1);
         let offY;
         if (fit) {
           offY = anchorFor(sec)();
@@ -2344,6 +2426,18 @@ html.low-fx .display em .wi,html.low-fx .h2 em .wi,html.low-fx .hero-eyebrow{
     if (lenis) lenis.start();
     setupScroll();
     ScrollTrigger.refresh();
+    // Arriving for a particular section: land on it while the preloader is still
+    // lifting, so the visitor never sees the hero first. Webfonts can reflow the
+    // page after this, so land once more when they are in, unless the visitor has
+    // already started scrolling on their own.
+    const arrive = arrivalTarget();
+    if (arrive) {
+      const land = () => { if (lenis) lenis.scrollTo(arrive, { immediate: true, force: true }); else arrive.scrollIntoView(); };
+      land();
+      let taken = false;
+      ['wheel', 'touchstart', 'keydown'].forEach((t) => addEventListener(t, () => { taken = true; }, { once: true, passive: true }));
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (!taken) { ScrollTrigger.refresh(); land(); } });
+    }
     if (reduced) {
       if (field) { field.state.intro = 1; field.state.scale = mobile() ? 0.72 : 1; }
       typewrite(heroH1);

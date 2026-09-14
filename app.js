@@ -66,6 +66,30 @@
     });
   });
 
+  // Links from another page to a section of the home page ("/#pricing"). Followed
+  // normally they leave "#pricing" in the address bar, so the section is handed
+  // over in sessionStorage instead and startHero() scrolls to it on arrival. The
+  // href stays as the fallback for modified clicks, new tabs and no storage.
+  const GOTO_KEY = 'nuit-goto';
+  $$('a[href^="/#"]').forEach((a) => {
+    a.addEventListener('click', (e) => {
+      if (e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+      try { sessionStorage.setItem(GOTO_KEY, a.getAttribute('href').slice(1)); } catch (err) { return; }
+      e.preventDefault();
+      location.href = '/';
+    });
+  });
+
+  // The section asked for on arrival — handed over by the links above, or a hash in
+  // the URL — with the hash cleared from the address bar either way.
+  function arrivalTarget() {
+    let id = null;
+    try { id = sessionStorage.getItem(GOTO_KEY); sessionStorage.removeItem(GOTO_KEY); } catch (e) { /* private mode */ }
+    if (!id && location.hash.length > 1) id = location.hash;
+    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+    try { return id ? $(id) : null; } catch (e) { return null; }
+  }
+
   /* ------------------------------------------------------------------
      Pointer state (shared by cursor, glow and particles)
      ------------------------------------------------------------------ */
@@ -855,12 +879,47 @@
       // with its section and stays in the space reserved for it. With the footer parked
       // at the top of the viewport (page bottom) this returns exactly what the old
       // fixed-fraction maths did, so the settled composition is unchanged.
-      const anchorFor = (sec) => () => {
-        const scale = field.halfW * +sec.dataset.scale;
-        const halfFrac = (scale / LOGO_RATIO) / (2 * field.halfH);
-        const topFrac = sec.getBoundingClientRect().top / innerHeight;
-        return field.halfH * (1 - 2 * (topFrac + +sec.dataset.y + halfFrac));
+      // A width-fitted mark's world scale, capped so it is never taller than MARK_MAX_H of
+      // the viewport. Width alone makes it outgrow short screens: a landscape phone or an
+      // ultrawide monitor got a wordmark filling the screen, too sparse to read, with the
+      // footer copy shoved off the bottom.
+      const MARK_MAX_H = 0.42;
+      const fitScale = (sec) => Math.min(field.halfW * +sec.dataset.scale, field.halfH * LOGO_RATIO * MARK_MAX_H);
+      // Height of a width-fitted mark, in CSS pixels.
+      const markHeight = (sec) => (fitScale(sec) / LOGO_RATIO) / field.halfH * innerHeight;
+      const markGap = (h) => Math.max(28, h * 0.16);
+      const anchorFor = (sec) => {
+        // data-anchor names the element the mark sits directly above (the footer email).
+        // Hanging it off the section's top edge instead put it wherever the aspect ratio
+        // left it: a width-fitted mark is short on a tall phone, so it floated near the top
+        // with the copy pinned far below at the bottom of a full-height footer.
+        const below = sec.dataset.anchor ? $(sec.dataset.anchor, sec) : null;
+        return () => {
+          const h = markHeight(sec);
+          const halfFrac = h / (2 * innerHeight);
+          const centreFrac = below
+            ? (below.getBoundingClientRect().top - markGap(h)) / innerHeight - halfFrac
+            : sec.getBoundingClientRect().top / innerHeight + +sec.dataset.y + halfFrac;
+          return field.halfH * (1 - 2 * centreFrac);
+        };
       };
+      // Reserve the room above the anchor as the section's top padding: a little breathing
+      // space, the mark, and the gap under it. Measured from the mark's real height, so
+      // the footer copy starts where the wordmark ends on every screen shape. No nav
+      // clearance: the footer no longer fills the screen, so its top edge sits below the
+      // section above rather than under the fixed nav.
+      const reserveMarks = () => {
+        let changed = false;
+        $$('[data-fit="width"][data-anchor]').forEach((sec) => {
+          const h = markHeight(sec);
+          const above = Math.max(24, h * 0.12);
+          const px = Math.round(above + h + markGap(h)) + 'px';
+          if (sec.style.getPropertyValue('--mark-space') !== px) { sec.style.setProperty('--mark-space', px); changed = true; }
+        });
+        if (changed) ScrollTrigger.refresh();
+      };
+      reserveMarks();
+      window.addEventListener('resize', reserveMarks, { passive: true });
       const cfgFor = (sec) => {
         const m = mobile();
         // data-fit="width" sizes the shape as a share of the viewport width rather than
@@ -869,7 +928,7 @@
         // anchoring its top (not its centre) is what keeps it clear of the footer copy
         // on every screen.
         const fit = sec.dataset.fit === 'width';
-        const scale = fit ? field.halfW * +sec.dataset.scale : +sec.dataset.scale * (m ? 0.72 : 1);
+        const scale = fit ? fitScale(sec) : +sec.dataset.scale * (m ? 0.72 : 1);
         let offY;
         if (fit) {
           offY = anchorFor(sec)();
@@ -1090,6 +1149,18 @@
     if (lenis) lenis.start();
     setupScroll();
     ScrollTrigger.refresh();
+    // Arriving for a particular section: land on it while the preloader is still
+    // lifting, so the visitor never sees the hero first. Webfonts can reflow the
+    // page after this, so land once more when they are in, unless the visitor has
+    // already started scrolling on their own.
+    const arrive = arrivalTarget();
+    if (arrive) {
+      const land = () => { if (lenis) lenis.scrollTo(arrive, { immediate: true, force: true }); else arrive.scrollIntoView(); };
+      land();
+      let taken = false;
+      ['wheel', 'touchstart', 'keydown'].forEach((t) => addEventListener(t, () => { taken = true; }, { once: true, passive: true }));
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { if (!taken) { ScrollTrigger.refresh(); land(); } });
+    }
     if (reduced) {
       if (field) { field.state.intro = 1; field.state.scale = mobile() ? 0.72 : 1; }
       typewrite(heroH1);
