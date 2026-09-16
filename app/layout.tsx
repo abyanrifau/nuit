@@ -23,10 +23,27 @@ const neue = localFont({
   display: "swap",
 });
 
+const description =
+  "Nuit Works is a two-person web design and development studio based in the Maldives.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://nuit.works"),
   title: "Nuit Works",
-  description:
-    "Nuit Works is a two-person web design and development studio based in the Maldives.",
+  description,
+  openGraph: {
+    title: "Nuit Works",
+    description,
+    url: "https://nuit.works",
+    siteName: "Nuit Works",
+    type: "website",
+    images: [{ url: "/og.jpg", width: 2400, height: 1260, alt: "Nuit Works" }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Nuit Works",
+    description,
+    images: ["/og.jpg"],
+  },
 };
 
 export default function RootLayout({
