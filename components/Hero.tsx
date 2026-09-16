@@ -38,7 +38,7 @@ export function Hero() {
         <Prism
           // Desktop tilts with the mouse; on mobile it drifts slowly on its own.
           animationType={desktop ? "hover" : "3drotate"}
-          timeScale={desktop ? 0.5 : 0.12}
+          timeScale={desktop ? 0.5 : 0.22}
           height={3.5}
           baseWidth={4.3}
           scale={desktop ? 3.6 : 2.4}
@@ -67,7 +67,7 @@ export function Hero() {
         <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4 md:mt-12">
           <a
             href="mailto:hello@nuit.works"
-            className="no-dim inline-block border border-black bg-white px-8 py-4 font-grotesk text-base leading-none text-black transition-colors duration-200 hover:bg-black hover:text-white focus-visible:bg-black focus-visible:text-white focus-visible:outline-none"
+            className="btn-fill inline-block px-8 py-4 font-grotesk text-base leading-none"
           >
             Start a project
           </a>

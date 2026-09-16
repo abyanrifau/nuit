@@ -23,7 +23,7 @@ export function Contact() {
           <Reveal progress={progress} range={[0.62, 0.8]}>
             <a
               href="mailto:hello@nuit.works"
-              className="no-dim mt-10 inline-block border border-black bg-white px-8 py-4 font-grotesk text-base leading-none text-black transition-colors duration-200 hover:bg-black hover:text-white focus-visible:bg-black focus-visible:text-white focus-visible:outline-none"
+              className="btn-fill mt-10 inline-block px-8 py-4 font-grotesk text-base leading-none"
             >
               Contact us
             </a>

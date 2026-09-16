@@ -89,6 +89,17 @@ button {
   }
 }
 
+/* Solid button: filled with the text colour; hover softens like the nav links */
+.btn-fill {
+  background: var(--fg);
+  color: var(--bg);
+  border: 1px solid var(--fg);
+}
+.btn-fill:focus-visible {
+  outline: none;
+  opacity: 0.55;
+}
+
 ::selection {
   background: var(--fg);
   color: var(--bg);
