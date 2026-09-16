@@ -36,8 +36,9 @@ export function Hero() {
         }}
       >
         <Prism
-          animationType="hover"
-          timeScale={0.5}
+          // Desktop tilts with the mouse; on mobile it drifts slowly on its own.
+          animationType={desktop ? "hover" : "3drotate"}
+          timeScale={desktop ? 0.5 : 0.12}
           height={3.5}
           baseWidth={4.3}
           scale={desktop ? 3.6 : 2.4}
