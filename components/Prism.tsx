@@ -188,8 +188,21 @@ export default function Prism({
   className,
 }: PrismProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const programRef = useRef<Program | null>(null);
+  // Lets uniform updates request a fresh frame even when the hover loop has settled.
+  const kickRef = useRef<() => void>(() => {});
   const offX = offset?.x ?? 0;
   const offY = offset?.y ?? 0;
+
+  // Theme and glow changes only touch uniforms, so the canvas never blanks
+  // while a theme transition is mid-sweep.
+  useEffect(() => {
+    const program = programRef.current;
+    if (!program) return;
+    program.uniforms.uLightMode.value = lightMode ? 1 : 0;
+    program.uniforms.uGlow.value = Math.max(0, glow);
+    kickRef.current();
+  }, [lightMode, glow]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -263,6 +276,7 @@ export default function Prism({
       },
     });
     const mesh = new Mesh(gl, { geometry, program });
+    programRef.current = program;
 
     const resize = () => {
       const w = container.clientWidth || 1;
@@ -354,6 +368,7 @@ export default function Prism({
       if (raf) return;
       raf = requestAnimationFrame(render);
     };
+    kickRef.current = startRAF;
     const stopRAF = () => {
       if (!raf) return;
       cancelAnimationFrame(raf);
@@ -410,12 +425,15 @@ export default function Prism({
       }
       if (gl.canvas.parentElement === container) container.removeChild(gl.canvas);
       gl.getExtension("WEBGL_lose_context")?.loseContext();
+      programRef.current = null;
+      kickRef.current = () => {};
     };
+    // lightMode and glow are applied live above rather than rebuilding the scene.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     height,
     baseWidth,
     animationType,
-    glow,
     noise,
     offX,
     offY,
@@ -428,7 +446,6 @@ export default function Prism({
     inertia,
     bloom,
     suspendWhenOffscreen,
-    lightMode,
     renderScale,
   ]);
 

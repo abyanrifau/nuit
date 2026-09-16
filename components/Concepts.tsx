@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion, useMotionValueEvent, useReducedMotion, useScroll } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { Swiper as SwiperType } from "swiper";
 import { cn } from "@/lib/utils";
 import { ConceptCarousel } from "@/components/ConceptCarousel";
@@ -26,8 +26,12 @@ export function Concepts() {
   // concepts on the first pass. Once that's done and the section is off screen,
   // the pin is released and it becomes a normal section.
   const touredRef = useRef(false);
-  const released = useReleaseWhenOffscreen(sectionRef, touredRef);
   const pin = usePinning();
+  const forceToured = useCallback(() => {
+    touredRef.current = true;
+    swiperRef.current?.autoplay?.start();
+  }, []);
+  const released = useReleaseWhenOffscreen(sectionRef, touredRef, pin, forceToured);
   const pinned = pin && !released;
 
   const { scrollYProgress } = useScroll({

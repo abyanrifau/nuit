@@ -1,6 +1,7 @@
 "use client";
 
 import Lenis from "lenis";
+import { RELEASE_ALL_EVENT } from "@/lib/events";
 import {
   createContext,
   useCallback,
@@ -102,7 +103,17 @@ export function useScrollTo() {
         }
 
         if (lenis && !reducedMotion) {
-          lenis.scrollTo(dest, { offset });
+          // Resolve the element to a pixel position ourselves against the real
+          // scroll position; sections change height after their first pass and
+          // Lenis's own element lookup can be left with stale measurements.
+          let top = dest;
+          if (typeof dest === "string") {
+            const el = document.querySelector<HTMLElement>(dest);
+            if (!el) return;
+            top = el.getBoundingClientRect().top + window.scrollY;
+          }
+          lenis.resize();
+          lenis.scrollTo(top, { offset });
           return;
         }
 
@@ -117,7 +128,10 @@ export function useScrollTo() {
         window.scrollTo({ top, behavior });
       };
 
-      go();
+      // Release every pinned section first so nothing collapses mid-scroll and
+      // interrupts the animation, then measure once the layout has settled.
+      window.dispatchEvent(new Event(RELEASE_ALL_EVENT));
+      requestAnimationFrame(() => requestAnimationFrame(go));
     },
     [lenis, reducedMotion],
   );

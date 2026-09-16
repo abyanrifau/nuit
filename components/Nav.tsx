@@ -48,7 +48,13 @@ export function Nav() {
 
   return (
     <>
-      <header className="fixed inset-x-0 top-0 z-50 h-16 bg-white/70 backdrop-blur-md">
+      {/* Sits directly on the hero with no backing; picks up a translucent blur once the hero scrolls away */}
+      <header
+        className={cn(
+          "fixed inset-x-0 top-0 z-50 h-16 transition-colors duration-500",
+          wordmarkVisible ? "bg-white/70 backdrop-blur-md" : "bg-transparent",
+        )}
+      >
         <nav className="gutter flex h-full items-center justify-between">
           <a
             href="#top"

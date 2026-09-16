@@ -141,7 +141,14 @@ export default function Aurora({
   className,
 }: AuroraProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const programRef = useRef<Program | null>(null);
   const stopsKey = colorStops.join(",");
+
+  // Theme changes update a uniform in place so the canvas keeps rendering
+  // through the theme transition.
+  useEffect(() => {
+    if (programRef.current) programRef.current.uniforms.uLightMode.value = lightMode ? 1 : 0;
+  }, [lightMode]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -194,6 +201,7 @@ export default function Aurora({
       },
     });
     const mesh = new Mesh(gl, { geometry, program });
+    programRef.current = program;
 
     const resize = () => {
       const w = container.clientWidth || 1;
@@ -240,8 +248,11 @@ export default function Aurora({
       io.disconnect();
       if (gl.canvas.parentElement === container) container.removeChild(gl.canvas);
       gl.getExtension("WEBGL_lose_context")?.loseContext();
+      programRef.current = null;
     };
-  }, [stopsKey, amplitude, blend, speed, lightMode, renderScale]);
+    // lightMode is applied live above rather than rebuilding the scene.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stopsKey, amplitude, blend, speed, renderScale]);
 
   return <div ref={containerRef} className={className ?? "relative h-full w-full"} />;
 }

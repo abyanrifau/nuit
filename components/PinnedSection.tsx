@@ -10,6 +10,7 @@ import {
   type MotionValue,
 } from "framer-motion";
 import {
+  useCallback,
   useEffect,
   useLayoutEffect,
   useRef,
@@ -20,6 +21,7 @@ import {
 } from "react";
 import { cn } from "@/lib/utils";
 import { useLenis } from "@/components/SmoothScroll";
+import { RELEASE_ALL_EVENT } from "@/lib/events";
 
 /** True on desktop pointers without reduced motion; pinning is skipped otherwise. */
 export function usePinning() {
@@ -48,6 +50,10 @@ export function usePinning() {
 export function useReleaseWhenOffscreen(
   ref: RefObject<HTMLElement | null>,
   doneRef: RefObject<boolean>,
+  /** Only pinned sections ever need releasing; on mobile this stays off. */
+  enabled: boolean,
+  /** Marks the section's animation complete when a release is forced. */
+  onForce?: () => void,
 ) {
   const { lenis } = useLenis();
   const [released, setReleased] = useState(false);
@@ -55,7 +61,7 @@ export function useReleaseWhenOffscreen(
   const lastY = useRef(0);
 
   useEffect(() => {
-    if (released) return;
+    if (!enabled || released) return;
     lastY.current = window.scrollY;
     const check = () => {
       const y = window.scrollY;
@@ -77,9 +83,25 @@ export function useReleaseWhenOffscreen(
       };
       setReleased(true);
     };
+    const force = () => {
+      onForce?.();
+      const el = ref.current;
+      if (!el || pending.current) return;
+      const panel = el.firstElementChild as HTMLElement | null;
+      const r = el.getBoundingClientRect();
+      pending.current = {
+        panelTop: panel ? panel.getBoundingClientRect().top : 0,
+        keep: r.top < window.innerHeight,
+      };
+      setReleased(true);
+    };
     window.addEventListener("scroll", check, { passive: true });
-    return () => window.removeEventListener("scroll", check);
-  }, [ref, doneRef, released]);
+    window.addEventListener(RELEASE_ALL_EVENT, force);
+    return () => {
+      window.removeEventListener("scroll", check);
+      window.removeEventListener(RELEASE_ALL_EVENT, force);
+    };
+  }, [ref, doneRef, released, enabled, onForce]);
 
   useLayoutEffect(() => {
     if (!released || !pending.current || !ref.current) return;
@@ -127,8 +149,13 @@ export function PinnedSection({ id, hold = 1, background, children }: PinnedSect
   const progress = useMotionValue(0);
   const doneRef = useRef(false);
   // Pin only until the reveal has played and the section has scrolled away.
-  const released = useReleaseWhenOffscreen(ref, doneRef);
-  const pin = usePinning() && !released;
+  const canPin = usePinning();
+  const forceDone = useCallback(() => {
+    doneRef.current = true;
+    progress.set(1);
+  }, [progress]);
+  const released = useReleaseWhenOffscreen(ref, doneRef, canPin, forceDone);
+  const pin = canPin && !released;
   useMotionValueEvent(scrollYProgress, "change", (v) => {
     if (doneRef.current) return;
     if (v >= 0.98) {
@@ -158,7 +185,9 @@ export function PinnedSection({ id, hold = 1, background, children }: PinnedSect
         className={cn(
           "gutter relative isolate flex flex-col justify-center",
           pin && "sticky top-0 h-screen",
-          released && "min-h-screen",
+          // Released desktop panels and any panel with a background keep a full
+          // viewport height, so backgrounds fill from the start on mobile too.
+          (released || background) && "min-h-screen",
         )}
       >
         {background && (
