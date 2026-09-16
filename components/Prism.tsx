@@ -41,6 +41,11 @@ type PrismProps = {
   suspendWhenOffscreen?: boolean;
   timeScale?: number;
   lightMode?: boolean;
+  /**
+   * Fraction of the CSS size to render at (0.25 to 1). The prism is a soft
+   * glow, so 0.5 looks identical at a quarter of the pixel cost.
+   */
+  renderScale?: number;
   className?: string;
 };
 
@@ -123,7 +128,7 @@ const fragment = /* glsl */ `
       wob = mat2(c0, c1, c2, c0);
     }
 
-    const int STEPS = 100;
+    const int STEPS = 64;
     for (int i = 0; i < STEPS; i++) {
       p = vec3(f, z);
       p.xz = p.xz * wob;
@@ -179,6 +184,7 @@ export default function Prism({
   suspendWhenOffscreen = false,
   timeScale = 0.5,
   lightMode = false,
+  renderScale = 0.5,
   className,
 }: PrismProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -203,8 +209,14 @@ export default function Prism({
     const HOVSTR = Math.max(0, hoverStrength || 1);
     const INERT = Math.max(0, Math.min(1, inertia || 0.12));
 
-    const dpr = Math.min(2, window.devicePixelRatio || 1);
-    const renderer = new Renderer({ dpr, alpha: transparent, antialias: true });
+    // Render at a reduced resolution and let the browser upscale the canvas.
+    const dpr = Math.min(1, window.devicePixelRatio || 1) * Math.min(1, Math.max(0.25, renderScale));
+    const renderer = new Renderer({
+      dpr,
+      alpha: transparent,
+      antialias: false,
+      powerPreference: "high-performance",
+    });
     const gl = renderer.gl;
     gl.disable(gl.DEPTH_TEST);
     gl.disable(gl.CULL_FACE);
@@ -362,7 +374,11 @@ export default function Prism({
       pointer.inside = false;
     };
 
-    if (animationType === "hover") {
+    // On touch screens there is no hover, so skip the pointer tracking; the
+    // prism renders once, settles, and stops instead of redrawing on every
+    // scroll-driven pointer event.
+    const canHover = window.matchMedia("(hover: hover)").matches;
+    if (animationType === "hover" && canHover) {
       window.addEventListener("pointermove", onMove, { passive: true });
       window.addEventListener("mouseleave", onLeave);
       window.addEventListener("blur", onLeave);
@@ -387,7 +403,7 @@ export default function Prism({
       stopRAF();
       ro.disconnect();
       io?.disconnect();
-      if (animationType === "hover") {
+      if (animationType === "hover" && canHover) {
         window.removeEventListener("pointermove", onMove);
         window.removeEventListener("mouseleave", onLeave);
         window.removeEventListener("blur", onLeave);
@@ -413,6 +429,7 @@ export default function Prism({
     bloom,
     suspendWhenOffscreen,
     lightMode,
+    renderScale,
   ]);
 
   return <div ref={containerRef} className={className ?? "relative h-full w-full"} />;

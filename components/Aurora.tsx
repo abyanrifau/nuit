@@ -17,6 +17,8 @@ type AuroraProps = {
   blend?: number;
   speed?: number;
   lightMode?: boolean;
+  /** Fraction of the CSS size to render at; the bands are soft so 0.5 is plenty. */
+  renderScale?: number;
   className?: string;
 };
 
@@ -135,6 +137,7 @@ export default function Aurora({
   blend = 0.5,
   speed = 0.6,
   lightMode = false,
+  renderScale = 0.5,
   className,
 }: AuroraProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -145,10 +148,12 @@ export default function Aurora({
     if (!container) return;
 
     const renderer = new Renderer({
-      dpr: Math.min(2, window.devicePixelRatio || 1),
+      // Reduced resolution, upscaled by the browser: the bands are blurry anyway.
+      dpr: Math.min(1, window.devicePixelRatio || 1) * Math.min(1, Math.max(0.25, renderScale)),
       alpha: true,
       premultipliedAlpha: true,
-      antialias: true,
+      antialias: false,
+      powerPreference: "high-performance",
     });
     const gl = renderer.gl;
     gl.clearColor(0, 0, 0, 0);
@@ -203,11 +208,15 @@ export default function Aurora({
     let raf = 0;
     let running = true;
     const t0 = performance.now();
+    let last = 0;
+    const FRAME_MS = 1000 / 30; // the drift is slow; 30fps is indistinguishable
     const render = (t: number) => {
       if (!running) return;
+      raf = requestAnimationFrame(render);
+      if (t - last < FRAME_MS) return;
+      last = t;
       program.uniforms.uTime.value = (t - t0) * 0.001 * speed;
       renderer.render({ scene: mesh });
-      raf = requestAnimationFrame(render);
     };
 
     // Only animate while visible.
@@ -232,7 +241,7 @@ export default function Aurora({
       if (gl.canvas.parentElement === container) container.removeChild(gl.canvas);
       gl.getExtension("WEBGL_lose_context")?.loseContext();
     };
-  }, [stopsKey, amplitude, blend, speed, lightMode]);
+  }, [stopsKey, amplitude, blend, speed, lightMode, renderScale]);
 
   return <div ref={containerRef} className={className ?? "relative h-full w-full"} />;
 }
