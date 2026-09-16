@@ -2,13 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "nuit-works",
-      "runtimeExecutable": "python",
-      "runtimeArgs": [
-        "serve.py",
-        "8000"
-      ],
-      "port": 8000
+      "name": "nuit-works-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3000
     }
   ]
 }
