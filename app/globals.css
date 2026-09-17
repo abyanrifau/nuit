@@ -103,6 +103,26 @@ button {
   opacity: 0.55;
 }
 
+/* Outlined button that inverts on hover (404 page) */
+.btn-outline {
+  background: var(--bg);
+  color: var(--fg);
+  border: 1px solid var(--fg);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+.btn-outline:hover,
+.btn-outline:focus-visible {
+  background: var(--fg);
+  color: var(--bg);
+  opacity: 1;
+  outline: none;
+}
+
+/* The 404 page is bare: hide the site chrome the root layout mounts */
+body:has([data-not-found]) :is(header, footer, [data-gradual-blur], [data-preloader], [data-scroll-progress]) {
+  display: none;
+}
+
 ::selection {
   background: var(--fg);
   color: var(--bg);
