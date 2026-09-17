@@ -162,20 +162,11 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${grotesk.variable} ${neue.variable}`}
-      // Dark by default; the inline script below applies a saved choice before hydration.
-      data-theme="dark"
-      suppressHydrationWarning
     >
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-        />
-        <script
-          dangerouslySetInnerHTML={{
-            __html:
-              'try{var t=localStorage.getItem("nuit-works-theme");document.documentElement.dataset.theme=t==="light"?"light":"dark"}catch(e){document.documentElement.dataset.theme="dark"}',
-          }}
         />
       </head>
       <body className="min-h-screen bg-white text-black">

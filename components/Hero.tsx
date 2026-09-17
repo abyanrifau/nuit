@@ -1,7 +1,7 @@
 "use client";
 
 import { useSyncExternalStore } from "react";
-import Prism, { useIsLightTheme } from "@/components/Prism";
+import Prism from "@/components/Prism";
 import { useScrollTo } from "@/components/SmoothScroll";
 
 /** True at the desktop breakpoint, where the prism sits to the right of the wordmark. */
@@ -19,7 +19,6 @@ function useIsDesktop() {
 
 export function Hero() {
   const scrollTo = useScrollTo();
-  const light = useIsLightTheme();
   const desktop = useIsDesktop();
 
   return (
@@ -46,9 +45,8 @@ export function Hero() {
           hueShift={-0.0416}
           colorFrequency={1.75}
           noise={0}
-          glow={light ? 0.7 : 1}
+          glow={1}
           suspendWhenOffscreen
-          lightMode={light}
         />
       </div>
 

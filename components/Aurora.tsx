@@ -7,7 +7,6 @@ import { Color, Mesh, Program, Renderer, Triangle } from "ogl";
  * Aurora, adapted from React Bits (https://reactbits.dev). Two drifting
  * curtains of colour driven by simplex noise, one hanging from the top and one
  * rising from the bottom, rendered on a WebGL canvas that fills its container.
- * In light mode the bands tint white instead of glowing on black.
  */
 
 type AuroraProps = {
@@ -16,7 +15,6 @@ type AuroraProps = {
   amplitude?: number;
   blend?: number;
   speed?: number;
-  lightMode?: boolean;
   /** Fraction of the CSS size to render at; the bands are soft so 0.5 is plenty. */
   renderScale?: number;
   className?: string;
@@ -38,7 +36,6 @@ const fragment = /* glsl */ `
   uniform float uStopCount;
   uniform vec2 uResolution;
   uniform float uBlend;
-  uniform float uLightMode;
 
   vec3 permute(vec3 x) {
     return mod(((x * 34.0) + 1.0) * x, 289.0);
@@ -110,24 +107,13 @@ const fragment = /* glsl */ `
     float top = curtain(vec2(uv.x, 1.0 - uv.y), 0.0, 1.0);
     float bottom = curtain(uv, 7.3, -1.0);
 
-    if (uLightMode > 0.5) {
-      // Sharpen each curtain's edge on white so the gaps between bands read
-      // as clearly as they do on black.
-      float ta = smoothstep(0.12, 0.8, top);
-      float ba = smoothstep(0.12, 0.8, bottom);
-      vec3 col = vec3(1.0);
-      col = mix(col, colorA, ta * 0.92);
-      col = mix(col, colorB, ba * 0.92);
-      gl_FragColor = vec4(col, 1.0);
-    } else {
-      // Screen-blend the two curtains so overlaps stay coloured instead of
-      // blowing out to white, and keep the glow below full brightness.
-      vec3 a = colorA * top;
-      vec3 b = colorB * bottom;
-      vec3 col = (1.0 - (1.0 - a) * (1.0 - b)) * 0.8;
-      float alpha = clamp(top + bottom, 0.0, 1.0);
-      gl_FragColor = vec4(col * alpha, alpha);
-    }
+    // Screen-blend the two curtains so overlaps stay coloured instead of
+    // blowing out to white, and keep the glow below full brightness.
+    vec3 a = colorA * top;
+    vec3 b = colorB * bottom;
+    vec3 col = (1.0 - (1.0 - a) * (1.0 - b)) * 0.8;
+    float alpha = clamp(top + bottom, 0.0, 1.0);
+    gl_FragColor = vec4(col * alpha, alpha);
   }
 `;
 
@@ -136,19 +122,12 @@ export default function Aurora({
   amplitude = 1,
   blend = 0.5,
   speed = 0.6,
-  lightMode = false,
   renderScale = 0.5,
   className,
 }: AuroraProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const programRef = useRef<Program | null>(null);
   const stopsKey = colorStops.join(",");
-
-  // Theme changes update a uniform in place so the canvas keeps rendering
-  // through the theme transition.
-  useEffect(() => {
-    if (programRef.current) programRef.current.uniforms.uLightMode.value = lightMode ? 1 : 0;
-  }, [lightMode]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -197,7 +176,6 @@ export default function Aurora({
         uStopCount: { value: parsed.length },
         uResolution: { value: [1, 1] },
         uBlend: { value: blend },
-        uLightMode: { value: lightMode ? 1 : 0 },
       },
     });
     const mesh = new Mesh(gl, { geometry, program });
@@ -250,8 +228,6 @@ export default function Aurora({
       gl.getExtension("WEBGL_lose_context")?.loseContext();
       programRef.current = null;
     };
-    // lightMode is applied live above rather than rebuilding the scene.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [stopsKey, amplitude, blend, speed, renderScale]);
 
   return <div ref={containerRef} className={className ?? "relative h-full w-full"} />;

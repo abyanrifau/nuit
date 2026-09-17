@@ -4,7 +4,6 @@ import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { useEffect, useState, type MouseEvent } from "react";
 import { cn } from "@/lib/utils";
 import { useScrollTo } from "@/components/SmoothScroll";
-import { ThemeToggle } from "@/components/ThemeToggle";
 
 const links = [
   { label: "concepts", href: "#concepts" },
@@ -85,9 +84,6 @@ export function Nav() {
                 </a>
               </li>
             ))}
-            <li>
-              <ThemeToggle className="text-base" />
-            </li>
           </ul>
 
           <button
@@ -125,9 +121,6 @@ export function Nav() {
                   </a>
                 </li>
               ))}
-              <li className="pt-4">
-                <ThemeToggle className="text-2xl" />
-              </li>
             </ul>
           </motion.div>
         )}

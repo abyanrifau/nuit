@@ -2,7 +2,6 @@
 
 import { PinnedSection, Reveal, RevealWords } from "@/components/PinnedSection";
 import Aurora from "@/components/Aurora";
-import { useIsLightTheme } from "@/components/Prism";
 
 const STATEMENT =
   "Nuit Works is a two-person studio based in the Maldives. We design and build websites for businesses that want to stand out online and be remembered. We take care of everything, from the first concept to launch and the ongoing support that follows.";
@@ -10,8 +9,6 @@ const STATEMENT =
 const EDGE_MASK = "linear-gradient(to bottom, transparent 0%, black 16%, black 84%, transparent 100%)";
 
 export function Studio() {
-  const light = useIsLightTheme();
-
   return (
     <PinnedSection
       id="studio"
@@ -26,7 +23,6 @@ export function Studio() {
             amplitude={1.2}
             blend={0.7}
             speed={0.5}
-            lightMode={light}
           />
         </div>
       }

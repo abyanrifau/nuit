@@ -1,11 +1,7 @@
 @import "tailwindcss";
 
-/* The whole site is drawn in two colours. Dark mode swaps them. */
+/* The whole site is drawn in two colours: white on black. */
 :root {
-  --bg: #ffffff;
-  --fg: #000000;
-}
-:root[data-theme="dark"] {
   --bg: #000000;
   --fg: #ffffff;
   color-scheme: dark;
@@ -112,29 +108,3 @@ button {
   color: var(--bg);
 }
 
-/* Theme switch: circular reveal from the toggle (View Transitions API) */
-::view-transition-old(root),
-::view-transition-new(root) {
-  animation: none;
-  mix-blend-mode: normal;
-}
-::view-transition-new(root) {
-  animation: theme-reveal 0.65s cubic-bezier(0.45, 0, 0.55, 1);
-}
-@keyframes theme-reveal {
-  from {
-    clip-path: circle(0 at var(--theme-x, 50%) var(--theme-y, 50%));
-  }
-  to {
-    clip-path: circle(var(--theme-r, 150vmax) at var(--theme-x, 50%) var(--theme-y, 50%));
-  }
-}
-
-/* Fallback for browsers without view transitions: a short colour fade */
-html.theme-fade,
-html.theme-fade * {
-  transition:
-    background-color 0.5s ease,
-    color 0.5s ease,
-    border-color 0.5s ease;
-}

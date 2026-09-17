@@ -1,28 +1,12 @@
 "use client";
 
-import { useEffect, useRef, useSyncExternalStore } from "react";
+import { useEffect, useRef } from "react";
 import { Mesh, Program, Renderer, Triangle } from "ogl";
 
 /*
  * Prism, adapted from React Bits (https://reactbits.dev). Renders a glowing
  * ray-marched prism on a WebGL canvas that fills its container.
  */
-
-/** Tracks the html data-theme attribute so a prism can adapt its rendering. */
-export function useIsLightTheme() {
-  return useSyncExternalStore(
-    (cb) => {
-      const observer = new MutationObserver(cb);
-      observer.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ["data-theme"],
-      });
-      return () => observer.disconnect();
-    },
-    () => document.documentElement.dataset.theme !== "dark",
-    () => true,
-  );
-}
 
 type PrismProps = {
   height?: number;
@@ -40,7 +24,6 @@ type PrismProps = {
   bloom?: number;
   suspendWhenOffscreen?: boolean;
   timeScale?: number;
-  lightMode?: boolean;
   /**
    * Fraction of the CSS size to render at (0.25 to 1). The prism is a soft
    * glow, so 0.5 looks identical at a quarter of the pixel cost.
@@ -79,7 +62,6 @@ const fragment = /* glsl */ `
   uniform float uMinAxis;
   uniform float uPxScale;
   uniform float uTimeScale;
-  uniform float uLightMode;
 
   vec4 tanh4(vec4 x){
     vec4 e2x = exp(2.0*x);
@@ -154,16 +136,7 @@ const fragment = /* glsl */ `
       col = clamp(hueRotation(uHueShift) * col, 0.0, 1.0);
     }
 
-    if (uLightMode > 0.5) {
-      // On white, push the colour harder and let the faint outer bloom fall away
-      // so the prism reads as a solid shape rather than a haze.
-      float peak = max(col.r, max(col.g, col.b));
-      vec3 chroma = pow(clamp(col / max(peak, 0.0001), 0.0, 1.0), vec3(1.7));
-      float body = smoothstep(0.08, 0.75, o.a);
-      gl_FragColor = vec4(mix(vec3(1.0), chroma, body), 1.0);
-    } else {
-      gl_FragColor = vec4(col, o.a);
-    }
+    gl_FragColor = vec4(col, o.a);
   }
 `;
 
@@ -183,7 +156,6 @@ export default function Prism({
   bloom = 1,
   suspendWhenOffscreen = false,
   timeScale = 0.5,
-  lightMode = false,
   renderScale = 0.5,
   className,
 }: PrismProps) {
@@ -194,15 +166,13 @@ export default function Prism({
   const offX = offset?.x ?? 0;
   const offY = offset?.y ?? 0;
 
-  // Theme and glow changes only touch uniforms, so the canvas never blanks
-  // while a theme transition is mid-sweep.
+  // Glow changes only touch a uniform, so the canvas never rebuilds.
   useEffect(() => {
     const program = programRef.current;
     if (!program) return;
-    program.uniforms.uLightMode.value = lightMode ? 1 : 0;
     program.uniforms.uGlow.value = Math.max(0, glow);
     kickRef.current();
-  }, [lightMode, glow]);
+  }, [glow]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -272,7 +242,6 @@ export default function Prism({
         uMinAxis: { value: Math.min(BASE_HALF, H) },
         uPxScale: { value: 1 / ((gl.drawingBufferHeight || 1) * 0.1 * SCALE) },
         uTimeScale: { value: TS },
-        uLightMode: { value: lightMode ? 1 : 0 },
       },
     });
     const mesh = new Mesh(gl, { geometry, program });
@@ -428,7 +397,7 @@ export default function Prism({
       programRef.current = null;
       kickRef.current = () => {};
     };
-    // lightMode and glow are applied live above rather than rebuilding the scene.
+    // glow is applied live above rather than rebuilding the scene.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     height,

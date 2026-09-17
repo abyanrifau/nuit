@@ -3,7 +3,6 @@
 import { type MotionValue } from "framer-motion";
 import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 import { Mesh, Program, Renderer, Triangle } from "ogl";
-import { useIsLightTheme } from "@/components/Prism";
 
 /*
  * A shaft of light enters from the top right, passes through a slowly tumbling
@@ -36,7 +35,9 @@ function useIsWide() {
 
 /** The canvas reaches above the panel so the beam can arrive from off screen. */
 const OVER_TOP = "42vh";
-const OVER_BOTTOM = "8vh";
+/* Generous room below, faded out by the host's mask, so the spectrum's tail
+   always dissolves into the black rather than meeting the canvas edge. */
+const OVER_BOTTOM = "36vh";
 
 type Geometry = {
   /** Canvas size in CSS pixels, which is the shader's coordinate space. */
@@ -183,7 +184,6 @@ const fragment = /* glsl */ `
   uniform float uNearHalf;
   uniform float uFarHalf;
   uniform vec2  uHalo;
-  uniform float uLightMode;
 
   /* Half-extents of the solid: an equilateral triangle, extruded toward us. */
   const float TRI = 0.75;
@@ -379,7 +379,13 @@ const fragment = /* glsl */ `
     float n1 = snoise(vec2(un * 2.2 - t * 0.08, vn * 1.1 + t * 0.045));
     float n2 = snoise(vec2(un * 4.8 + t * 0.055, vn * 2.2 - t * 0.03));
     float arc = 0.24 * un * (1.0 - un);
-    float vv = vn + arc + (n1 * 0.17 + n2 * 0.07) * smoothstep(0.03, 0.65, un);
+    // The prism's tumble carries into the light: as the glass turns, the band
+    // eases across and its colours slide a little along the ramp.
+    float yaw = sin(t * 0.13) * 0.62;
+    float pitch = sin(t * 0.087 + 1.1) * 0.24;
+    float turn = yaw * 0.18 + pitch * 0.22;
+    float vv = vn + arc + turn * smoothstep(0.03, 0.8, un)
+             + (n1 * 0.17 + n2 * 0.07) * smoothstep(0.03, 0.65, un);
 
     // Soft the whole way across, with no flat top: a hot core falling away into
     // the black, the warm half reaching further than the cool half.
@@ -396,7 +402,8 @@ const fragment = /* glsl */ `
     float gate = mouth * tail * wave * fanIn * travel;
 
     float fanA = (body * 0.38 + core * 0.26) * gate;
-    vec3 fanCol = caustic(clamp(0.5 - vv * mix(0.3, 0.4, step(0.0, vv)), 0.0, 1.0));
+    float hueShift = (yaw * 0.05 + pitch * 0.07) * smoothstep(0.05, 0.6, un);
+    vec3 fanCol = caustic(clamp(0.5 - vv * mix(0.3, 0.4, step(0.0, vv)) + hueShift, 0.0, 1.0));
     // Hot in the middle, and still undispersed right at the exit face.
     // Push the chroma before the core whitens it, so the colour stays rich
     // at low opacity rather than drifting grey.
@@ -423,9 +430,7 @@ const fragment = /* glsl */ `
     float shaft = exp(-bd / (uPrismSize * 0.3));
     float wide = exp(-bd / (uPrismSize * 0.95));
     float beamA = clamp((bCore * 0.5 + shaft * 0.14 + wide * 0.05) * mix(0.06, 1.0, axis) * dust * beamIn, 0.0, 1.0);
-    // A white shaft is invisible on a white page, so on light it warms to
-    // daylight gold instead.
-    vec3 beamCol = mix(vec3(1.4, 1.36, 1.28), vec3(1.0, 0.78, 0.30), uLightMode);
+    vec3 beamCol = vec3(1.4, 1.36, 1.28);
 
     acc.rgb += beamCol * beamA;
     acc.a += beamA;
@@ -462,24 +467,13 @@ const fragment = /* glsl */ `
 
     acc.a = clamp(acc.a, 0.0, 1.0);
 
-    if (uLightMode > 0.5) {
-      // On white, drop the white core and lay the chroma down as a tint.
-      float lum = dot(acc.rgb, vec3(0.2126, 0.7152, 0.0722));
-      vec3 chroma = acc.a > 0.001 ? acc.rgb / acc.a : vec3(1.0);
-      chroma = clamp(mix(vec3(lum), chroma, 1.4), 0.0, 1.0);
-      chroma = pow(chroma, vec3(1.3));
-      float a = clamp(acc.a * 0.8, 0.0, 1.0);
-      gl_FragColor = vec4(chroma * a, a);
-    } else {
-      // Already premultiplied, so it goes out as it is.
-      gl_FragColor = vec4(max(acc.rgb, vec3(0.0)), acc.a);
-    }
+    // Already premultiplied, so it goes out as it is.
+    gl_FragColor = vec4(max(acc.rgb, vec3(0.0)), acc.a);
   }
 `;
 
 export function PrismRefraction({ progress }: { progress: MotionValue<number> }) {
   const wide = useIsWide();
-  const light = useIsLightTheme();
   const hostRef = useRef<HTMLDivElement>(null);
   const programRef = useRef<Program | null>(null);
   const progressRef = useRef(progress);
@@ -516,12 +510,6 @@ export function PrismRefraction({ progress }: { progress: MotionValue<number> })
       window.removeEventListener("resize", read);
     };
   }, [wide]);
-
-  // The theme only moves a uniform, so the canvas keeps drawing through the
-  // theme transition rather than tearing down and rebuilding.
-  useEffect(() => {
-    if (programRef.current) programRef.current.uniforms.uLightMode.value = light ? 1 : 0;
-  }, [light]);
 
   useEffect(() => {
     const host = hostRef.current;
@@ -570,7 +558,6 @@ export function PrismRefraction({ progress }: { progress: MotionValue<number> })
         uNearHalf: { value: geo.nearHalf },
         uFarHalf: { value: geo.farHalf },
         uHalo: { value: geo.halo },
-        uLightMode: { value: document.documentElement.dataset.theme === "dark" ? 0 : 1 },
       },
     });
     const mesh = new Mesh(gl, { geometry: new Triangle(gl), program });
@@ -631,7 +618,12 @@ export function PrismRefraction({ progress }: { progress: MotionValue<number> })
       ref={hostRef}
       aria-hidden="true"
       className="pointer-events-none absolute inset-x-0 z-0"
-      style={{ top: `-${OVER_TOP}`, bottom: `-${OVER_BOTTOM}` }}
+      style={{
+        top: `-${OVER_TOP}`,
+        bottom: `-${OVER_BOTTOM}`,
+        maskImage: "linear-gradient(to bottom, black 62%, transparent 100%)",
+        WebkitMaskImage: "linear-gradient(to bottom, black 62%, transparent 100%)",
+      }}
     />
   );
 }
