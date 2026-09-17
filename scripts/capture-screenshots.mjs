@@ -6,13 +6,17 @@ import { chromium } from "playwright";
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
 
+// `previews` lists which sections of each homepage the popup shows, as
+// indexes into the page's section elements (taller than 200px, in order).
+// Each is framed from its top so no section is cut mid-way. Index 0 is the
+// hero, followed by the two most distinctive sections of that site.
 const concepts = [
-  { slug: "fuku-coffee", url: "https://cafe-nuit.vercel.app" },
-  { slug: "driftwood", url: "https://guesthouse-nuit.vercel.app" },
-  { slug: "verum", url: "https://skincare-nuit.vercel.app" },
-  { slug: "homestead", url: "https://furniture-nuit.vercel.app" },
-  { slug: "scentu", url: "https://perfume-nuit.vercel.app" },
-  { slug: "nocturne", url: "https://cafe2-nuit.vercel.app" },
+  { slug: "fuku-coffee", url: "https://cafe-nuit.vercel.app", previews: [0, 2, 5] },
+  { slug: "driftwood", url: "https://guesthouse-nuit.vercel.app", previews: [0, 2, 3] },
+  { slug: "verum", url: "https://skincare-nuit.vercel.app", previews: [0, 2, 3] },
+  { slug: "homestead", url: "https://furniture-nuit.vercel.app", previews: [0, 1, 2] },
+  { slug: "scentu", url: "https://perfume-nuit.vercel.app", previews: [0, 3, 4] },
+  { slug: "nocturne", url: "https://cafe2-nuit.vercel.app", previews: [0, 3, 4] },
 ];
 
 const SLIDE = { width: 1440, height: 810 }; // 16:9, matches the carousel slides
@@ -105,7 +109,7 @@ async function captureConcept(browser, concept) {
 
   if (slidesOnly) return;
 
-  // Previews: desktop captures at top, middle, and lower parts of the homepage.
+  // Previews: desktop captures of the hero and two chosen sections, each framed from its top.
   {
     const ctx = await browser.newContext({
       viewport: DESKTOP,
@@ -117,10 +121,18 @@ async function captureConcept(browser, concept) {
     await settle(page);
     await warmScroll(page);
 
+    // Section tops, measured after the warm scroll so lazy content has sized.
+    const tops = await page.evaluate(() =>
+      Array.from(document.querySelectorAll("section"))
+        .filter((el) => el.offsetHeight > 200)
+        .map((el) => Math.round(el.getBoundingClientRect().top + window.scrollY)),
+    );
     const maxScroll = await page.evaluate(
       () => document.documentElement.scrollHeight - window.innerHeight,
     );
-    const positions = [0, Math.round(maxScroll * 0.5), Math.round(maxScroll * 0.85)];
+    const positions = concept.previews.map((i) =>
+      i === 0 ? 0 : Math.min(maxScroll, tops[i] ?? Math.round(maxScroll * (i / tops.length))),
+    );
 
     for (let i = 0; i < positions.length; i++) {
       await scrollToAndSettle(page, positions[i]);
