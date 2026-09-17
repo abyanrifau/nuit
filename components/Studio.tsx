@@ -5,7 +5,7 @@ import Aurora from "@/components/Aurora";
 import { useIsLightTheme } from "@/components/Prism";
 
 const STATEMENT =
-  "Nuit Works is a two-person studio based in the Maldives. We design and build websites for small businesses, from the first sketch to the day it goes live. You talk to the people doing the work, every time.";
+  "Nuit Works is a two-person studio based in the Maldives. We design and build websites for businesses that want to stand out online and be remembered. We take care of everything, from the first concept to launch and the ongoing support that follows.";
 
 const EDGE_MASK = "linear-gradient(to bottom, transparent 0%, black 16%, black 84%, transparent 100%)";
 

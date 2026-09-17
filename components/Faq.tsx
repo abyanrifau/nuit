@@ -16,7 +16,7 @@ export function Faq() {
   const reduced = useReducedMotion();
 
   return (
-    <FadeUp id="faq" className="gutter section-gap">
+    <FadeUp id="faq" className="gutter section-pad">
       <h2 className="font-grotesk text-4xl uppercase leading-tight md:text-5xl">
         Questions
       </h2>

@@ -23,20 +23,20 @@ import { cn } from "@/lib/utils";
 import { useLenis } from "@/components/SmoothScroll";
 import { RELEASE_ALL_EVENT } from "@/lib/events";
 
+// Pinning needs a wide screen and a mouse or trackpad: touch momentum cannot be
+// corrected mid-flight, so tablets and landscape phones scroll normally.
+const PIN_QUERY =
+  "(min-width: 768px) and (pointer: fine) and (prefers-reduced-motion: no-preference)";
+
 /** True on desktop pointers without reduced motion; pinning is skipped otherwise. */
 export function usePinning() {
   return useSyncExternalStore(
     (cb) => {
-      const m = window.matchMedia(
-        "(min-width: 768px) and (prefers-reduced-motion: no-preference)",
-      );
+      const m = window.matchMedia(PIN_QUERY);
       m.addEventListener("change", cb);
       return () => m.removeEventListener("change", cb);
     },
-    () =>
-      window.matchMedia(
-        "(min-width: 768px) and (prefers-reduced-motion: no-preference)",
-      ).matches,
+    () => window.matchMedia(PIN_QUERY).matches,
     () => false,
   );
 }
@@ -125,10 +125,12 @@ export function useReleaseWhenOffscreen(
     const { panelTop, keep } = pending.current;
     pending.current = null;
     const el = ref.current;
-    if (keep) {
-      // After collapsing, the panel sits at the section's top. Scroll so it
-      // lands exactly where it was on screen a moment ago.
-      const y = el.offsetTop - panelTop;
+    const panel = el.firstElementChild as HTMLElement | null;
+    if (keep && panel) {
+      // After collapsing, the panel sits statically inside the section's top
+      // padding. Scroll so it lands exactly where it was on screen a moment
+      // ago, measured from its new document position.
+      const y = panel.getBoundingClientRect().top + window.scrollY - panelTop;
       if (lenis) lenis.scrollTo(y, { immediate: true, force: true });
       else window.scrollTo(0, y);
     }
@@ -184,37 +186,60 @@ export function PinnedSection({ id, hold = 1, background, children }: PinnedSect
     ref.current?.setAttribute("data-progress", progress.get().toFixed(3));
   });
 
-  // One stable element tree in both modes, so the scroll tracker's ref never
-  // points at an unmounted node when pinning switches on after hydration.
+  // The panel is content-sized and sticks at whatever offset centres it in
+  // the viewport, so the padding above and below it stays a constant two pads
+  // between sections. The hold is extra bottom padding the panel stays stuck
+  // through; releasing simply removes it.
+  const panelRef = useRef<HTMLDivElement>(null);
+  const [stickTop, setStickTop] = useState(64);
+  useEffect(() => {
+    const el = panelRef.current;
+    if (!el || !pin) return;
+    const measure = () => {
+      const top = Math.max(64, Math.round((window.innerHeight - el.offsetHeight) / 2));
+      setStickTop((prev) => (prev === top ? prev : top));
+    };
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    window.addEventListener("resize", measure);
+    measure();
+    return () => {
+      ro.disconnect();
+      window.removeEventListener("resize", measure);
+    };
+  }, [pin]);
+
   return (
     <section
       id={id}
       ref={ref}
       data-pin={pin ? "" : undefined}
-      className={cn("relative", !pin && (released ? "flex min-h-screen flex-col justify-center" : "section-gap"))}
-      style={{ height: pin ? `${(1 + hold) * 100}vh` : undefined }}
+      className="relative section-pad"
     >
       <motion.div
+        ref={panelRef}
         initial={pin || released || reduced ? false : { opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "0px 0px -10% 0px" }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className={cn(
-          // Top padding keeps centred content clear of the fixed nav on short screens.
-          "gutter relative isolate flex flex-col justify-center pt-16",
-          pin && "sticky top-0 h-screen",
-          // Released desktop panels and any panel with a background keep a full
-          // viewport height, so backgrounds fill from the start on mobile too.
-          (released || background) && "min-h-screen",
-        )}
+        className={cn("gutter relative isolate", pin && "sticky")}
+        style={pin ? { top: stickTop } : undefined}
       >
         {background && (
-          <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
+          // A full viewport of background centred on the panel, spilling into
+          // the padding so it still reads as a full-bleed section.
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute inset-x-0 top-1/2 -z-10 h-screen -translate-y-1/2"
+          >
             {background}
           </div>
         )}
         {children(pin || released ? progress : revealed)}
       </motion.div>
+      {/* The hold: scroll distance the stuck panel rides through. A real element
+          rather than padding, since sticky panels cannot travel into padding. */}
+      {pin && <div aria-hidden="true" style={{ height: `${hold * 100}vh` }} />}
     </section>
   );
 }

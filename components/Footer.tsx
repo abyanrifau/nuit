@@ -27,7 +27,8 @@ export function Footer() {
   const scrollTo = useScrollTo();
 
   return (
-    <footer className="gutter mt-[24vh] pb-12 md:mt-[36vh] md:pb-16">
+        // Extra bottom padding equal to the page-edge blur keeps the last line clear of it.
+    <footer className="gutter pt-[var(--section-pad)] pb-[calc(3rem+6rem)] md:pb-[calc(4rem+6rem)]">
       <div className="flex flex-col gap-12 md:flex-row md:items-stretch md:justify-between md:gap-16">
         {/* Primary contact points: large, left */}
         <ul className="flex flex-col gap-3 md:gap-4">

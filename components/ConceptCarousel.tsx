@@ -123,7 +123,7 @@ export function ConceptCarousel({
           reduced
             ? false
             : {
-                delay: 4000,
+                delay: 2500,
                 pauseOnMouseEnter: true,
                 disableOnInteraction: false,
               }

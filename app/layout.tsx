@@ -7,6 +7,7 @@ import { Footer } from "@/components/Footer";
 import { Preloader } from "@/components/Preloader";
 import { faqs } from "@/data/faq";
 import { ScrollProgress } from "@/components/ScrollProgress";
+import GradualBlur from "@/components/GradualBlur";
 
 const grotesk = localFont({
   src: "./fonts/AlteHaasGroteskBold.ttf",
@@ -184,6 +185,19 @@ export default function RootLayout({
           <Nav />
           <main>{children}</main>
           <Footer />
+          {/* Content dissolves into a blur along the bottom edge of the viewport;
+              z-index keeps it beneath the nav, mobile menu and preview popup */}
+          <GradualBlur
+            target="page"
+            position="bottom"
+            height="6rem"
+            strength={2}
+            divCount={5}
+            curve="bezier"
+            exponential
+            opacity={1}
+            zIndex={-70}
+          />
         </SmoothScroll>
       </body>
     </html>

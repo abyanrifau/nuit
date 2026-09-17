@@ -26,12 +26,19 @@
   }
 }
 
-/* Vertical rhythm between sections */
-@utility section-gap {
-  margin-top: 18vh;
-  @media (width >= 768px) {
-    margin-top: 32vh;
+/* Shared vertical rhythm: every section (pinned or not) has the same padding
+   above and below its content, so the black space between blocks is always
+   two pads, whatever the content height. */
+:root {
+  --section-pad: 12vh;
+}
+@media (width >= 768px) {
+  :root {
+    --section-pad: 20vh;
   }
+}
+@utility section-pad {
+  padding-block: var(--section-pad);
 }
 
 html {
