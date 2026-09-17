@@ -1,5 +1,7 @@
 "use client";
 
+import { GMAIL_COMPOSE_URL } from "@/lib/contact";
+
 import { PinnedSection, Reveal, RevealWords } from "@/components/PinnedSection";
 import { PrismRefraction } from "@/components/PrismRefraction";
 
@@ -28,7 +30,9 @@ export function Contact() {
             <Reveal progress={progress} range={[0.62, 0.8]}>
               <a
                 data-prism-target
-                href="mailto:hello@nuit.works"
+                href={GMAIL_COMPOSE_URL}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="btn-fill mt-10 inline-block px-8 py-4 font-grotesk text-base leading-none"
               >
                 Contact us

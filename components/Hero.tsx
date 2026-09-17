@@ -1,5 +1,7 @@
 "use client";
 
+import { GMAIL_COMPOSE_URL } from "@/lib/contact";
+
 import { useSyncExternalStore } from "react";
 import Prism from "@/components/Prism";
 import { useScrollTo } from "@/components/SmoothScroll";
@@ -31,7 +33,8 @@ export function Hero() {
           // Fade the canvas out toward the bottom so the prism's glow dissolves
           // into the page instead of being cut off at the section edge.
           maskImage: "linear-gradient(to bottom, black 62%, transparent 100%)",
-          WebkitMaskImage: "linear-gradient(to bottom, black 62%, transparent 100%)",
+          WebkitMaskImage:
+            "linear-gradient(to bottom, black 62%, transparent 100%)",
         }}
       >
         <Prism
@@ -64,7 +67,9 @@ export function Hero() {
 
         <div className="mt-10 flex flex-wrap items-center gap-x-8 gap-y-4 md:mt-12">
           <a
-            href="mailto:hello@nuit.works"
+            href={GMAIL_COMPOSE_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             className="btn-fill inline-block px-8 py-4 font-grotesk text-base leading-none"
           >
             Start a project
