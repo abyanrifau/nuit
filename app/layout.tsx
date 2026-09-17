@@ -24,7 +24,7 @@ const neue = localFont({
   display: "swap",
 });
 
-const SITE_URL = "https://nuit.works";
+const SITE_URL = "https://www.nuit.works";
 const TITLE = "Nuit Works | Web Design Studio in the Maldives";
 const description =
   "Nuit Works is a web design and development studio in the Maldives. We design, build, host and maintain websites that help small businesses generate leads.";

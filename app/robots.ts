@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next";
 
-const SITE_URL = "https://nuit.works";
+const SITE_URL = "https://www.nuit.works";
 
 // Crawlers used by AI assistants and search engines, allowed explicitly so an
 // upstream default never blocks them.

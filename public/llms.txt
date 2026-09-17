@@ -2,7 +2,7 @@
 
 > Nuit Works is a two-person web design and development studio based in the Maldives. We design, build, host and maintain websites for small businesses, and we take on international projects.
 
-Website: https://nuit.works
+Website: https://www.nuit.works
 Email: hello@nuit.works
 Instagram: https://instagram.com/nuit.works
 Location: Maldives (clients worldwide)
@@ -24,8 +24,8 @@ Location: Maldives (clients worldwide)
 
 ## Pages
 
-- [Home](https://nuit.works/): studio overview, concept work, services, questions and contact.
-- [Concepts](https://nuit.works/#concepts): six concept websites (café, guesthouse, skincare, furniture, fragrance, café).
-- [Services](https://nuit.works/#services): what we offer.
-- [Questions](https://nuit.works/#faq): answers about pricing, location, timelines and contact.
-- [Contact](https://nuit.works/#contact): start a project.
+- [Home](https://www.nuit.works/): studio overview, concept work, services, questions and contact.
+- [Concepts](https://www.nuit.works/#concepts): six concept websites (café, guesthouse, skincare, furniture, fragrance, café).
+- [Services](https://www.nuit.works/#services): what we offer.
+- [Questions](https://www.nuit.works/#faq): answers about pricing, location, timelines and contact.
+- [Contact](https://www.nuit.works/#contact): start a project.
