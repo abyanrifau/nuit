@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
@@ -190,6 +191,8 @@ export default function RootLayout({
             zIndex={-70}
           />
         </SmoothScroll>
+        {/* Vercel Web Analytics: cookieless page view tracking */}
+        <Analytics />
       </body>
     </html>
   );
