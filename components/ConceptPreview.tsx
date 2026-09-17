@@ -81,13 +81,12 @@ export function ConceptPreview({ concept, onClose }: ConceptPreviewProps) {
                 <Image
                   key={src}
                   src={src}
-                  alt={`${concept.name} homepage, view ${i + 1} of 3`}
+                  alt={`${concept.name} ${concept.category.toLowerCase()} website concept, ${["top", "middle", "lower"][i]} section of the homepage on desktop`}
                   width={1440}
                   height={900}
                   sizes="(min-width: 768px) 88vw, 100vw"
                   className="h-auto w-full"
-                  priority={i === 0}
-                  quality={90}
+                      quality={90}
                 />
               ))}
             </div>

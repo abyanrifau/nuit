@@ -59,6 +59,7 @@ export function useReleaseWhenOffscreen(
   const [released, setReleased] = useState(false);
   const pending = useRef<{ panelTop: number; keep: boolean } | null>(null);
   const lastY = useRef(0);
+  const settle = useRef(0);
 
   useEffect(() => {
     if (!enabled || released) return;
@@ -76,12 +77,27 @@ export function useReleaseWhenOffscreen(
       const offAbove = r.bottom <= 0;
       const backInto = goingUp && r.top < 0;
       if (!offBelow && !offAbove && !backInto) return;
-      const panel = el.firstElementChild as HTMLElement | null;
-      pending.current = {
-        panelTop: panel ? panel.getBoundingClientRect().top : 0,
-        keep: !offBelow,
+      const commit = () => {
+        if (pending.current) return;
+        const now = el.getBoundingClientRect();
+        const stillOffscreen = now.bottom <= 0 || now.top >= window.innerHeight;
+        if (!stillOffscreen && !backInto) return;
+        const panel = el.firstElementChild as HTMLElement | null;
+        pending.current = {
+          panelTop: panel ? panel.getBoundingClientRect().top : 0,
+          keep: now.top < window.innerHeight,
+        };
+        setReleased(true);
       };
-      setReleased(true);
+      if (offAbove && !goingUp) {
+        // Collapsing a section above the viewport needs a scroll correction,
+        // which would cut the smooth-scroll momentum mid-flight. Wait until
+        // scrolling settles so the correction is never felt.
+        window.clearTimeout(settle.current);
+        settle.current = window.setTimeout(commit, 160);
+        return;
+      }
+      commit();
     };
     const force = () => {
       onForce?.();
@@ -98,6 +114,7 @@ export function useReleaseWhenOffscreen(
     window.addEventListener("scroll", check, { passive: true });
     window.addEventListener(RELEASE_ALL_EVENT, force);
     return () => {
+      window.clearTimeout(settle.current);
       window.removeEventListener("scroll", check);
       window.removeEventListener(RELEASE_ALL_EVENT, force);
     };
@@ -183,7 +200,8 @@ export function PinnedSection({ id, hold = 1, background, children }: PinnedSect
         viewport={{ once: true, margin: "0px 0px -10% 0px" }}
         transition={{ duration: 0.8, ease: "easeOut" }}
         className={cn(
-          "gutter relative isolate flex flex-col justify-center",
+          // Top padding keeps centred content clear of the fixed nav on short screens.
+          "gutter relative isolate flex flex-col justify-center pt-16",
           pin && "sticky top-0 h-screen",
           // Released desktop panels and any panel with a background keep a full
           // viewport height, so backgrounds fill from the start on mobile too.

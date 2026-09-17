@@ -142,11 +142,10 @@ export function ConceptCarousel({
           >
             <Image
               src={slideImage(c)}
-              alt={`${c.name} homepage`}
+              alt={`${c.name} ${c.category.toLowerCase()} website concept by Nuit Works, homepage`}
               fill
               sizes="(min-width: 768px) 40vw, 78vw"
               className="object-cover object-top"
-              priority={i === 0}
               quality={90}
               draggable={false}
             />
