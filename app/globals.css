@@ -128,3 +128,72 @@ body:has([data-not-found]) :is(header, footer, [data-gradual-blur], [data-preloa
   color: var(--bg);
 }
 
+
+/* Intro overlay: CSS only, about a second, once per session (see Preloader) */
+@property --intro-n {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+.intro {
+  pointer-events: none;
+  animation: intro-out 0.45s cubic-bezier(0.4, 0, 0.2, 1) 0.95s forwards;
+}
+.intro-letter {
+  transform: translateY(110%);
+  animation: intro-rise 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.intro-count {
+  counter-reset: n var(--intro-n);
+  animation: intro-count 0.8s ease-in-out 0.05s forwards;
+}
+.intro-count::after {
+  content: counter(n);
+}
+.intro-line {
+  transform: scaleX(0);
+  animation: intro-line 0.8s ease-in-out 0.05s forwards;
+}
+@keyframes intro-rise {
+  to {
+    transform: translateY(0);
+  }
+}
+@keyframes intro-count {
+  0% { --intro-n: 0; }
+  28% { --intro-n: 34; }
+  50% { --intro-n: 52; }
+  82% { --intro-n: 88; }
+  100% { --intro-n: 100; }
+}
+@keyframes intro-line {
+  0% { transform: scaleX(0); }
+  28% { transform: scaleX(0.34); }
+  50% { transform: scaleX(0.52); }
+  82% { transform: scaleX(0.88); }
+  100% { transform: scaleX(1); }
+}
+@keyframes intro-out {
+  to {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+html[data-intro="done"] .intro {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .intro {
+    display: none;
+  }
+}
+
+/* Poster of the hero prism's first frame, shown until the canvas starts */
+.hero-poster {
+  background: url("/hero-poster-mobile.webp") center / auto 100% no-repeat;
+}
+@media (width >= 768px) {
+  .hero-poster {
+    background-image: url("/hero-poster-desktop.webp");
+  }
+}

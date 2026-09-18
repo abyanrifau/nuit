@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { warmShader } from "@/lib/warm-shader";
 import { Mesh, Program, Renderer, Triangle } from "ogl";
 
 /*
@@ -178,224 +179,264 @@ export default function Prism({
     const container = containerRef.current;
     if (!container) return;
 
-    const H = Math.max(0.001, height);
-    const BW = Math.max(0.001, baseWidth);
-    const BASE_HALF = BW * 0.5;
-    const GLOW = Math.max(0, glow);
-    const NOISE = Math.max(0, noise);
-    const SAT = transparent ? 1.5 : 1;
-    const SCALE = Math.max(0.001, scale);
-    const HUE = hueShift || 0;
-    const CFREQ = Math.max(0, colorFrequency || 1);
-    const BLOOM = Math.max(0, bloom || 1);
-    const TS = Math.max(0, timeScale || 1);
-    const HOVSTR = Math.max(0, hoverStrength || 1);
-    const INERT = Math.max(0, Math.min(1, inertia || 0.12));
+    // The shader is warmed in the background first, so building the scene
+    // below never blocks the main thread on a compile.
+    let cancelled = false;
+    let teardown: (() => void) | undefined;
+    const init = () => {
+      const H = Math.max(0.001, height);
+      const BW = Math.max(0.001, baseWidth);
+      const BASE_HALF = BW * 0.5;
+      const GLOW = Math.max(0, glow);
+      const NOISE = Math.max(0, noise);
+      const SAT = transparent ? 1.5 : 1;
+      const SCALE = Math.max(0.001, scale);
+      const HUE = hueShift || 0;
+      const CFREQ = Math.max(0, colorFrequency || 1);
+      const BLOOM = Math.max(0, bloom || 1);
+      const TS = Math.max(0, timeScale || 1);
+      const HOVSTR = Math.max(0, hoverStrength || 1);
+      const INERT = Math.max(0, Math.min(1, inertia || 0.12));
 
-    // Render at a reduced resolution and let the browser upscale the canvas.
-    const dpr = Math.min(1, window.devicePixelRatio || 1) * Math.min(1, Math.max(0.25, renderScale));
-    const renderer = new Renderer({
-      dpr,
-      alpha: transparent,
-      antialias: false,
-      powerPreference: "high-performance",
-    });
-    const gl = renderer.gl;
-    gl.disable(gl.DEPTH_TEST);
-    gl.disable(gl.CULL_FACE);
-    gl.disable(gl.BLEND);
-
-    Object.assign(gl.canvas.style, {
-      position: "absolute",
-      inset: "0",
-      width: "100%",
-      height: "100%",
-      display: "block",
-    });
-    container.appendChild(gl.canvas);
-
-    const geometry = new Triangle(gl);
-    const iResBuf = new Float32Array(2);
-    const offsetPxBuf = new Float32Array(2);
-
-    const program = new Program(gl, {
-      vertex,
-      fragment,
-      uniforms: {
-        iResolution: { value: iResBuf },
-        iTime: { value: 0 },
-        uHeight: { value: H },
-        uBaseHalf: { value: BASE_HALF },
-        uUseBaseWobble: { value: 1 },
-        uRot: { value: new Float32Array([1, 0, 0, 0, 1, 0, 0, 0, 1]) },
-        uGlow: { value: GLOW },
-        uOffsetPx: { value: offsetPxBuf },
-        uNoise: { value: NOISE },
-        uSaturation: { value: SAT },
-        uScale: { value: SCALE },
-        uHueShift: { value: HUE },
-        uColorFreq: { value: CFREQ },
-        uBloom: { value: BLOOM },
-        uCenterShift: { value: H * 0.25 },
-        uInvBaseHalf: { value: 1 / BASE_HALF },
-        uInvHeight: { value: 1 / H },
-        uMinAxis: { value: Math.min(BASE_HALF, H) },
-        uPxScale: { value: 1 / ((gl.drawingBufferHeight || 1) * 0.1 * SCALE) },
-        uTimeScale: { value: TS },
-      },
-    });
-    const mesh = new Mesh(gl, { geometry, program });
-    programRef.current = program;
-
-    const resize = () => {
-      const w = container.clientWidth || 1;
-      const h = container.clientHeight || 1;
-      renderer.setSize(w, h);
-      iResBuf[0] = gl.drawingBufferWidth;
-      iResBuf[1] = gl.drawingBufferHeight;
-      offsetPxBuf[0] = offX * dpr;
-      offsetPxBuf[1] = offY * dpr;
-      program.uniforms.uPxScale.value = 1 / ((gl.drawingBufferHeight || 1) * 0.1 * SCALE);
-    };
-    const ro = new ResizeObserver(resize);
-    ro.observe(container);
-    resize();
-
-    const rotBuf = new Float32Array(9);
-    const setMat3FromEuler = (yawY: number, pitchX: number, rollZ: number, out: Float32Array) => {
-      const cy = Math.cos(yawY), sy = Math.sin(yawY);
-      const cx = Math.cos(pitchX), sx = Math.sin(pitchX);
-      const cz = Math.cos(rollZ), sz = Math.sin(rollZ);
-      out[0] = cy * cz + sy * sx * sz;
-      out[1] = cx * sz;
-      out[2] = -sy * cz + cy * sx * sz;
-      out[3] = -cy * sz + sy * sx * cz;
-      out[4] = cx * cz;
-      out[5] = sy * sz + cy * sx * cz;
-      out[6] = sy * cx;
-      out[7] = -sx;
-      out[8] = cy * cx;
-      return out;
-    };
-
-    const NOISE_IS_ZERO = NOISE < 1e-6;
-    let raf = 0;
-    const t0 = performance.now();
-
-    const rnd = () => Math.random();
-    const wX = 0.3 + rnd() * 0.6;
-    const wY = 0.2 + rnd() * 0.7;
-    const wZ = 0.1 + rnd() * 0.5;
-    const phX = rnd() * Math.PI * 2;
-    const phZ = rnd() * Math.PI * 2;
-
-    let yaw = 0, pitch = 0, roll = 0;
-    let targetYaw = 0, targetPitch = 0;
-    const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
-
-    const pointer = { x: 0, y: 0, inside: true };
-
-    const render = (t: number) => {
-      const time = (t - t0) * 0.001;
-      program.uniforms.iTime.value = time;
-      let continueRAF = true;
-
-      if (animationType === "hover") {
-        const maxPitch = 0.6 * HOVSTR;
-        const maxYaw = 0.6 * HOVSTR;
-        targetYaw = (pointer.inside ? -pointer.x : 0) * maxYaw;
-        targetPitch = (pointer.inside ? pointer.y : 0) * maxPitch;
-        yaw = lerp(yaw, targetYaw, INERT);
-        pitch = lerp(pitch, targetPitch, INERT);
-        roll = lerp(roll, 0, 0.1);
-        program.uniforms.uRot.value = setMat3FromEuler(yaw, pitch, roll, rotBuf);
-        if (NOISE_IS_ZERO) {
-          const settled =
-            Math.abs(yaw - targetYaw) < 1e-4 &&
-            Math.abs(pitch - targetPitch) < 1e-4 &&
-            Math.abs(roll) < 1e-4;
-          if (settled) continueRAF = false;
-        }
-      } else if (animationType === "3drotate") {
-        const tScaled = time * TS;
-        yaw = tScaled * wY;
-        pitch = Math.sin(tScaled * wX + phX) * 0.6;
-        roll = Math.sin(tScaled * wZ + phZ) * 0.5;
-        program.uniforms.uRot.value = setMat3FromEuler(yaw, pitch, roll, rotBuf);
-        if (TS < 1e-6) continueRAF = false;
-      } else {
-        rotBuf.set([1, 0, 0, 0, 1, 0, 0, 0, 1]);
-        program.uniforms.uRot.value = rotBuf;
-        if (TS < 1e-6) continueRAF = false;
-      }
-
-      renderer.render({ scene: mesh });
-      raf = continueRAF ? requestAnimationFrame(render) : 0;
-    };
-
-    const startRAF = () => {
-      if (raf) return;
-      raf = requestAnimationFrame(render);
-    };
-    kickRef.current = startRAF;
-    const stopRAF = () => {
-      if (!raf) return;
-      cancelAnimationFrame(raf);
-      raf = 0;
-    };
-
-    const onMove = (e: PointerEvent) => {
-      const ww = Math.max(1, window.innerWidth);
-      const wh = Math.max(1, window.innerHeight);
-      const nx = (e.clientX - ww * 0.5) / (ww * 0.5);
-      const ny = (e.clientY - wh * 0.5) / (wh * 0.5);
-      pointer.x = Math.max(-1, Math.min(1, nx));
-      pointer.y = Math.max(-1, Math.min(1, ny));
-      pointer.inside = true;
-      startRAF();
-    };
-    const onLeave = () => {
-      pointer.inside = false;
-    };
-
-    // On touch screens there is no hover, so skip the pointer tracking; the
-    // prism renders once, settles, and stops instead of redrawing on every
-    // scroll-driven pointer event.
-    const canHover = window.matchMedia("(hover: hover)").matches;
-    if (animationType === "hover" && canHover) {
-      window.addEventListener("pointermove", onMove, { passive: true });
-      window.addEventListener("mouseleave", onLeave);
-      window.addEventListener("blur", onLeave);
-      program.uniforms.uUseBaseWobble.value = 0;
-    } else if (animationType === "3drotate") {
-      program.uniforms.uUseBaseWobble.value = 0;
-    } else {
-      program.uniforms.uUseBaseWobble.value = 1;
-    }
-
-    let io: IntersectionObserver | null = null;
-    if (suspendWhenOffscreen) {
-      io = new IntersectionObserver((entries) => {
-        if (entries.some((e) => e.isIntersecting)) startRAF();
-        else stopRAF();
+      // Render at a reduced resolution and let the browser upscale the canvas.
+      const dpr =
+        Math.min(1, window.devicePixelRatio || 1) *
+        Math.min(1, Math.max(0.25, renderScale));
+      const renderer = new Renderer({
+        dpr,
+        alpha: transparent,
+        antialias: false,
+        powerPreference: "high-performance",
       });
-      io.observe(container);
-    }
-    startRAF();
+      const gl = renderer.gl;
+      gl.disable(gl.DEPTH_TEST);
+      gl.disable(gl.CULL_FACE);
+      gl.disable(gl.BLEND);
 
-    return () => {
-      stopRAF();
-      ro.disconnect();
-      io?.disconnect();
+      Object.assign(gl.canvas.style, {
+        position: "absolute",
+        inset: "0",
+        width: "100%",
+        height: "100%",
+        display: "block",
+      });
+      container.appendChild(gl.canvas);
+
+      const geometry = new Triangle(gl);
+      const iResBuf = new Float32Array(2);
+      const offsetPxBuf = new Float32Array(2);
+
+      const program = new Program(gl, {
+        vertex,
+        fragment,
+        uniforms: {
+          iResolution: { value: iResBuf },
+          iTime: { value: 0 },
+          uHeight: { value: H },
+          uBaseHalf: { value: BASE_HALF },
+          uUseBaseWobble: { value: 1 },
+          uRot: { value: new Float32Array([1, 0, 0, 0, 1, 0, 0, 0, 1]) },
+          uGlow: { value: GLOW },
+          uOffsetPx: { value: offsetPxBuf },
+          uNoise: { value: NOISE },
+          uSaturation: { value: SAT },
+          uScale: { value: SCALE },
+          uHueShift: { value: HUE },
+          uColorFreq: { value: CFREQ },
+          uBloom: { value: BLOOM },
+          uCenterShift: { value: H * 0.25 },
+          uInvBaseHalf: { value: 1 / BASE_HALF },
+          uInvHeight: { value: 1 / H },
+          uMinAxis: { value: Math.min(BASE_HALF, H) },
+          uPxScale: {
+            value: 1 / ((gl.drawingBufferHeight || 1) * 0.1 * SCALE),
+          },
+          uTimeScale: { value: TS },
+        },
+      });
+      const mesh = new Mesh(gl, { geometry, program });
+      programRef.current = program;
+
+      const resize = () => {
+        const w = container.clientWidth || 1;
+        const h = container.clientHeight || 1;
+        renderer.setSize(w, h);
+        iResBuf[0] = gl.drawingBufferWidth;
+        iResBuf[1] = gl.drawingBufferHeight;
+        offsetPxBuf[0] = offX * dpr;
+        offsetPxBuf[1] = offY * dpr;
+        program.uniforms.uPxScale.value =
+          1 / ((gl.drawingBufferHeight || 1) * 0.1 * SCALE);
+      };
+      const ro = new ResizeObserver(resize);
+      ro.observe(container);
+      resize();
+
+      const rotBuf = new Float32Array(9);
+      const setMat3FromEuler = (
+        yawY: number,
+        pitchX: number,
+        rollZ: number,
+        out: Float32Array,
+      ) => {
+        const cy = Math.cos(yawY),
+          sy = Math.sin(yawY);
+        const cx = Math.cos(pitchX),
+          sx = Math.sin(pitchX);
+        const cz = Math.cos(rollZ),
+          sz = Math.sin(rollZ);
+        out[0] = cy * cz + sy * sx * sz;
+        out[1] = cx * sz;
+        out[2] = -sy * cz + cy * sx * sz;
+        out[3] = -cy * sz + sy * sx * cz;
+        out[4] = cx * cz;
+        out[5] = sy * sz + cy * sx * cz;
+        out[6] = sy * cx;
+        out[7] = -sx;
+        out[8] = cy * cx;
+        return out;
+      };
+
+      const NOISE_IS_ZERO = NOISE < 1e-6;
+      let raf = 0;
+      const t0 = performance.now();
+
+      const rnd = () => Math.random();
+      const wX = 0.3 + rnd() * 0.6;
+      const wY = 0.2 + rnd() * 0.7;
+      const wZ = 0.1 + rnd() * 0.5;
+      const phX = rnd() * Math.PI * 2;
+      const phZ = rnd() * Math.PI * 2;
+
+      let yaw = 0,
+        pitch = 0,
+        roll = 0;
+      let targetYaw = 0,
+        targetPitch = 0;
+      const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
+
+      const pointer = { x: 0, y: 0, inside: true };
+
+      const render = (t: number) => {
+        const time = (t - t0) * 0.001;
+        program.uniforms.iTime.value = time;
+        let continueRAF = true;
+
+        if (animationType === "hover") {
+          const maxPitch = 0.6 * HOVSTR;
+          const maxYaw = 0.6 * HOVSTR;
+          targetYaw = (pointer.inside ? -pointer.x : 0) * maxYaw;
+          targetPitch = (pointer.inside ? pointer.y : 0) * maxPitch;
+          yaw = lerp(yaw, targetYaw, INERT);
+          pitch = lerp(pitch, targetPitch, INERT);
+          roll = lerp(roll, 0, 0.1);
+          program.uniforms.uRot.value = setMat3FromEuler(
+            yaw,
+            pitch,
+            roll,
+            rotBuf,
+          );
+          if (NOISE_IS_ZERO) {
+            const settled =
+              Math.abs(yaw - targetYaw) < 1e-4 &&
+              Math.abs(pitch - targetPitch) < 1e-4 &&
+              Math.abs(roll) < 1e-4;
+            if (settled) continueRAF = false;
+          }
+        } else if (animationType === "3drotate") {
+          const tScaled = time * TS;
+          yaw = tScaled * wY;
+          pitch = Math.sin(tScaled * wX + phX) * 0.6;
+          roll = Math.sin(tScaled * wZ + phZ) * 0.5;
+          program.uniforms.uRot.value = setMat3FromEuler(
+            yaw,
+            pitch,
+            roll,
+            rotBuf,
+          );
+          if (TS < 1e-6) continueRAF = false;
+        } else {
+          rotBuf.set([1, 0, 0, 0, 1, 0, 0, 0, 1]);
+          program.uniforms.uRot.value = rotBuf;
+          if (TS < 1e-6) continueRAF = false;
+        }
+
+        renderer.render({ scene: mesh });
+        raf = continueRAF ? requestAnimationFrame(render) : 0;
+      };
+
+      const startRAF = () => {
+        if (raf) return;
+        raf = requestAnimationFrame(render);
+      };
+      kickRef.current = startRAF;
+      const stopRAF = () => {
+        if (!raf) return;
+        cancelAnimationFrame(raf);
+        raf = 0;
+      };
+
+      const onMove = (e: PointerEvent) => {
+        const ww = Math.max(1, window.innerWidth);
+        const wh = Math.max(1, window.innerHeight);
+        const nx = (e.clientX - ww * 0.5) / (ww * 0.5);
+        const ny = (e.clientY - wh * 0.5) / (wh * 0.5);
+        pointer.x = Math.max(-1, Math.min(1, nx));
+        pointer.y = Math.max(-1, Math.min(1, ny));
+        pointer.inside = true;
+        startRAF();
+      };
+      const onLeave = () => {
+        pointer.inside = false;
+      };
+
+      // On touch screens there is no hover, so skip the pointer tracking; the
+      // prism renders once, settles, and stops instead of redrawing on every
+      // scroll-driven pointer event.
+      const canHover = window.matchMedia("(hover: hover)").matches;
       if (animationType === "hover" && canHover) {
-        window.removeEventListener("pointermove", onMove);
-        window.removeEventListener("mouseleave", onLeave);
-        window.removeEventListener("blur", onLeave);
+        window.addEventListener("pointermove", onMove, { passive: true });
+        window.addEventListener("mouseleave", onLeave);
+        window.addEventListener("blur", onLeave);
+        program.uniforms.uUseBaseWobble.value = 0;
+      } else if (animationType === "3drotate") {
+        program.uniforms.uUseBaseWobble.value = 0;
+      } else {
+        program.uniforms.uUseBaseWobble.value = 1;
       }
-      if (gl.canvas.parentElement === container) container.removeChild(gl.canvas);
-      gl.getExtension("WEBGL_lose_context")?.loseContext();
-      programRef.current = null;
-      kickRef.current = () => {};
+
+      let io: IntersectionObserver | null = null;
+      if (suspendWhenOffscreen) {
+        io = new IntersectionObserver((entries) => {
+          if (entries.some((e) => e.isIntersecting)) startRAF();
+          else stopRAF();
+        });
+        io.observe(container);
+      }
+      startRAF();
+
+      return () => {
+        stopRAF();
+        ro.disconnect();
+        io?.disconnect();
+        if (animationType === "hover" && canHover) {
+          window.removeEventListener("pointermove", onMove);
+          window.removeEventListener("mouseleave", onLeave);
+          window.removeEventListener("blur", onLeave);
+        }
+        if (gl.canvas.parentElement === container)
+          container.removeChild(gl.canvas);
+        gl.getExtension("WEBGL_lose_context")?.loseContext();
+        programRef.current = null;
+        kickRef.current = () => {};
+      };
+    };
+    void warmShader(vertex, fragment).then(() => {
+      if (!cancelled) teardown = init();
+    });
+    return () => {
+      cancelled = true;
+      teardown?.();
     };
     // glow is applied live above rather than rebuilding the scene.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -418,5 +459,7 @@ export default function Prism({
     renderScale,
   ]);
 
-  return <div ref={containerRef} className={className ?? "relative h-full w-full"} />;
+  return (
+    <div ref={containerRef} className={className ?? "relative h-full w-full"} />
+  );
 }

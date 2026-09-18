@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { FadeUp } from "@/components/FadeUp";
@@ -26,7 +26,7 @@ export function Faq() {
           const isOpen = open === i;
           const panelId = `faq-panel-${i}`;
           return (
-            <motion.div
+            <m.div
               key={f.question}
               className="border-b border-black"
               initial={reduced ? false : { opacity: 0, y: 16 }}
@@ -56,7 +56,7 @@ export function Faq() {
                 </button>
               </h3>
               {/* Always in the DOM so the answer text is crawlable; folded shut visually */}
-              <motion.div
+              <m.div
                 id={panelId}
                 aria-hidden={!isOpen}
                 initial={false}
@@ -67,8 +67,8 @@ export function Faq() {
                 <p className="max-w-[40em] pb-6 font-neue text-base leading-relaxed md:pb-8 md:text-lg">
                   {f.answer}
                 </p>
-              </motion.div>
-            </motion.div>
+              </m.div>
+            </m.div>
           );
         })}
       </div>

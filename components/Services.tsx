@@ -44,18 +44,18 @@ export function Services() {
           <ul className="mt-10 border-t border-black md:mt-12">
             {services.map((s, i) => (
               <Reveal
+                as="li"
                 key={s.name}
                 progress={progress}
                 range={[0.45 + i * 0.08, 0.6 + i * 0.08]}
+                className="grid grid-cols-1 gap-3 border-b border-black py-5 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-12 md:py-6"
               >
-                <li className="grid grid-cols-1 gap-3 border-b border-black py-5 md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:gap-12 md:py-6">
-                  <h3 className="font-grotesk text-xl leading-tight md:text-2xl">
-                    {s.name}
-                  </h3>
-                  <p className="max-w-[40em] font-neue text-base leading-relaxed md:text-lg">
-                    {s.description}
-                  </p>
-                </li>
+                <h3 className="font-grotesk text-xl leading-tight md:text-2xl">
+                  {s.name}
+                </h3>
+                <p className="max-w-[40em] font-neue text-base leading-relaxed md:text-lg">
+                  {s.description}
+                </p>
               </Reveal>
             ))}
           </ul>

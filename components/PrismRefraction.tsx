@@ -1,7 +1,7 @@
 "use client";
 
 import { type MotionValue } from "framer-motion";
-import { useEffect, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Mesh, Program, Renderer, Triangle } from "ogl";
 
 /*
@@ -17,21 +17,9 @@ import { Mesh, Program, Renderer, Triangle } from "ogl";
  * The whole sequence is driven by the pinned section's scroll progress, so it
  * scrubs with the scroll and holds once it has played. The geometry is measured
  * from the real layout: the spectrum is aimed at whichever element carries
- * `data-prism-target`, and the prism parks itself clear of the copy.
+ * `data-prism-target`, and the prism parks itself clear of the copy. On
+ * phones it sits small in the top right corner and plays itself in.
  */
-
-/** The effect needs the empty right-hand side of the panel, so it is desktop only. */
-function useIsWide() {
-  return useSyncExternalStore(
-    (cb) => {
-      const m = window.matchMedia("(min-width: 768px)");
-      m.addEventListener("change", cb);
-      return () => m.removeEventListener("change", cb);
-    },
-    () => window.matchMedia("(min-width: 768px)").matches,
-    () => false,
-  );
-}
 
 /** The canvas reaches above the panel so the beam can arrive from off screen. */
 const OVER_TOP = "42vh";
@@ -117,13 +105,20 @@ function measure(host: HTMLDivElement): Geometry | null {
     btn.x + button.offsetWidth,
   );
 
-  const size = Math.min(126, Math.max(78, w * 0.075));
+  // Phones have no clear space beside the copy, so the prism sits smaller in
+  // the top right corner above the heading, in the canvas's overhang.
+  const narrow = w < 768;
+  const size = narrow ? Math.min(72, Math.max(56, w * 0.17)) : Math.min(126, Math.max(78, w * 0.075));
 
   // Park the prism in the clear space to the right of the copy, a little above
   // the heading so the spectrum has room to spread on the way down to the
   // button, and clear of the fixed nav at the top of the screen.
-  const px = Math.min(w - size * 0.9, Math.max(w * 0.76, contentRight + dx + size + 40));
-  const py = Math.max(size * 0.9, Math.min(dy - size * 0.45, target[1] - 250));
+  const px = narrow
+    ? w - size * 0.95
+    : Math.min(w - size * 0.9, Math.max(w * 0.76, contentRight + dx + size + 40));
+  const py = narrow
+    ? Math.max(size * 0.9, dy - size * 0.9)
+    : Math.max(size * 0.9, Math.min(dy - size * 0.45, target[1] - 250));
   const prism: [number, number] = [px, py];
 
   // The beam arrives from beyond the top right corner.
@@ -154,7 +149,8 @@ function measure(host: HTMLDivElement): Geometry | null {
     fanNrm: nrm,
     reach: dist * 1.08,
     nearHalf: size * 0.2,
-    farHalf: Math.min(200, Math.max(96, dist * 0.15)),
+    // A slimmer band on phones, where it has to cross the copy.
+    farHalf: narrow ? Math.min(110, Math.max(56, dist * 0.11)) : Math.min(200, Math.max(96, dist * 0.15)),
     halo: [button.offsetWidth * 0.85, button.offsetHeight * 1.5],
   };
 }
@@ -473,7 +469,6 @@ const fragment = /* glsl */ `
 `;
 
 export function PrismRefraction({ progress }: { progress: MotionValue<number> }) {
-  const wide = useIsWide();
   const hostRef = useRef<HTMLDivElement>(null);
   const programRef = useRef<Program | null>(null);
   const progressRef = useRef(progress);
@@ -486,10 +481,7 @@ export function PrismRefraction({ progress }: { progress: MotionValue<number> })
 
   useLayoutEffect(() => {
     const el = hostRef.current;
-    if (!wide || !el) {
-      setGeo(null);
-      return;
-    }
+    if (!el) return;
     const read = () =>
       setGeo((prev) => {
         const next = measure(el);
@@ -509,7 +501,7 @@ export function PrismRefraction({ progress }: { progress: MotionValue<number> })
       ro.disconnect();
       window.removeEventListener("resize", read);
     };
-  }, [wide]);
+  }, []);
 
   useEffect(() => {
     const host = hostRef.current;
@@ -576,17 +568,32 @@ export function PrismRefraction({ progress }: { progress: MotionValue<number> })
     let last = 0;
     const t0 = performance.now();
     const FRAME_MS = 1000 / 40;
+    // Where the section does not pin (phones, reduced motion, or after a nav
+    // jump) the progress arrives already complete, so the sequence plays
+    // itself over a few seconds from the moment the section comes into view.
+    let playFrom: number | null = null;
+    const PLAY_MS = 2800;
     const render = (time: number) => {
       raf = requestAnimationFrame(render);
       if (time - last < FRAME_MS) return;
       last = time;
       program.uniforms.iTime.value = (time - t0) * 0.001;
-      program.uniforms.uProgress.value = progressRef.current.get();
+      let p = progressRef.current.get();
+      if (playFrom !== null) {
+        const u = Math.min(1, (time - playFrom) / PLAY_MS);
+        p = 1 - Math.pow(1 - u, 2.2);
+      }
+      program.uniforms.uProgress.value = p;
       renderer.render({ scene: mesh });
     };
+    let seen = false;
     const start = () => {
       if (running) return;
       running = true;
+      if (!seen) {
+        seen = true;
+        if (progressRef.current.get() >= 0.98) playFrom = performance.now();
+      }
       raf = requestAnimationFrame(render);
     };
     const stop = () => {

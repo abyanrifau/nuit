@@ -1,6 +1,7 @@
 "use client";
 
-import Lenis from "lenis";
+import type Lenis from "lenis";
+import { LazyMotion } from "framer-motion";
 import { RELEASE_ALL_EVENT } from "@/lib/events";
 import {
   createContext,
@@ -22,6 +23,8 @@ const LenisContext = createContext<LenisContextValue>({
   reducedMotion: false,
 });
 
+const loadMotionFeatures = () => import("@/lib/motion-features").then((r) => r.default);
+
 export const NAV_HEIGHT = 64;
 const SCROLL_OFFSET = -(NAV_HEIGHT + 32);
 
@@ -33,23 +36,40 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
     let instance: Lenis | null = null;
+    // Bumped on every stop so a late import never starts a stale instance.
+    let generation = 0;
+    let idle = 0;
 
+    // Lenis is fetched once the page is idle, off the critical path. The
+    // intro overlay is still up at that point, so scrolling always has it.
     const start = () => {
-      const created = new Lenis({
-        duration: 1.2,
-        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        smoothWheel: true,
-      });
-      const raf = (time: number) => {
-        created.raf(time);
+      const mine = ++generation;
+      const load = async () => {
+        const { default: LenisCtor } = await import("lenis");
+        if (mine !== generation) return;
+        const created = new LenisCtor({
+          duration: 1.2,
+          easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+          smoothWheel: true,
+        });
+        const raf = (time: number) => {
+          created.raf(time);
+          rafRef.current = requestAnimationFrame(raf);
+        };
         rafRef.current = requestAnimationFrame(raf);
+        instance = created;
+        setLenis(created);
       };
-      rafRef.current = requestAnimationFrame(raf);
-      setLenis(created);
-      return created;
+      if (typeof window.requestIdleCallback === "function") {
+        idle = window.requestIdleCallback(() => void load(), { timeout: 1200 });
+      } else {
+        void load();
+      }
     };
 
     const stop = () => {
+      generation++;
+      if (idle && typeof window.cancelIdleCallback === "function") window.cancelIdleCallback(idle);
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
       rafRef.current = null;
       instance?.destroy();
@@ -57,12 +77,15 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       setLenis(null);
     };
 
+    let started = false;
     const apply = () => {
       setReducedMotion(media.matches);
       if (media.matches) {
         stop();
-      } else if (!instance) {
-        instance = start();
+        started = false;
+      } else if (!started) {
+        started = true;
+        start();
       }
     };
 
@@ -76,7 +99,8 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
 
   return (
     <LenisContext.Provider value={{ lenis, reducedMotion }}>
-      {children}
+      {/* Animation features arrive as a separate chunk after first paint */}
+      <LazyMotion features={loadMotionFeatures}>{children}</LazyMotion>
     </LenisContext.Provider>
   );
 }

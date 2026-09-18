@@ -1,9 +1,29 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, m, useReducedMotion } from "framer-motion";
+import dynamic from "next/dynamic";
 import { useRef, useState } from "react";
-import { ConceptCarousel } from "@/components/ConceptCarousel";
-import { ConceptPreview } from "@/components/ConceptPreview";
+import { LazyMount } from "@/components/LazyMount";
+
+// Swiper and the popup are only fetched once the section is near the viewport.
+const ConceptCarousel = dynamic(
+  () => import("@/components/ConceptCarousel").then((m) => m.ConceptCarousel),
+  { ssr: false, loading: () => <CarouselSpace /> },
+);
+const ConceptPreview = dynamic(
+  () => import("@/components/ConceptPreview").then((m) => m.ConceptPreview),
+  { ssr: false },
+);
+
+/** Holds the carousel's exact height (one 16:9 slide plus the dots row). */
+function CarouselSpace() {
+  return (
+    <div
+      aria-hidden="true"
+      className="h-[calc(min(78vw,300px)*9/16+30px)] md:h-[calc(min(40vw,820px)*9/16+30px)]"
+    />
+  );
+}
 import { concepts } from "@/data/concepts";
 
 /*
@@ -13,11 +33,13 @@ import { concepts } from "@/data/concepts";
 export function Concepts() {
   const [active, setActive] = useState(0);
   const [previewIndex, setPreviewIndex] = useState<number | null>(null);
+  const [everOpened, setEverOpened] = useState(false);
   const openerRef = useRef<HTMLElement | null>(null);
   const reduced = useReducedMotion();
 
   const openPreview = (index: number) => {
     openerRef.current = document.activeElement as HTMLElement | null;
+    setEverOpened(true);
     setPreviewIndex(index);
   };
 
@@ -33,7 +55,7 @@ export function Concepts() {
   return (
     <>
       <section id="concepts" className="section-pad">
-        <motion.div
+        <m.div
           initial={reduced ? false : { opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "0px 0px -10% 0px" }}
@@ -46,17 +68,19 @@ export function Concepts() {
           </div>
 
           <div className="mt-12 md:mt-16">
-            <ConceptCarousel
-              concepts={concepts}
-              onActiveChange={setActive}
-              onOpen={openPreview}
-            />
+            <LazyMount placeholder={<CarouselSpace />} margin="100px">
+              <ConceptCarousel
+                concepts={concepts}
+                onActiveChange={setActive}
+                onOpen={openPreview}
+              />
+            </LazyMount>
           </div>
 
           <div className="gutter mt-8 md:mt-10" aria-live="polite">
             {/* Name and category slip out and the next ones slip in on slide change */}
             <AnimatePresence mode="wait" initial={false}>
-              <motion.div
+              <m.div
                 key={current.slug}
                 initial={reduced ? false : { opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -69,7 +93,7 @@ export function Concepts() {
                 <p className="mt-2 font-neue text-base leading-none md:text-lg">
                   {current.category}
                 </p>
-              </motion.div>
+              </m.div>
             </AnimatePresence>
             <button
               type="button"
@@ -79,13 +103,15 @@ export function Concepts() {
               View concept
             </button>
           </div>
-        </motion.div>
+        </m.div>
       </section>
 
-      <ConceptPreview
-        concept={previewIndex === null ? null : concepts[previewIndex]}
-        onClose={closePreview}
-      />
+      {everOpened && (
+        <ConceptPreview
+          concept={previewIndex === null ? null : concepts[previewIndex]}
+          onClose={closePreview}
+        />
+      )}
     </>
   );
 }

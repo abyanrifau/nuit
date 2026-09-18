@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import { useEffect, useState, type MouseEvent } from "react";
 import { cn } from "@/lib/utils";
 import { useScrollTo } from "@/components/SmoothScroll";
@@ -100,7 +100,7 @@ export function Nav() {
 
       <AnimatePresence>
         {open && (
-          <motion.div
+          <m.div
             id="mobile-menu"
             data-lenis-prevent
             initial={reduced ? false : { opacity: 0 }}
@@ -122,7 +122,7 @@ export function Nav() {
                 </li>
               ))}
             </ul>
-          </motion.div>
+          </m.div>
         )}
       </AnimatePresence>
     </>

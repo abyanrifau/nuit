@@ -1,7 +1,7 @@
 "use client";
 
 import {
-  motion,
+  m,
   useMotionValue,
   useMotionValueEvent,
   useReducedMotion,
@@ -216,7 +216,7 @@ export function PinnedSection({ id, hold = 1, background, children }: PinnedSect
       data-pin={pin ? "" : undefined}
       className="relative section-pad"
     >
-      <motion.div
+      <m.div
         ref={panelRef}
         initial={pin || released || reduced ? false : { opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -236,7 +236,7 @@ export function PinnedSection({ id, hold = 1, background, children }: PinnedSect
           </div>
         )}
         {children(pin || released ? progress : revealed)}
-      </motion.div>
+      </m.div>
       {/* The hold: scroll distance the stuck panel rides through. A real element
           rather than padding, since sticky panels cannot travel into padding. */}
       {pin && <div aria-hidden="true" style={{ height: `${hold * 100}vh` }} />}
@@ -253,6 +253,8 @@ type RevealProps = {
   /** Progress window over which this block fades and rises in. */
   range?: [number, number];
   className?: string;
+  /** Render as a list item when the block sits directly inside a list. */
+  as?: "div" | "li";
   children: ReactNode;
 };
 
@@ -261,14 +263,16 @@ export function Reveal({
   progress,
   range = [0.4, 0.7],
   className,
+  as = "div",
   children,
 }: RevealProps) {
   const opacity = useTransform(progress, (v) => unit(v, range));
   const y = useTransform(progress, (v) => 24 * (1 - unit(v, range)));
+  const Tag = as === "li" ? m.li : m.div;
   return (
-    <motion.div style={{ opacity, y }} className={className}>
+    <Tag style={{ opacity, y }} className={className}>
       {children}
-    </motion.div>
+    </Tag>
   );
 }
 
@@ -294,7 +298,7 @@ export function RevealWords({
   const Tag = as;
 
   return (
-    <Tag className={cn("flex flex-wrap", className)} aria-label={text}>
+    <Tag className={cn("flex flex-wrap", className)}>
       {words.map((word, i) => (
         <Word
           key={`${word}-${i}`}
@@ -322,9 +326,9 @@ function Word({
   const opacity = useTransform(progress, (v) => unit(v, range));
   const y = useTransform(progress, (v) => `${0.4 * (1 - unit(v, range))}em`);
   return (
-    <motion.span style={{ opacity, y }} className="inline-block" aria-hidden="true">
+    <m.span style={{ opacity, y }} className="inline-block">
       {word}
       {last ? "" : " "}
-    </motion.span>
+    </m.span>
   );
 }

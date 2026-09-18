@@ -1,12 +1,16 @@
 "use client";
 
 import { PinnedSection, Reveal, RevealWords } from "@/components/PinnedSection";
-import Aurora from "@/components/Aurora";
+import dynamic from "next/dynamic";
+import { LazyMount } from "@/components/LazyMount";
+
+const Aurora = dynamic(() => import("@/components/Aurora"), { ssr: false });
 
 const STATEMENT =
   "Nuit Works is a two-person studio based in the Maldives. We design and build websites for businesses that want to stand out online and be remembered. We take care of everything, from the first concept to launch and the ongoing support that follows.";
 
-const EDGE_MASK = "linear-gradient(to bottom, transparent 0%, black 16%, black 84%, transparent 100%)";
+const EDGE_MASK =
+  "linear-gradient(to bottom, transparent 0%, black 16%, black 84%, transparent 100%)";
 
 export function Studio() {
   return (
@@ -18,12 +22,21 @@ export function Studio() {
           className="h-full w-full"
           style={{ maskImage: EDGE_MASK, WebkitMaskImage: EDGE_MASK }}
         >
-          <Aurora
-            colorStops={["#5b8cff", "#ff6b9a", "#ffd166", "#5ce1a0", "#7ad9ff", "#c084fc"]}
-            amplitude={1.2}
-            blend={0.7}
-            speed={0.5}
-          />
+          <LazyMount className="h-full w-full">
+            <Aurora
+              colorStops={[
+                "#5b8cff",
+                "#ff6b9a",
+                "#ffd166",
+                "#5ce1a0",
+                "#7ad9ff",
+                "#c084fc",
+              ]}
+              amplitude={1.2}
+              blend={0.7}
+              speed={0.5}
+            />
+          </LazyMount>
         </div>
       }
     >

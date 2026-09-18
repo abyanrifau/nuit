@@ -3,15 +3,31 @@
 import { GMAIL_COMPOSE_URL } from "@/lib/contact";
 
 import { PinnedSection, Reveal, RevealWords } from "@/components/PinnedSection";
-import { PrismRefraction } from "@/components/PrismRefraction";
+import dynamic from "next/dynamic";
+import { useRef } from "react";
+import { useNearViewport } from "@/components/LazyMount";
+
+const PrismRefraction = dynamic(
+  () => import("@/components/PrismRefraction").then((m) => m.PrismRefraction),
+  { ssr: false },
+);
 
 export function Contact() {
+  // The effect's code and shader are only loaded once the section is close.
+  const sentinel = useRef<HTMLSpanElement>(null);
+  const near = useNearViewport(sentinel);
+
   return (
     <PinnedSection id="contact" hold={1}>
       {(progress) => (
         <>
           {/* Light enters top right, refracts, and lands on the button below */}
-          <PrismRefraction progress={progress} />
+          <span
+            ref={sentinel}
+            aria-hidden="true"
+            className="absolute left-0 top-0"
+          />
+          {near && <PrismRefraction progress={progress} />}
           {/* The copy sits above the light, so a band of colour never dims it. */}
           <div className="relative z-10">
             <RevealWords

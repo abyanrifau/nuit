@@ -5,13 +5,13 @@ import "./globals.css";
 import { SmoothScroll } from "@/components/SmoothScroll";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
-import { Preloader } from "@/components/Preloader";
+import { INTRO_SCRIPT, Preloader } from "@/components/Preloader";
 import { faqs } from "@/data/faq";
 import { ScrollProgress } from "@/components/ScrollProgress";
 import GradualBlur from "@/components/GradualBlur";
 
 const grotesk = localFont({
-  src: "./fonts/AlteHaasGroteskBold.ttf",
+  src: "./fonts/AlteHaasGroteskBold.woff2",
   variable: "--font-grotesk",
   weight: "700",
   style: "normal",
@@ -19,7 +19,7 @@ const grotesk = localFont({
 });
 
 const neue = localFont({
-  src: "./fonts/HelveticaNeueLight.otf",
+  src: "./fonts/HelveticaNeueLight.woff2",
   variable: "--font-neue",
   weight: "300",
   style: "normal",
@@ -163,8 +163,11 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${grotesk.variable} ${neue.variable}`}
+      // The intro script may set data-intro before hydration.
+      suppressHydrationWarning
     >
       <head>
+        <script dangerouslySetInnerHTML={{ __html: INTRO_SCRIPT }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}

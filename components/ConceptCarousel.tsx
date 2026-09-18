@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { useRef, useState } from "react";
 import type { Swiper as SwiperType } from "swiper";
@@ -95,7 +95,7 @@ export function ConceptCarousel({
   };
 
   return (
-    <motion.div
+    <m.div
       initial={reduced ? false : { opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -144,7 +144,7 @@ export function ConceptCarousel({
               src={slideImage(c)}
               alt={`${c.name} ${c.category.toLowerCase()} website concept by Nuit Works, homepage`}
               fill
-              sizes="(min-width: 768px) 40vw, 78vw"
+              sizes="(min-width: 768px) min(40vw, 820px), min(78vw, 300px)"
               className="object-cover object-top"
               quality={90}
               draggable={false}
@@ -173,6 +173,6 @@ export function ConceptCarousel({
           />
         ))}
       </div>
-    </motion.div>
+    </m.div>
   );
 }

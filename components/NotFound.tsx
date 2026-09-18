@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 
 /*
  * 404. A bare page: no nav, carousel or footer. The rest of the site's chrome
@@ -18,7 +18,7 @@ export function NotFound() {
       // another colour, whatever the viewport height.
       style={{ background: "var(--bg)", color: "var(--fg)" }}
     >
-      <motion.div
+      <m.div
         initial={reduced ? false : { opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
@@ -36,7 +36,7 @@ export function NotFound() {
         >
           Back to home
         </Link>
-      </motion.div>
+      </m.div>
     </section>
   );
 }

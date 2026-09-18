@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import type { ReactNode, Ref } from "react";
 
 type FadeUpProps = {
@@ -22,7 +22,7 @@ export function FadeUp({ children, className, id, ref }: FadeUpProps) {
   }
 
   return (
-    <motion.section
+    <m.section
       id={id}
       ref={ref}
       className={className}
@@ -32,6 +32,6 @@ export function FadeUp({ children, className, id, ref }: FadeUpProps) {
       transition={{ duration: 0.8, ease: "easeOut" }}
     >
       {children}
-    </motion.section>
+    </m.section>
   );
 }

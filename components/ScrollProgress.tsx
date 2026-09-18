@@ -1,12 +1,12 @@
 "use client";
 
-import { motion, useScroll } from "framer-motion";
+import { m, useScroll } from "framer-motion";
 
 /** Thin black line along the top edge showing how far down the page you are. */
 export function ScrollProgress() {
   const { scrollYProgress } = useScroll();
   return (
-    <motion.div
+    <m.div
       data-scroll-progress
       aria-hidden="true"
       style={{ scaleX: scrollYProgress }}

@@ -38,7 +38,7 @@ export function Footer() {
                 href={c.href}
                 target={c.external ? "_blank" : undefined}
                 rel={c.external ? "noopener noreferrer" : undefined}
-                aria-label={c.label}
+                aria-label={`${c.label}: ${c.text}`}
                 className="inline-block font-grotesk text-[clamp(2.25rem,6vw,5.5rem)] leading-none tracking-[-0.03em] underline decoration-2 underline-offset-[0.1em] decoration-transparent transition-[text-decoration-color] duration-200 hover:decoration-black focus-visible:decoration-black focus-visible:outline-none"
               >
                 {c.text}

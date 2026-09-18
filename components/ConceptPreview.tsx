@@ -1,6 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { useLenis } from "@/components/SmoothScroll";
@@ -41,7 +41,7 @@ export function ConceptPreview({ concept, onClose }: ConceptPreviewProps) {
   return (
     <AnimatePresence>
       {concept && (
-        <motion.div
+        <m.div
           role="dialog"
           aria-modal="true"
           aria-label={`${concept.name} preview`}
@@ -100,7 +100,7 @@ export function ConceptPreview({ concept, onClose }: ConceptPreviewProps) {
               Visit full site
             </a>
           </div>
-        </motion.div>
+        </m.div>
       )}
     </AnimatePresence>
   );
