@@ -1,0 +1,177 @@
+{
+  "slug": "scentu",
+  "url": "https://perfume-nuit.vercel.app",
+  "capturedAt": "2026-09-28T18:05:56.543Z",
+  "pages": [
+    {
+      "file": "pages/01-home.webp",
+      "label": "Home",
+      "path": "/"
+    },
+    {
+      "file": "pages/02-shop.webp",
+      "label": "Shop",
+      "path": "/shop"
+    },
+    {
+      "file": "pages/03-about.webp",
+      "label": "About",
+      "path": "/about"
+    }
+  ],
+  "components": [
+    {
+      "name": "navigation",
+      "file": "components/navigation.webp",
+      "width": 1440,
+      "height": 64
+    },
+    {
+      "name": "button",
+      "file": "components/button.webp",
+      "width": 256,
+      "height": 116
+    },
+    {
+      "name": "card",
+      "file": "components/card.webp",
+      "width": 338,
+      "height": 460
+    }
+  ],
+  "specimens": [
+    {
+      "role": "display",
+      "family": "Classy Vogue",
+      "weight": "400",
+      "style": "normal",
+      "file": "specimens/display.webp"
+    },
+    {
+      "role": "body",
+      "family": "Geist Variable",
+      "weight": "400",
+      "style": "normal",
+      "file": "specimens/body.webp"
+    }
+  ],
+  "designSystem": {
+    "fonts": {
+      "display": {
+        "selector": "h1",
+        "family": "Classy Vogue",
+        "stack": "\"Classy Vogue\", \"Instrument Serif\", \"Times New Roman\", Georgia, serif",
+        "weight": "400",
+        "style": "normal",
+        "size": "80.64px",
+        "letterSpacing": "-0.4032px",
+        "textTransform": "none",
+        "sample": "Find your scent.by smell, not by house."
+      },
+      "heading": {
+        "selector": "h2",
+        "family": "Classy Vogue",
+        "stack": "\"Classy Vogue\", \"Instrument Serif\", \"Times New Roman\", Georgia, serif",
+        "weight": "400",
+        "style": "normal",
+        "size": "76px",
+        "letterSpacing": "-0.38px",
+        "textTransform": "none",
+        "sample": "Men"
+      },
+      "body": {
+        "selector": "[data-nw-body]",
+        "family": "Geist Variable",
+        "stack": "\"Geist Variable\", Geist, system-ui, -apple-system, \"Segoe UI\", sans-serif",
+        "weight": "400",
+        "style": "normal",
+        "size": "15px",
+        "letterSpacing": "normal",
+        "textTransform": "none",
+        "sample": "Scentu is a fragrance boutique in Malé. We buy directly from"
+      },
+      "ui": {
+        "selector": "nav a",
+        "family": "Instrument Serif",
+        "stack": "\"Instrument Serif\", \"Times New Roman\", Georgia, serif",
+        "weight": "400",
+        "style": "normal",
+        "size": "28px",
+        "letterSpacing": "-0.56px",
+        "textTransform": "none",
+        "sample": "Scentu."
+      }
+    },
+    "cssColorVars": {},
+    "backgrounds": [
+      {
+        "hex": "#0b0b0c",
+        "weight": 993116
+      },
+      {
+        "hex": "#e7e2d8",
+        "weight": 396138
+      },
+      {
+        "hex": "#000000",
+        "weight": 107232
+      },
+      {
+        "hex": "#f2eee6",
+        "weight": 25420
+      },
+      {
+        "hex": "#c97a22",
+        "weight": 2826
+      },
+      {
+        "hex": "#98a2b3",
+        "weight": 2706
+      },
+      {
+        "hex": "#dbbe9e",
+        "weight": 2451
+      },
+      {
+        "hex": "#d7481f",
+        "weight": 2251
+      }
+    ],
+    "textColors": [
+      {
+        "hex": "#f2eee6",
+        "weight": 881697
+      },
+      {
+        "hex": "#f2efe6",
+        "weight": 112601
+      },
+      {
+        "hex": "#0b0b0c",
+        "weight": 105475
+      },
+      {
+        "hex": "#8c8880",
+        "weight": 26862
+      },
+      {
+        "hex": "#c97a22",
+        "weight": 11141
+      },
+      {
+        "hex": "#0f1622",
+        "weight": 1089
+      }
+    ]
+  },
+  "recordings": {
+    "desktop": {
+      "maxScroll": 5190,
+      "seconds": 11.2
+    },
+    "mobile": {
+      "maxScroll": 7897,
+      "seconds": 11.2
+    }
+  }
+}

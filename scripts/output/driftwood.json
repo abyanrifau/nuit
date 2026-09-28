@@ -1,0 +1,161 @@
+{
+  "slug": "driftwood",
+  "url": "https://guesthouse-nuit.vercel.app",
+  "capturedAt": "2026-09-28T17:56:26.526Z",
+  "pages": [
+    {
+      "file": "pages/01-home.webp",
+      "label": "Home",
+      "path": "/"
+    },
+    {
+      "file": "pages/02-rooms.webp",
+      "label": "Rooms",
+      "path": "/rooms"
+    },
+    {
+      "file": "pages/03-experiences.webp",
+      "label": "Experiences",
+      "path": "/experiences"
+    },
+    {
+      "file": "pages/04-about.webp",
+      "label": "About",
+      "path": "/about"
+    }
+  ],
+  "components": [
+    {
+      "name": "navigation",
+      "file": "components/navigation.webp",
+      "width": 1440,
+      "height": 79
+    },
+    {
+      "name": "button",
+      "file": "components/button.webp",
+      "width": 260,
+      "height": 113
+    }
+  ],
+  "specimens": [
+    {
+      "role": "display",
+      "family": "Cormorant Garamond",
+      "weight": "300",
+      "style": "normal",
+      "file": "specimens/display.webp"
+    },
+    {
+      "role": "body",
+      "family": "Jost",
+      "weight": "300",
+      "style": "normal",
+      "file": "specimens/body.webp"
+    }
+  ],
+  "designSystem": {
+    "fonts": {
+      "display": {
+        "selector": "h1",
+        "family": "Cormorant Garamond",
+        "stack": "\"Cormorant Garamond\", Cormorant, Garamond, \"Times New Roman\", serif",
+        "weight": "300",
+        "style": "normal",
+        "size": "105.6px",
+        "letterSpacing": "-1.2672px",
+        "textTransform": "none",
+        "sample": "Driftwood. A quiet stay on Maafushi."
+      },
+      "heading": {
+        "selector": "h2",
+        "family": "Cormorant Garamond",
+        "stack": "\"Cormorant Garamond\", Cormorant, Garamond, \"Times New Roman\", serif",
+        "weight": "300",
+        "style": "normal",
+        "size": "48px",
+        "letterSpacing": "-0.576px",
+        "textTransform": "none",
+        "sample": "Coral starts where the sand runs out."
+      },
+      "body": {
+        "selector": "[data-nw-body]",
+        "family": "Jost",
+        "stack": "Jost, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Helvetica, Arial, sans-serif",
+        "weight": "300",
+        "style": "normal",
+        "size": "20.928px",
+        "letterSpacing": "normal",
+        "textTransform": "none",
+        "sample": "Walk to the end of our street, turn left at the water, and y"
+      },
+      "ui": {
+        "selector": "nav a",
+        "family": "Jost",
+        "stack": "Jost, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Helvetica, Arial, sans-serif",
+        "weight": "400",
+        "style": "normal",
+        "size": "13px",
+        "letterSpacing": "1.105px",
+        "textTransform": "none",
+        "sample": "Home"
+      }
+    },
+    "cssColorVars": {
+      "--sand": "#F5F1EA",
+      "--sand-deep": "#EDE7DC",
+      "--sand-warm": "#E6DFD3",
+      "--ink": "#2B2622",
+      "--stone": "#8C877E",
+      "--stone-ink": "#6F6960",
+      "--wood": "#6B5B4D",
+      "--clay": "#8E5A3C",
+      "--clay-deep": "#754730",
+      "--clay-soft": "#FAF4ED",
+      "--line": "rgba(107, 91, 77, .20)",
+      "--line-soft": "rgba(107, 91, 77, .12)"
+    },
+    "backgrounds": [
+      {
+        "hex": "#f5f1ea",
+        "weight": 7116480
+      },
+      {
+        "hex": "#e6dfd3",
+        "weight": 3066541
+      },
+      {
+        "hex": "#8e5a3c",
+        "weight": 33505
+      }
+    ],
+    "textColors": [
+      {
+        "hex": "#2b2622",
+        "weight": 1177994
+      },
+      {
+        "hex": "#f5f1ea",
+        "weight": 625527
+      },
+      {
+        "hex": "#6f6960",
+        "weight": 484406
+      },
+      {
+        "hex": "#8e5a3c",
+        "weight": 9971
+      }
+    ]
+  },
+  "recordings": {
+    "desktop": {
+      "maxScroll": 8984,
+      "seconds": 14.03
+    },
+    "mobile": {
+      "maxScroll": 9946,
+      "seconds": 13.27
+    }
+  }
+}

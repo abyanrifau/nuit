@@ -1,0 +1,150 @@
+{
+  "slug": "nocturne",
+  "url": "https://cafe2-nuit.vercel.app",
+  "capturedAt": "2026-09-28T18:27:44.580Z",
+  "pages": [
+    {
+      "file": "pages/01-home.webp",
+      "label": "Home",
+      "path": "/"
+    },
+    {
+      "file": "pages/02-menu.webp",
+      "label": "Menu",
+      "path": "/menu.html"
+    },
+    {
+      "file": "pages/03-about.webp",
+      "label": "About",
+      "path": "/about.html"
+    },
+    {
+      "file": "pages/04-visit.webp",
+      "label": "Visit",
+      "path": "/visit.html"
+    }
+  ],
+  "components": [
+    {
+      "name": "navigation",
+      "file": "components/navigation.webp",
+      "width": 1440,
+      "height": 69
+    },
+    {
+      "name": "card",
+      "file": "components/card.webp",
+      "width": 416,
+      "height": 706
+    }
+  ],
+  "specimens": [
+    {
+      "role": "display",
+      "family": "Instrument Serif",
+      "weight": "400",
+      "style": "normal",
+      "file": "specimens/display.webp"
+    },
+    {
+      "role": "body",
+      "family": "Karla",
+      "weight": "400",
+      "style": "normal",
+      "file": "specimens/body.webp"
+    }
+  ],
+  "designSystem": {
+    "fonts": {
+      "display": {
+        "selector": "h1",
+        "family": "Instrument Serif",
+        "stack": "\"Instrument Serif\", \"Iowan Old Style\", Georgia, serif",
+        "weight": "400",
+        "style": "normal",
+        "size": "152px",
+        "letterSpacing": "-1.824px",
+        "textTransform": "none",
+        "sample": "Slow coffee,low light."
+      },
+      "heading": {
+        "selector": "h2",
+        "family": "Instrument Serif",
+        "stack": "\"Instrument Serif\", \"Iowan Old Style\", Georgia, serif",
+        "weight": "400",
+        "style": "normal",
+        "size": "56px",
+        "letterSpacing": "-0.672px",
+        "textTransform": "none",
+        "sample": "The room comes first"
+      },
+      "body": {
+        "selector": "[data-nw-body]",
+        "family": "Karla",
+        "stack": "Karla, \"Helvetica Neue\", Arial, sans-serif",
+        "weight": "400",
+        "style": "normal",
+        "size": "20.16px",
+        "letterSpacing": "normal",
+        "textTransform": "none",
+        "sample": "Six pendants over the counter, brick left the way we found i"
+      },
+      "ui": {
+        "selector": "nav a",
+        "family": "Karla",
+        "stack": "Karla, \"Helvetica Neue\", Arial, sans-serif",
+        "weight": "400",
+        "style": "normal",
+        "size": "11.5px",
+        "letterSpacing": "2.76px",
+        "textTransform": "uppercase",
+        "sample": "Home"
+      }
+    },
+    "cssColorVars": {
+      "--ink": "#1A1512",
+      "--ink-raise": "#221B16",
+      "--ink-deep": "#120E0C",
+      "--cream": "#EDE3D3",
+      "--cream-dim": "#B7A794",
+      "--amber": "#C98A3E",
+      "--amber-lift": "#E0A452",
+      "--brick": "#8B4A3A",
+      "--rule": "rgba(237, 227, 211, 0.12)",
+      "--rule-warm": "rgba(139, 74, 58, 0.5)",
+      "--glow": "rgba(201, 138, 62, 0.28)"
+    },
+    "backgrounds": [
+      {
+        "hex": "#120e0c",
+        "weight": 5187028
+      },
+      {
+        "hex": "#1a1512",
+        "weight": 4724640
+      },
+      {
+        "hex": "#c98a3e",
+        "weight": 6636
+      }
+    ],
+    "textColors": [
+      {
+        "hex": "#ede3d3",
+        "weight": 935437
+      },
+      {
+        "hex": "#b7a794",
+        "weight": 337781
+      },
+      {
+        "hex": "#c98a3e",
+        "weight": 250718
+      },
+      {
+        "hex": "#120e0c",
+        "weight": 2535
+      }
+    ]
+  }
+}

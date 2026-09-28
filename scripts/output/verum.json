@@ -1,0 +1,197 @@
+{
+  "slug": "verum",
+  "url": "https://skincare-nuit.vercel.app",
+  "capturedAt": "2026-09-28T18:00:11.662Z",
+  "pages": [
+    {
+      "file": "pages/01-home.webp",
+      "label": "Home",
+      "path": "/"
+    },
+    {
+      "file": "pages/02-shop.webp",
+      "label": "Shop",
+      "path": "/shop"
+    },
+    {
+      "file": "pages/03-find-your-formula.webp",
+      "label": "Find your formula",
+      "path": "/quiz"
+    },
+    {
+      "file": "pages/04-philosophy.webp",
+      "label": "Philosophy",
+      "path": "/philosophy"
+    }
+  ],
+  "components": [
+    {
+      "name": "navigation",
+      "file": "components/navigation.webp",
+      "width": 1440,
+      "height": 69
+    },
+    {
+      "name": "button",
+      "file": "components/button.webp",
+      "width": 202,
+      "height": 124
+    },
+    {
+      "name": "card",
+      "file": "components/card.webp",
+      "width": 458,
+      "height": 709
+    }
+  ],
+  "specimens": [
+    {
+      "role": "display",
+      "family": "Fraunces",
+      "weight": "400",
+      "style": "normal",
+      "file": "specimens/display.webp"
+    },
+    {
+      "role": "body",
+      "family": "Inter",
+      "weight": "400",
+      "style": "normal",
+      "file": "specimens/body.webp"
+    }
+  ],
+  "designSystem": {
+    "fonts": {
+      "display": {
+        "selector": "h1",
+        "family": "Fraunces",
+        "stack": "Fraunces, \"Iowan Old Style\", Georgia, \"Times New Roman\", serif",
+        "weight": "400",
+        "style": "normal",
+        "size": "112px",
+        "letterSpacing": "-2.464px",
+        "textTransform": "none",
+        "sample": "Shop skincarethat earnsits place."
+      },
+      "heading": {
+        "selector": "h2",
+        "family": "Fraunces",
+        "stack": "Fraunces, \"Iowan Old Style\", Georgia, \"Times New Roman\", serif",
+        "weight": "400",
+        "style": "normal",
+        "size": "36px",
+        "letterSpacing": "-0.36px",
+        "textTransform": "none",
+        "sample": "Not sure what to get?Find your formula in 30 seconds."
+      },
+      "body": {
+        "selector": "[data-nw-body]",
+        "family": "Inter",
+        "stack": "Inter, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Helvetica, Arial, sans-serif",
+        "weight": "400",
+        "style": "normal",
+        "size": "13px",
+        "letterSpacing": "-0.08px",
+        "textTransform": "none",
+        "sample": "Anua · Beauty of Joseon · CeraVe · COSRX · EltaMD · Glow Rec"
+      },
+      "ui": {
+        "selector": "nav a",
+        "family": "Inter",
+        "stack": "Inter, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Helvetica, Arial, sans-serif",
+        "weight": "400",
+        "style": "normal",
+        "size": "14px",
+        "letterSpacing": "-0.08px",
+        "textTransform": "none",
+        "sample": "Shop"
+      }
+    },
+    "cssColorVars": {
+      "--paper": "#FAFAF8",
+      "--ink": "#1C1C1A",
+      "--ink-60": "#5A5A55",
+      "--ink-40": "#6C6C66",
+      "--sage": "#8B9D83",
+      "--sage-deep": "#56654F",
+      "--sage-wash": "#EEF1EA",
+      "--sage-tint": "#E4EADF",
+      "--sage-line": "rgba(139, 157, 131, 0.30)",
+      "--forest": "#242A22",
+      "--forest-line": "rgba(250, 250, 248, 0.16)",
+      "--grey": "#D8D8D3",
+      "--grey-soft": "#EFEFEC",
+      "--white": "#FFFFFF"
+    },
+    "backgrounds": [
+      {
+        "hex": "#fafaf8",
+        "weight": 6448152
+      },
+      {
+        "hex": "#eef1ea",
+        "weight": 1614150
+      },
+      {
+        "hex": "#ffffff",
+        "weight": 1291045
+      },
+      {
+        "hex": "#242a22",
+        "weight": 788085
+      },
+      {
+        "hex": "#8b9d83",
+        "weight": 74452
+      },
+      {
+        "hex": "#e4eadf",
+        "weight": 19296
+      },
+      {
+        "hex": "#efefec",
+        "weight": 9801
+      },
+      {
+        "hex": "#1c1c1a",
+        "weight": 7684
+      }
+    ],
+    "textColors": [
+      {
+        "hex": "#1c1c1a",
+        "weight": 922475
+      },
+      {
+        "hex": "#5a5a55",
+        "weight": 367574
+      },
+      {
+        "hex": "#6c6c66",
+        "weight": 33412
+      },
+      {
+        "hex": "#56654f",
+        "weight": 32559
+      },
+      {
+        "hex": "#8b9d83",
+        "weight": 13622
+      },
+      {
+        "hex": "#fafaf8",
+        "weight": 5285
+      }
+    ]
+  },
+  "recordings": {
+    "desktop": {
+      "maxScroll": 4270,
+      "seconds": 11.2
+    },
+    "mobile": {
+      "maxScroll": 10495,
+      "seconds": 13.87
+    }
+  }
+}

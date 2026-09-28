@@ -1,0 +1,183 @@
+{
+  "slug": "fuku-coffee",
+  "url": "https://cafe-nuit.vercel.app",
+  "capturedAt": "2026-09-28T17:54:11.679Z",
+  "pages": [
+    {
+      "file": "pages/01-home.webp",
+      "label": "Home",
+      "path": "/"
+    },
+    {
+      "file": "pages/02-our-story.webp",
+      "label": "Our Story",
+      "path": "/story.html"
+    },
+    {
+      "file": "pages/03-gallery.webp",
+      "label": "Gallery",
+      "path": "/gallery.html"
+    },
+    {
+      "file": "pages/04-events.webp",
+      "label": "Events",
+      "path": "/events.html"
+    }
+  ],
+  "components": [
+    {
+      "name": "navigation",
+      "file": "components/navigation.webp",
+      "width": 1440,
+      "height": 76
+    },
+    {
+      "name": "button",
+      "file": "components/button.webp",
+      "width": 217,
+      "height": 100
+    },
+    {
+      "name": "card",
+      "file": "components/card.webp",
+      "width": 400,
+      "height": 224
+    }
+  ],
+  "specimens": [
+    {
+      "role": "display",
+      "family": "Louis George Cafe",
+      "weight": "300",
+      "style": "normal",
+      "file": "specimens/display.webp"
+    },
+    {
+      "role": "body",
+      "family": "Louis George Cafe",
+      "weight": "400",
+      "style": "normal",
+      "file": "specimens/body.webp"
+    }
+  ],
+  "designSystem": {
+    "fonts": {
+      "display": {
+        "selector": "h1",
+        "family": "Louis George Cafe",
+        "stack": "\"Louis George Cafe\", \"Helvetica Neue\", Helvetica, Arial, sans-serif",
+        "weight": "300",
+        "style": "normal",
+        "size": "80px",
+        "letterSpacing": "-0.8px",
+        "textTransform": "none",
+        "sample": "Good fortune, poured slowly."
+      },
+      "heading": {
+        "selector": "h2",
+        "family": "Louis George Cafe",
+        "stack": "\"Louis George Cafe\", \"Helvetica Neue\", Helvetica, Arial, sans-serif",
+        "weight": "300",
+        "style": "normal",
+        "size": "44px",
+        "letterSpacing": "-0.22px",
+        "textTransform": "none",
+        "sample": "A small room for coffee, light, and the pace of an unhurried"
+      },
+      "body": {
+        "selector": "[data-nw-body]",
+        "family": "Louis George Cafe",
+        "stack": "\"Louis George Cafe\", \"Helvetica Neue\", Helvetica, Arial, sans-serif",
+        "weight": "400",
+        "style": "normal",
+        "size": "17px",
+        "letterSpacing": "normal",
+        "textTransform": "none",
+        "sample": "Fuku was built around three ideas that don't need much expla"
+      },
+      "ui": {
+        "selector": "nav a",
+        "family": "Louis George Cafe",
+        "stack": "\"Louis George Cafe\", \"Helvetica Neue\", Helvetica, Arial, sans-serif",
+        "weight": "400",
+        "style": "normal",
+        "size": "14px",
+        "letterSpacing": "0.28px",
+        "textTransform": "none",
+        "sample": "Home"
+      }
+    },
+    "cssColorVars": {
+      "--color-walnut-dark": "#5e503f",
+      "--color-walnut": "#7f5539",
+      "--color-terracotta": "#9c6644",
+      "--color-cream": "#ede0d4",
+      "--color-offwhite": "#f2f4f3",
+      "--color-ink": "#242331",
+      "--color-cream-deep": "#e3d3c3",
+      "--color-cream-soft": "#f6efe7",
+      "--color-line": "rgba(127, 85, 57, 0.18)",
+      "--color-line-strong": "rgba(127, 85, 57, 0.38)",
+      "--color-muted": "rgba(36, 35, 49, 0.66)",
+      "--color-on-dark-muted": "rgba(237, 224, 212, 0.66)"
+    },
+    "backgrounds": [
+      {
+        "hex": "#f2f4f3",
+        "weight": 3647253
+      },
+      {
+        "hex": "#ede0d4",
+        "weight": 3121010
+      },
+      {
+        "hex": "#5e503f",
+        "weight": 1917203
+      },
+      {
+        "hex": "#7f5539",
+        "weight": 709143
+      },
+      {
+        "hex": "#f2f5f3",
+        "weight": 109440
+      }
+    ],
+    "textColors": [
+      {
+        "hex": "#5e503f",
+        "weight": 339640
+      },
+      {
+        "hex": "#f2f4f3",
+        "weight": 244055
+      },
+      {
+        "hex": "#242331",
+        "weight": 150280
+      },
+      {
+        "hex": "#ede0d4",
+        "weight": 26540
+      },
+      {
+        "hex": "#7f5539",
+        "weight": 13434
+      },
+      {
+        "hex": "#9c6644",
+        "weight": 8928
+      }
+    ]
+  },
+  "recordings": {
+    "desktop": {
+      "maxScroll": 3931,
+      "seconds": 11.2
+    },
+    "mobile": {
+      "maxScroll": 4741,
+      "seconds": 11.2
+    }
+  }
+}

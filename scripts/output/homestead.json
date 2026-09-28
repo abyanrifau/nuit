@@ -1,0 +1,162 @@
+{
+  "slug": "homestead",
+  "url": "https://furniture-nuit.vercel.app",
+  "capturedAt": "2026-09-28T18:02:47.722Z",
+  "pages": [
+    {
+      "file": "pages/01-home.webp",
+      "label": "Home",
+      "path": "/"
+    },
+    {
+      "file": "pages/02-shop.webp",
+      "label": "Shop",
+      "path": "/shop"
+    },
+    {
+      "file": "pages/03-story.webp",
+      "label": "Story",
+      "path": "/story"
+    },
+    {
+      "file": "pages/04-contact.webp",
+      "label": "Contact",
+      "path": "/contact"
+    }
+  ],
+  "components": [
+    {
+      "name": "navigation",
+      "file": "components/navigation.webp",
+      "width": 1440,
+      "height": 64
+    },
+    {
+      "name": "button",
+      "file": "components/button.webp",
+      "width": 311,
+      "height": 120
+    },
+    {
+      "name": "card",
+      "file": "components/card.webp",
+      "width": 451,
+      "height": 607
+    }
+  ],
+  "specimens": [
+    {
+      "role": "display",
+      "family": "Cormorant Garamond",
+      "weight": "500",
+      "style": "normal",
+      "file": "specimens/display.webp"
+    },
+    {
+      "role": "body",
+      "family": "Inter",
+      "weight": "400",
+      "style": "normal",
+      "file": "specimens/body.webp"
+    }
+  ],
+  "designSystem": {
+    "fonts": {
+      "display": {
+        "selector": "h1",
+        "family": "Cormorant Garamond",
+        "stack": "\"Cormorant Garamond\", Georgia, serif",
+        "weight": "500",
+        "style": "normal",
+        "size": "72px",
+        "letterSpacing": "-0.36px",
+        "textTransform": "none",
+        "sample": "Furniture for the quiet hours."
+      },
+      "heading": {
+        "selector": "h2",
+        "family": "Cormorant Garamond",
+        "stack": "\"Cormorant Garamond\", Georgia, serif",
+        "weight": "500",
+        "style": "normal",
+        "size": "46px",
+        "letterSpacing": "-0.23px",
+        "textTransform": "none",
+        "sample": "Six pieces. Nothing you don’t need."
+      },
+      "body": {
+        "selector": "[data-nw-body]",
+        "family": "Inter",
+        "stack": "Inter, system-ui, sans-serif",
+        "weight": "400",
+        "style": "normal",
+        "size": "15px",
+        "letterSpacing": "normal",
+        "textTransform": "none",
+        "sample": "From our workshop in Hulhumalé we work with timber that arri"
+      },
+      "ui": {
+        "selector": "nav a",
+        "family": "Inter",
+        "stack": "Inter, system-ui, sans-serif",
+        "weight": "400",
+        "style": "normal",
+        "size": "12px",
+        "letterSpacing": "2.16px",
+        "textTransform": "uppercase",
+        "sample": "Shop"
+      }
+    },
+    "cssColorVars": {},
+    "backgrounds": [
+      {
+        "hex": "#f7f3ec",
+        "weight": 4381892
+      },
+      {
+        "hex": "#f1ebe1",
+        "weight": 1966230
+      },
+      {
+        "hex": "#e9e1d5",
+        "weight": 1916912
+      },
+      {
+        "hex": "#faf7f2",
+        "weight": 1121282
+      },
+      {
+        "hex": "#5b4636",
+        "weight": 13804
+      }
+    ],
+    "textColors": [
+      {
+        "hex": "#2b241d",
+        "weight": 699370
+      },
+      {
+        "hex": "#75695b",
+        "weight": 168876
+      },
+      {
+        "hex": "#2a241d",
+        "weight": 17067
+      },
+      {
+        "hex": "#f7f3ec",
+        "weight": 3211
+      }
+    ]
+  },
+  "recordings": {
+    "desktop": {
+      "maxScroll": 4392,
+      "seconds": 11.2
+    },
+    "mobile": {
+      "maxScroll": 7865,
+      "seconds": 11.2
+    }
+  }
+}

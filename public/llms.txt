@@ -1,0 +1,50 @@
+# Nuit Works
+
+> Nuit Works is a web design and development studio based in the Maldives. We design, build, host and maintain websites for businesses, and we take on international projects.
+
+Website: https://www.nuit.works
+Email: hello@nuit.works
+Instagram: https://instagram.com/nuit.works
+Location: Maldives (clients worldwide)
+
+## What we offer
+
+- Custom design: every website is designed from scratch around the brand, the audience and how customers use it. No templates.
+- Development and launch: fast, fully responsive sites, tested before launch and taken live on the client's domain.
+- Fast turnaround: a simple site can be live within a week of getting started.
+- Hosting and support: on a monthly hosting and support plan we host, maintain and update the site.
+
+## Website packages (starting prices, every project is quoted on its size)
+
+- Essential: from MVR 3,500. A custom one-page site with a menu or services section, photo gallery, contact details and map, WhatsApp and Instagram links, mobile-ready, with basic SEO. Can be upgraded to Business later with a loyalty discount. Typical timeline: about 1 week.
+- Business: from MVR 7,500. Everything in Essential, plus a multi-page site, booking or reservation requests confirmed by hand, and a contact form. Typical timeline: about 2 to 3 weeks.
+- Commerce: from MVR 12,500. Everything in Business, plus an online shop (product catalog, cart and order flow, with bank transfer or mobile payment confirmed by hand, no payment gateway) and an owner admin area. Typical timeline: about 3 to 5 weeks.
+
+Typical timelines are estimates; the actual timeline is quoted for each project. A portion of the payment is taken upfront before work begins.
+
+## Hosting and support (monthly, separate from the website packages)
+
+- Standard: MVR 300 a month. Hosting and domain management, fixes, security updates and backups, small content edits and regular check-ups.
+- Priority: MVR 500 a month. Everything in Standard, plus faster response times and requests handled first.
+
+Domain and hosting fees are quoted separately.
+
+## Work
+
+The studio's portfolio is six concept sites it designed and built itself to show its capability. They are concepts, not client projects.
+
+- [Driftwood](https://www.nuit.works/work/driftwood): guesthouse concept with a full booking flow.
+- [Scentu](https://www.nuit.works/work/scentu): fragrance shop concept organised by scent family.
+- [Verum](https://www.nuit.works/work/verum): skincare shop concept with ingredient breakdowns and a quiz.
+- [Nocturne](https://www.nuit.works/work/nocturne): coffee bar concept.
+- [Fuku Coffee](https://www.nuit.works/work/fuku-coffee): café concept.
+- [Homestead](https://www.nuit.works/work/homestead): furniture shop concept.
+
+## Pages
+
+- [Home](https://www.nuit.works/)
+- [Work](https://www.nuit.works/work)
+- [Services](https://www.nuit.works/services)
+- [Pricing](https://www.nuit.works/pricing): website packages, comparison, package picker, hosting and support plans, and FAQ.
+- [About](https://www.nuit.works/about)
+- [Contact](https://www.nuit.works/contact)

@@ -1,0 +1,854 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   Design tokens
+   The UI is black and white. Colour only ever comes from the prism light.
+   ========================================================================== */
+
+:root {
+  /* Surfaces */
+  --bg: #0b0b0c;
+  --bg-raised: #131315;
+  --bg-sunken: #070708;
+
+  /* Type. Muted is 8:1 on --bg, faint is 4.7:1 and kept for small labels. */
+  --fg: #f4f4f2;
+  --fg-muted: #a6a6a3;
+  --fg-faint: #7e7e7b;
+  --line: rgb(255 255 255 / 0.12);
+  --line-strong: rgb(255 255 255 / 0.3);
+
+  /* Prism light: muted, dusty tones sampled from the hero prism. Only the
+     light field, the process glow and hover edges use these. */
+  --light-steel: #2b6694;
+  --light-teal: #538894;
+  --light-olive: #948a56;
+  --light-amber: #946842;
+  --light-rust: #945043;
+  --light-rose: #946779;
+  --light-violet: #6a5a8f;
+
+  /* Motion. Arrivals use a soft ease-out; small hover swaps use an even
+     in-out. GSAP mirrors these in lib/motion.ts. */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
+  --ease-in-out: cubic-bezier(0.87, 0, 0.13, 1);
+  --ease-roll: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+  --dur-fast: 0.3s;
+  --dur-base: 0.6s;
+  --dur-slow: 1s;
+
+  /* Layout: 12 columns, fluid side padding, generous section rhythm. The
+     header is 64px tall, as on the previous site. */
+  --pad-x: clamp(20px, 4.5vw, 96px);
+  --gutter: 16px;
+  --header-h: 64px;
+  --section-y: clamp(112px, 18vh, 220px);
+  --radius: 10px;
+  --radius-lg: 18px;
+
+  color-scheme: dark;
+}
+
+@media (width >= 768px) {
+  :root {
+    --gutter: 24px;
+  }
+}
+
+@theme inline {
+  --font-display: var(--font-grotesk), "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-body: var(--font-neue), "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  --color-bg: var(--bg);
+  --color-raised: var(--bg-raised);
+  --color-fg: var(--fg);
+  --color-muted: var(--fg-muted);
+  --color-faint: var(--fg-faint);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+
+  /* Type scale. Display is the wordmark; h1 to h4 are editorial headings in
+     Alte Haas Grotesk; lead and body are Helvetica Neue Light. */
+  --text-label: 0.75rem;
+  --text-label--line-height: 1.2;
+  --text-label--letter-spacing: 0.14em;
+  --text-small: 0.875rem;
+  --text-small--line-height: 1.5;
+  --text-body: clamp(1rem, 0.96rem + 0.18vw, 1.125rem);
+  --text-body--line-height: 1.6;
+  --text-lead: clamp(1.1875rem, 1.02rem + 0.62vw, 1.625rem);
+  --text-lead--line-height: 1.42;
+  --text-h4: clamp(1.25rem, 1.1rem + 0.6vw, 1.75rem);
+  --text-h4--line-height: 1.15;
+  --text-h3: clamp(1.75rem, 1.25rem + 2vw, 3.25rem);
+  --text-h3--line-height: 1.02;
+  --text-h3--letter-spacing: -0.025em;
+  --text-h2: clamp(2.5rem, 1.5rem + 4.2vw, 6rem);
+  --text-h2--line-height: 0.96;
+  --text-h2--letter-spacing: -0.035em;
+  --text-h1: clamp(3.25rem, 1.6rem + 7.4vw, 10.5rem);
+  --text-h1--line-height: 0.9;
+  --text-h1--letter-spacing: -0.045em;
+  --text-display: clamp(4.5rem, 18.3vw, 26rem);
+  --text-display--line-height: 0.82;
+  --text-display--letter-spacing: -0.05em;
+
+  --ease-out: var(--ease-out);
+  --ease-in-out: var(--ease-in-out);
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+@layer base {
+html {
+  background: var(--bg);
+  color: var(--fg);
+  -webkit-text-size-adjust: 100%;
+  /* Lenis corrects its own position; the browser's anchoring would fight it. */
+  overflow-anchor: none;
+  /* No visible scrollbar anywhere (the progress line at the top stands in
+     for it). Scrolling itself is untouched. */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
+body {
+  min-height: 100svh;
+  background: transparent;
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+::selection {
+  background: var(--fg);
+  color: var(--bg);
+}
+
+:focus-visible {
+  outline: 2px solid var(--fg);
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: clip;
+}
+
+/* The custom cursor replaces the system one on fine pointers; text fields
+   keep their caret so typing never feels off. */
+html.has-cursor,
+html.has-cursor * {
+  cursor: none !important;
+}
+html.has-cursor :is(input, textarea, select, [contenteditable="true"]) {
+  cursor: text !important;
+}
+html.has-cursor select {
+  cursor: pointer !important;
+}
+
+/* ==========================================================================
+   Film grain. One static, tiling noise texture on a fixed layer: no
+   animation, so it costs nothing after first paint. Sits above content and
+   below the cursor.
+   ========================================================================== */
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0.06;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 240px 240px;
+}
+
+/* ==========================================================================
+   Layout utilities
+   ========================================================================== */
+
+@utility px-site {
+  padding-inline: var(--pad-x);
+}
+
+@utility grid-site {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+}
+
+@utility section-y {
+  padding-block: var(--section-y);
+}
+
+/* Small uppercase label, used for eyebrows, index numbers and tags. */
+@utility label {
+  font-family: var(--font-body);
+  font-weight: 300;
+  font-size: var(--text-label);
+  line-height: 1.2;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+@layer components {
+/* ==========================================================================
+   Buttons and links
+   ========================================================================== */
+
+/* Primary: white rounded rectangle, dark label. On hover the label stays
+   still and the white eases to a soft off-white (the button also leans a
+   few pixels toward the pointer; see components/ui/Magnetic.tsx). */
+.btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6em;
+  height: 54px;
+  padding-inline: 28px;
+  border-radius: var(--radius);
+  background: var(--fg);
+  color: var(--bg);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1;
+  white-space: nowrap;
+  /* Dark text on white never needs the contrast shadow copy may carry. */
+  text-shadow: none;
+  transition: background-color 0.25s ease;
+}
+@media (hover: hover) {
+  .btn:hover {
+    background: #e2e1dc;
+  }
+}
+.btn-sm {
+  height: 44px;
+  padding-inline: 20px;
+  font-size: 0.9375rem;
+}
+
+/* Nav links: pointing at one (or tabbing to it) softly dims the others to
+   half, so the one you are on stands out. */
+.nav-links a,
+.footer-links a {
+  transition: opacity 0.25s ease;
+}
+@media (hover: hover) {
+  .nav-links:has(a:hover) a:not(:hover),
+  .footer-links:has(a:hover) a:not(:hover) {
+    opacity: 0.5;
+  }
+}
+.nav-links:has(a:focus-visible) a:not(:focus-visible),
+.footer-links:has(a:focus-visible) a:not(:focus-visible) {
+  opacity: 0.5;
+}
+
+/* The footer's links work the same way, with no underline at rest or on
+   hover. They keep the text link's box, so nothing in the layout moves. */
+.footer-links .link::after {
+  content: none;
+}
+
+/* Secondary: underlined text link. On hover the underline shrinks away to
+   the right and redraws from the left. */
+.link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  line-height: 1.2;
+  padding-bottom: 3px;
+}
+.link::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: currentColor;
+  transform-origin: left;
+}
+@media (hover: hover) {
+  .link:hover::after {
+    animation: link-redraw 0.4s var(--ease-roll);
+  }
+}
+@keyframes link-redraw {
+  0% {
+    transform: scaleX(1);
+    transform-origin: right;
+  }
+  50% {
+    transform: scaleX(0);
+    transform-origin: right;
+  }
+  50.01% {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  100% {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+}
+
+.arrow {
+  display: inline-block;
+}
+
+/* The "Concept" / "Client" tag. */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  height: 24px;
+  padding-inline: 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  font-size: 0.6875rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1;
+  color: var(--fg);
+  white-space: nowrap;
+}
+
+/* The rolling word in the hero line: a clipped slot exactly one line tall
+   (the line height leaves room for descenders), aligned to the line's top so
+   its baseline matches the words around it. */
+.word-slot {
+  position: relative;
+  display: inline-block;
+  vertical-align: top;
+  white-space: nowrap;
+  overflow: clip;
+}
+
+/* The hero wordmark fades in on a repeat visit (the loading screen reveals
+   it on a first visit, and it is never hidden at first paint then). */
+html[data-loader="skip"] .wm-word {
+  animation: enter-blur 0.9s var(--ease-soft) both;
+  animation-delay: var(--d, 0s);
+}
+html[data-transition="cover"] .wm-word {
+  animation-play-state: paused;
+}
+
+/* Process steps (components/home/ProcessSteps.tsx). One step is active at a
+   time: fully white, with a soft, heavily blurred pool of prism light behind
+   it. The others rest at 35%, with no glow. Everything crossfades slowly. */
+.step {
+  position: relative;
+  isolation: isolate;
+  opacity: 0.35;
+  transition: opacity 1.2s var(--ease-soft);
+}
+.step[data-active="true"] {
+  opacity: 1;
+}
+.step-glow {
+  position: absolute;
+  inset: -40% -30%;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, var(--glow-a), var(--glow-b) 50%, transparent 100%);
+  filter: blur(48px);
+  opacity: 0;
+  transition: opacity 1.6s var(--ease-soft);
+}
+.step[data-active="true"] .step-glow {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .step {
+    opacity: 1;
+  }
+  .step-glow {
+    display: none;
+  }
+}
+
+/* Pricing cards (components/pricing/PricingCard.tsx). The edge is a 1px
+   ring of prism colour, cut out with a mask; it turns with --angle. The
+   glare is a soft light that sits under the pointer (--mx, --my). */
+.pcard {
+  --mx: 50%;
+  --my: 0%;
+  --angle: 0rad;
+  will-change: transform;
+}
+.pcard-edge,
+.pcard-glare {
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--dur-base) var(--ease-out);
+}
+.pcard-edge {
+  padding: 1px;
+  background: conic-gradient(
+    from var(--angle),
+    #6f9cc4,
+    #7fb3bd,
+    #c4b877,
+    #c9975f,
+    #c2735f,
+    #c08fa4,
+    #9486c2,
+    #6f9cc4
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+}
+/* The popular column's header in the comparison: a soft light that fades
+   out well inside its own cell, so it never meets an edge. */
+.compare-lit::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    closest-side,
+    rgb(148 104 66 / 0.3),
+    rgb(43 102 148 / 0.14) 55%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+/* The most popular package sits in a slightly stronger pool of soft light. */
+.pcard-pool {
+  position: absolute;
+  inset: -6% -10%;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    rgb(148 104 66 / 0.34),
+    rgb(43 102 148 / 0.2) 55%,
+    transparent 100%
+  );
+  filter: blur(44px);
+}
+.pcard-glare {
+  background: radial-gradient(
+    60% 50% at var(--mx) var(--my),
+    rgb(255 255 255 / 0.07),
+    transparent 70%
+  );
+}
+@media (hover: hover) {
+  .pcard:hover .pcard-edge {
+    opacity: 0.85;
+  }
+  .pcard:hover .pcard-glare {
+    opacity: 1;
+  }
+}
+
+/* Package picker options: quiet outlined choices; a chosen one fills white. */
+.picker-option {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55em;
+  min-height: 44px;
+  padding-inline: 18px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  cursor: pointer;
+  transition:
+    background-color 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
+}
+@media (hover: hover) {
+  .picker-option:hover {
+    border-color: var(--fg);
+  }
+}
+.picker-option:has(input:checked) {
+  background: var(--fg);
+  border-color: var(--fg);
+  color: var(--bg);
+}
+.picker-option:has(input:focus-visible) {
+  outline: 2px solid var(--fg);
+  outline-offset: 3px;
+}
+.picker-check {
+  display: none;
+}
+.picker-option:has(input:checked) .picker-check {
+  display: block;
+}
+
+/* Contact form fields. */
+.field::placeholder {
+  color: var(--fg-faint);
+}
+.field:-webkit-autofill,
+.field:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--fg);
+  caret-color: var(--fg);
+  transition: background-color 600000s 0s;
+}
+select.field option {
+  background: var(--bg-raised);
+  color: var(--fg);
+}
+.sending-dots {
+  display: inline-flex;
+  gap: 3px;
+}
+.sending-dots span {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: currentColor;
+  animation: sending 1s var(--ease-in-out) infinite;
+}
+.sending-dots span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.sending-dots span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+@keyframes sending {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* The success state: the prism draws, light enters, the spectrum leaves. */
+.contact-success .sent-prism,
+.contact-success .sent-beam {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: sent-draw 0.6s var(--ease-in-out) forwards;
+}
+.contact-success .sent-beam {
+  animation-delay: 0.4s;
+}
+.contact-success .sent-fan {
+  opacity: 0;
+  transform-origin: 86px 48px;
+  transform: scale(0.2, 0.1);
+  filter: blur(4px);
+  animation: sent-fan 0.8s var(--ease-out) 0.75s forwards;
+}
+.contact-success > :not(svg) {
+  animation: enter-fade 1s var(--ease-out) 0.3s both;
+}
+@keyframes sent-draw {
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes sent-fan {
+  to {
+    opacity: 0.85;
+    transform: scale(1, 1);
+  }
+}
+
+/* The hero's prism (components/prism/HeroPrism.tsx). With a mouse it sits
+   to the right at its full, original size, and the hero leaves empty space
+   below itself for the prism's glow to run into. On touch screens it fills
+   the hero and fades out toward the hero's bottom edge, from 62% of the way
+   down, exactly as the previous site's did. Both follow the same pointer
+   test as the script (MOUSE_QUERY). */
+@media (hover: hover) and (pointer: fine) {
+  .hero-gap {
+    margin-bottom: calc(29svh + 40px);
+  }
+}
+@media (hover: none), (pointer: coarse), (pointer: none) {
+  .hero-prism {
+    -webkit-mask: linear-gradient(to bottom, black 62%, transparent 100%) 0 0 / 100% 100% no-repeat;
+    mask: linear-gradient(to bottom, black 62%, transparent 100%) 0 0 / 100% 100% no-repeat;
+  }
+}
+
+/* A pre-rendered frame of the hero prism on a transparent square, shown
+   until (or instead of) the live shader, in exactly the canvas's box. */
+.hero-poster {
+  background: url("/hero-poster-mobile.webp") center / 100% 100% no-repeat;
+}
+@media (width >= 768px) {
+  .hero-poster {
+    background-image: url("/hero-poster-desktop.webp");
+  }
+}
+
+/* ==========================================================================
+   Loading screen (first visit per session). See components/layout/Loader.tsx.
+   Strictly black and white. Its states: html[data-loader] is "play" while it
+   runs, "done" once the cover starts to lift, "skip" on later visits;
+   #loader[data-stage] is "in" while it counts, "full" while it holds at
+   100, then "out" (or "skip" when clicked away).
+   ========================================================================== */
+
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 85;
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--bg);
+  color: var(--fg);
+}
+html:is([data-loader="play"], [data-loader="done"]) .loader {
+  display: flex;
+}
+.loader-inner {
+  width: 100%;
+  /* Its own layer, so the text is smoothed in greys only (no coloured
+     sub-pixel fringes), keeping the whole screen strictly black and white. */
+  will-change: transform;
+}
+.loader-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+}
+.loader-mark {
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 1.9rem + 3.2vw, 4.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.035em;
+  white-space: nowrap;
+}
+.loader-count {
+  font-size: clamp(1rem, 0.8rem + 0.7vw, 1.375rem);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  padding-bottom: 0.1em;
+}
+.loader-line {
+  position: relative;
+  height: 1px;
+  margin-top: clamp(18px, 2.2vw, 30px);
+}
+.loader-fill {
+  position: absolute;
+  inset: 0;
+  background: var(--fg);
+  transform-origin: left;
+  transform: scaleX(var(--p, 0));
+}
+/* A small, soft white highlight riding the tip of the line. */
+.loader-tip {
+  position: absolute;
+  top: 50%;
+  left: calc(var(--p, 0) * 100%);
+  width: 34px;
+  height: 7px;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(255 255 255 / 0.95), rgb(255 255 255 / 0));
+  filter: blur(2px);
+  transform: translate(-65%, -50%);
+  opacity: min(1, calc(var(--p, 0) * 30));
+  transition: opacity 0.4s var(--ease-soft);
+}
+/* At 100 it settles into the line. */
+.loader:is([data-stage="full"], [data-stage="out"]) .loader-tip {
+  opacity: 0;
+}
+
+/* The wordmark sharpens in, letter by letter; no movement. */
+.loader-letter {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(8px);
+}
+.loader[data-stage] .loader-letter {
+  animation: loader-letter 0.8s var(--ease-soft) both;
+  animation-delay: calc(var(--i) * 45ms);
+}
+@keyframes loader-letter {
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+
+/* The exit, 0.8s in all: the count and line fade, the wordmark blurs away,
+   and the cover lifts to the finished hero. */
+.loader[data-stage="out"] :is(.loader-count, .loader-fill) {
+  opacity: 0;
+  transition: opacity 0.3s var(--ease-soft);
+}
+.loader[data-stage="out"] .loader-mark {
+  opacity: 0;
+  filter: blur(6px);
+  transition:
+    opacity 0.4s var(--ease-soft) 0.1s,
+    filter 0.4s var(--ease-soft) 0.1s;
+}
+.loader[data-stage="out"] {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.5s var(--ease-soft) 0.3s,
+    visibility 0s linear 0.8s;
+}
+.loader[data-stage="skip"] {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.35s var(--ease-soft),
+    visibility 0s linear 0.35s;
+}
+/* The safety net in <head>: if the sequence ever stalls, the cover goes. */
+html[data-loader-bail] .loader {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.6s var(--ease-soft),
+    visibility 0s linear 0.6s;
+}
+
+/* Reduced motion: the wordmark and a still line, then a plain fade. */
+html[data-loader-still] .loader-letter {
+  opacity: 1;
+  filter: none;
+  animation: none;
+}
+html[data-loader-still] .loader-fill {
+  transform: none;
+}
+html[data-loader-still] :is(.loader-count, .loader-tip) {
+  display: none;
+}
+html[data-loader-still] .loader[data-stage="out"] :is(.loader-mark, .loader-fill) {
+  opacity: 1;
+  filter: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .loader[data-stage="out"] {
+    transition-duration: 0.8s !important;
+    transition-delay: 0s !important;
+  }
+}
+
+/* ==========================================================================
+   Entrance animations that must not wait for JavaScript (page titles and
+   the hero). They play on first paint, and hold on their first frame while
+   the loading screen plays or a page is fading out.
+   ========================================================================== */
+
+html:is([data-loader="play"], [data-transition="cover"]) :is(.enter-blur, .enter-fade) {
+  animation-play-state: paused;
+}
+
+/* Every page title and section heading reveals the same way: from clear
+   nothing and a slight blur to sharp, with no movement. Lines are staggered
+   with --d (0.08s apart). JS-split headings (RevealText) use the same
+   values in GSAP. */
+.enter-blur {
+  animation: enter-blur 0.9s var(--ease-soft) both;
+  animation-delay: var(--d, 0s);
+}
+.enter-fade {
+  animation: enter-fade 1s var(--ease-out) both;
+  animation-delay: var(--d, 0s);
+}
+@keyframes enter-blur {
+  from {
+    opacity: 0;
+    filter: blur(7px);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+  }
+}
+@keyframes enter-fade {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+}
+
+/* ==========================================================================
+   Reduced motion: everything settles immediately.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
