@@ -5,9 +5,8 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 import { SHOW_TEAM, team } from "@/data/team";
 
 /**
- * PLACEHOLDER: the people behind the studio. Renders nothing until
- * data/team.ts has entries and SHOW_TEAM is true, so no names, photos or
- * bios are ever invented.
+ * The team section on /about. It is off, and renders nothing, until
+ * SHOW_TEAM is set to true and people are added in data/team.ts.
  */
 export function TeamSection({ index }: { index?: number }) {
   if (!SHOW_TEAM || team.length === 0) return null;

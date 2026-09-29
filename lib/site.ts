@@ -19,7 +19,7 @@ export const SITE_KEYWORDS = [
 
 export const CONTACT_EMAIL = "hello@nuit.works";
 export const INSTAGRAM_HANDLE = "@nuit.works";
-export const INSTAGRAM_URL = "https://instagram.com/nuit.works";
+export const INSTAGRAM_URL = "https://www.instagram.com/nuit.works/";
 
 export const NAV_LINKS = [
   { label: "work", href: "/work" },
