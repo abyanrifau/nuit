@@ -11,7 +11,7 @@ export function CaseRecordings({ work: w }: { work: Work }) {
       <Reveal className="col-span-12 md:col-span-9" y={40}>
         <BrowserFrame host={hostOf(w.url)}>
           <div className="aspect-[16/10]">
-            <WorkVideo {...m.desktop} label={`${w.name} on a desktop, scrolling from top to bottom`} />
+            <WorkVideo {...m.desktop} sizes="(min-width: 768px) 72vw, 92vw" label={`${w.name} on a desktop, scrolling from top to bottom`} />
           </div>
         </BrowserFrame>
       </Reveal>
@@ -22,7 +22,7 @@ export function CaseRecordings({ work: w }: { work: Work }) {
       >
         <PhoneFrame>
           <div className="aspect-[600/1298]">
-            <WorkVideo {...m.mobile} label={`${w.name} on a phone, scrolling from top to bottom`} />
+            <WorkVideo {...m.mobile} sizes="(min-width: 768px) 22vw, 62vw" label={`${w.name} on a phone, scrolling from top to bottom`} />
           </div>
         </PhoneFrame>
       </Reveal>

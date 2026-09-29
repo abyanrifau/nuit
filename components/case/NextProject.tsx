@@ -34,7 +34,7 @@ export function NextProject({ current, next }: { current: Work; next: Work }) {
           <div className="col-span-12 md:col-span-5">
             <BrowserFrame host={hostOf(next.url)}>
               <div className="aspect-[16/10] transition-transform duration-700 ease-(--ease-out) group-hover:scale-[1.035]">
-                <WorkVideo {...m.desktop} decorative label={next.name} />
+                <WorkVideo {...m.desktop} sizes="(min-width: 768px) 40vw, 92vw" decorative label={next.name} />
               </div>
             </BrowserFrame>
           </div>

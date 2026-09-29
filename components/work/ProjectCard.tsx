@@ -49,12 +49,12 @@ export function ProjectCard({
 
       <div className="overflow-hidden rounded-[22px] border border-line bg-raised md:hidden">
         <div className="aspect-[600/1298] transition-transform duration-700 ease-(--ease-out) group-hover:scale-[1.03]">
-          <WorkVideo {...m.mobile} decorative label={`${w.name} on a phone`} />
+          <WorkVideo {...m.mobile} sizes="68vw" decorative label={`${w.name} on a phone`} />
         </div>
       </div>
       <BrowserFrame host={hostOf(w.url)} className="max-md:hidden">
         <div className="aspect-[16/10] transition-transform duration-700 ease-(--ease-out) group-hover:scale-[1.035]">
-          <WorkVideo {...m.desktop} decorative label={`${w.name} on a desktop`} />
+          <WorkVideo {...m.desktop} sizes="(min-width: 1024px) 64vw, 72vw" decorative label={`${w.name} on a desktop`} />
         </div>
       </BrowserFrame>
 

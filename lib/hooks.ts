@@ -58,3 +58,21 @@ export function isLowPowerDevice() {
     (n.hardwareConcurrency !== undefined && n.hardwareConcurrency <= 2)
   );
 }
+
+const loaderLifted = () => document.documentElement.dataset.loader !== "play";
+const onLoaderChange = (cb: () => void) => {
+  const mo = new MutationObserver(cb);
+  mo.observe(document.documentElement, { attributes: true, attributeFilter: ["data-loader"] });
+  return () => mo.disconnect();
+};
+
+/**
+ * True once the page has finished loading and gone idle, and the loading
+ * screen (if it played) has lifted: the moment heavy, non-essential media
+ * such as videos may start downloading without slowing the first view.
+ */
+export function usePageSettled() {
+  const idle = useAfterIdle();
+  const lifted = useSyncExternalStore(onLoaderChange, loaderLifted, () => false);
+  return idle && lifted;
+}

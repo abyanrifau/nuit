@@ -1,12 +1,20 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { usePageSettled } from "@/lib/hooks";
 import { cn } from "@/lib/utils";
 
 /**
- * A muted, looping scroll recording. Nothing downloads until it is near the
- * screen; it plays only while at least a third of it is visible, and pauses
- * the moment it leaves. With reduced motion it stays on its poster.
+ * A muted, looping scroll recording.
+ *
+ * Its first frame is shown straight away as a properly sized image (so a
+ * phone never downloads the full-size frame), exactly where the video will
+ * play. The video itself downloads only once it is near the screen AND the
+ * page has finished loading (after the loading screen, when idle), so no
+ * video data competes with the first view. It plays only while at least a
+ * third of it is visible, and pauses the moment it leaves. With reduced
+ * motion it stays on its first frame.
  */
 export function WorkVideo({
   webm,
@@ -15,6 +23,7 @@ export function WorkVideo({
   width,
   height,
   label,
+  sizes = "100vw",
   decorative = false,
   className,
 }: {
@@ -24,6 +33,8 @@ export function WorkVideo({
   width: number;
   height: number;
   label: string;
+  /** How wide it shows, for choosing the poster size (as in next/image). */
+  sizes?: string;
   /** Inside a link that already names the project: hide it from screen readers. */
   decorative?: boolean;
   className?: string;
@@ -32,6 +43,8 @@ export function WorkVideo({
   const inView = useRef(false);
   const [near, setNear] = useState(false);
   const [reduced, setReduced] = useState(false);
+  const settled = usePageSettled();
+  const load = near && settled && !reduced;
 
   useEffect(() => {
     const video = ref.current;
@@ -69,31 +82,37 @@ export function WorkVideo({
 
   // Sources arrive after the first play attempt; start once they are in.
   useEffect(() => {
-    if (near && !reduced && inView.current) ref.current?.play().catch(() => {});
-  }, [near, reduced]);
+    if (load && inView.current) ref.current?.play().catch(() => {});
+  }, [load]);
 
   return (
-    <video
-      ref={ref}
-      className={cn("block h-full w-full object-cover object-top", className)}
-      width={width}
-      height={height}
-      // Browsers fetch posters eagerly, so it is only attached once the
-      // video is close; until then the frame shows its background.
-      poster={near ? poster : undefined}
-      muted
-      loop
-      playsInline
-      preload={near && !reduced ? "auto" : "none"}
-      aria-label={decorative ? undefined : label}
-      aria-hidden={decorative || undefined}
-    >
-      {near && !reduced && (
-        <>
-          <source src={webm} type="video/webm" />
-          <source src={mp4} type="video/mp4" />
-        </>
-      )}
-    </video>
+    <div className="relative h-full w-full">
+      <Image
+        src={poster}
+        alt=""
+        fill
+        sizes={sizes}
+        className={cn("object-cover object-top", className)}
+      />
+      <video
+        ref={ref}
+        className={cn("relative block h-full w-full object-cover object-top", className)}
+        width={width}
+        height={height}
+        muted
+        loop
+        playsInline
+        preload={load ? "auto" : "none"}
+        aria-label={decorative ? undefined : label}
+        aria-hidden={decorative || undefined}
+      >
+        {load && (
+          <>
+            <source src={webm} type="video/webm" />
+            <source src={mp4} type="video/mp4" />
+          </>
+        )}
+      </video>
+    </div>
   );
 }
