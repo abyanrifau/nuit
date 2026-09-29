@@ -398,3 +398,35 @@ Average performance: mobile 85.8 → 87.3, desktop 97.8 → 99.3.
   0.23s. On Vercel, images are optimized by Vercel's own image service and
   cached at the edge, so this does not apply there. If it ever shows up
   locally, restart the server.
+
+## Follow-up: background film grain
+
+- Reference: the old site ("Nuit Works 2") drew its grain live as an SVG
+  fractal-noise background (base frequency 0.85, 3 octaves, 220px tile) at
+  12% opacity, normal blend, over everything including text. Measured on
+  its hero, that grain was about 2.9 grey levels on near-black and 2.1 over
+  the lit prism light, and lifted the blacks by about 11 levels (greyer).
+- New: the same noise rendered once into a static 128px tile
+  (`scripts/grain.mjs`): monochrome, centred on 50% grey. `public/grain.png`
+  is 8KB and `grain@2x.png` is 31KB, chosen with `image-set`. One fixed
+  layer (`body::after`) at 40% with `mix-blend-mode: soft-light`, and 30%
+  under 768px wide. It replaces the previous SVG grain, so there is only
+  one.
+- Measured at 40%: 2.8 levels on near-black (the old site: 2.9); over the
+  prism light 7.2 (clearly visible, even, not dirty at 3x zoom); blacks
+  lifted by 0.8 levels (the old site: 11). At 30% on phones: 5.5 over the
+  light, the closest match to the old mobile hero at 3x density.
+- Layering: background light at z -20, both prisms at -10, grain at -5,
+  content above. That needed the page wrapper to stop being a stacking
+  context (it was `z-[1]`) and the hero to drop `isolate`. With the grain
+  hidden, every checked view (home hero, middle, footer, pricing, a case
+  study, about; 1440 and 390) is pixel-identical to `main`. The loader and
+  the mobile menu cover the page, so they carry the same layer themselves
+  (`.grain-cover`), aligned to the same tile.
+- Text stays crisp: near-white glyph pixels change by 0.017 levels on
+  average with the grain on (the maximum is 4, at anti-aliased edges).
+- No console errors. Loader still plays in full (9 of 9 quick runs).
+- Lighthouse, homepage, alternating runs against `main`, 5 rounds each:
+  mobile 87 → 92 (TBT 278 → 145ms, LCP 3.33 → 3.20s), desktop 100 → 100.
+  CLS 0 on both. The gain is likely because the old grain was a live SVG
+  turbulence filter the browser had to render, and it is now a small image.
