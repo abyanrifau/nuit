@@ -199,10 +199,13 @@ swipes over them scroll the page.
 - Bundle analysis uses Next's built-in Turbopack analyzer (`npm run
   analyze`, which runs `next experimental-analyze`). `@next/bundle-analyzer`
   only works with webpack builds, and this project builds with Turbopack.
-- This machine is noisy (other heavy apps were running), so the same build
-  could score 3 to 5 points apart across an hour. Every keep/revert decision
-  below was made from back-to-back runs (median of 5) against a `main` build
-  measured in the same session, never against the morning's baseline.
+- This machine is noisy (a game, Discord and other apps were running), so
+  the same build could score 3 to 5 points apart across an hour. Early
+  keep/revert calls used back-to-back runs (main, then the branch). That
+  turned out not to be good enough (see "Interleaved re-check" below), so
+  the final decisions and the final table come from **interleaved** runs:
+  main and the branch served side by side (ports 3200 and 3100) and
+  measured alternately, page by page, so both see the same noise.
 - Iteration summaries are committed in `reports/iterations/<name>/summary.json`
   (raw reports stay on disk, ignored by git).
 
@@ -234,9 +237,6 @@ Performance
   instead of being in the startup bundle.
 - Lenis is fetched only on mouse devices (it was already disabled on touch;
   now phones never download it either).
-- Reveal blocks still hide at hydration exactly as before, but create their
-  ScrollTrigger only when within one screen of view, which removes most of
-  the layout reads from hydration.
 - Links prefetch on intent (hover, touch start, keyboard focus) instead of on
   sight; the 250ms page fade covers any late prefetch.
 - Favicons and manifest icons recompressed losslessly (identical pixels,
@@ -245,8 +245,13 @@ Performance
   out of `public/` into `scripts/output/`.
 - Unused icons and an unused easing constant removed.
 - One-year immutable cache for captured concept media and the hero stills.
-- Measured back to back against main (mobile, median of 5): home TBT 233 to
-  76ms, verum TBT 201 to 102ms; performance home 87 to 90, verum 85 to 89.
+- Security headers that only matter for pages (CSP, Permissions-Policy,
+  X-Frame-Options, COOP, Referrer-Policy) are sent with documents only, not
+  with every script, font and image; HSTS and nosniff stay on everything.
+  Locally each response carried about 0.8KB of these, which Lighthouse's
+  simulation charged to LCP (see below). On Vercel, HTTP/2 header
+  compression makes repeated headers nearly free, but there is no reason
+  to send them with scripts anyway.
 
 Best practices
 - Security headers on every response: HSTS, nosniff, Referrer-Policy,
@@ -283,6 +288,13 @@ SEO and GEO
 
 ## Part 3: tried and reverted
 
+- Creating each Reveal block's scroll trigger only when it nears the screen
+  (instead of at hydration). Sequential runs suggested it helped; the
+  interleaved A/B showed it did not (about: 2 points behind main with it,
+  level with main without it). Reverted to the original behaviour.
+- Bundling SplitText again instead of loading it on first use: no difference
+  in the interleaved A/B (about and pricing both unchanged), so the lazy
+  load stays (it keeps SplitText out of the startup bundle).
 - Reverting the video change for an A/B check (ab-novideo) showed no score
   difference on its own under the noisy conditions; kept anyway because it
   removes ~2MB of downloads during page load on case studies.
@@ -292,6 +304,29 @@ SEO and GEO
 - Stand-in hero, removing the grain, removing the blur or the loader from
   first paint (experiments only, never committed): no change to first paint
   or the simulated LCP, so none of these features were touched.
+
+## Part 3: interleaved re-check
+
+The full after-run (sequential) came out 1 to 2 points below the morning
+baseline on the simpler pages, so I checked it properly:
+
+1. A second full run of `main`, straight after the branch: case studies
+   were clearly better on the branch; about, services, pricing and contact
+   were 1 to 2 points behind; home level. Still sequential, so noisy.
+2. Interleaved A/B (main on 3200, branch on 3100, alternating): home level;
+   about and pricing 3 to 4 points behind, with lab LCP 90 to 190ms higher.
+3. The Lighthouse traces showed the same main-thread work on both
+   (about 900ms in total), and the *observed* LCP is at first paint
+   (~140ms) on both. The simulated LCP (3.2s+) is built from every request
+   and task before that paint. The branch's responses were about 0.8KB
+   bigger each (security headers), and a manifest request now happens
+   before first paint. Scoping the page-only headers to documents brought
+   the lab LCP back level with main (about 3.13 vs 3.16s, pricing 3.38 vs
+   3.31s, verum 3.55 vs 3.87s).
+4. The remaining TBT gap on about came from the Reveal deferral (above);
+   with it reverted, about measured 90 vs main's 89 and home 87 vs 87.
+5. The final table in the report is a fresh interleaved run of every page
+   (3 rounds each, mobile and desktop).
 
 ## Decisions made without asking (continued)
 
@@ -307,3 +342,59 @@ SEO and GEO
    is short, which both reaches 140 characters and keeps concepts labelled.
 8. Iteration reports grouped under `reports/iterations/` with only their
    summaries committed.
+
+## Final results (interleaved, main vs branch)
+
+Lighthouse 13.5, both builds served side by side and measured alternately, 3 rounds per page and preset, median run. Also in `reports/after/scores.md`; summaries in `reports/after/summary.json` (branch) and `reports/before/summary-interleaved.json` (main).
+
+| Page | Mobile P / A / BP / SEO, before | Mobile, after | Desktop P / A / BP / SEO, before | Desktop, after |
+|---|---|---|---|---|
+| / | 88 / 96 / 96 / 100 | **89 / 96 / 100 / 100** | 100 / 96 / 96 / 100 | **100 / 96 / 100 / 100** |
+| /work | 86 / 100 / 96 / 100 | **89 / 100 / 100 / 100** | 100 / 100 / 96 / 100 | **99 / 100 / 100 / 100** |
+| /work/driftwood | 82 / 100 / 96 / 100 | **85 / 100 / 100 / 100** | 96 / 100 / 96 / 100 | **99 / 100 / 100 / 100** |
+| /work/scentu | 83 / 100 / 96 / 100 | **82 / 100 / 100 / 100** | 97 / 100 / 96 / 100 | **99 / 100 / 100 / 100** |
+| /work/verum | 81 / 100 / 96 / 100 | **88 / 100 / 100 / 100** | 96 / 100 / 96 / 100 | **100 / 100 / 100 / 100** |
+| /work/nocturne | 86 / 100 / 96 / 100 | **86 / 100 / 100 / 100** | 96 / 100 / 96 / 100 | **99 / 100 / 100 / 100** |
+| /work/fuku-coffee | 81 / 100 / 96 / 100 | **84 / 100 / 100 / 100** | 95 / 100 / 96 / 100 | **100 / 100 / 100 / 100** |
+| /work/homestead | 82 / 100 / 96 / 100 | **86 / 100 / 100 / 100** | 96 / 100 / 96 / 100 | **98 / 100 / 100 / 100** |
+| /services | 88 / 96 / 96 / 100 | **89 / 96 / 100 / 100** | 100 / 96 / 96 / 100 | **99 / 96 / 100 / 100** |
+| /pricing | 89 / 100 / 96 / 100 | **88 / 100 / 100 / 100** | 99 / 100 / 96 / 100 | **98 / 100 / 100 / 100** |
+| /about | 92 / 96 / 96 / 100 | **91 / 96 / 100 / 100** | 100 / 96 / 96 / 100 | **100 / 96 / 100 / 100** |
+| /contact | 91 / 100 / 96 / 100 | **90 / 100 / 100 / 100** | 99 / 100 / 96 / 100 | **100 / 100 / 100 / 100** |
+
+Core Web Vitals and supporting metrics (lab, median run). LCP / TBT / CLS; mobile also FCP and Speed Index.
+
+| Page | Mobile FCP | Mobile LCP | Mobile TBT | Mobile CLS | Mobile SI | Desktop LCP | Desktop TBT | Desktop CLS |
+|---|---|---|---|---|---|---|---|---|
+| / | 0.99s | 3.18s → 3.22s | 271ms → 246ms | 0.000 | 1.49s → 1.47s | 0.71s → 0.74s | 60ms → 44ms | 0.000 |
+| /work | 0.98s → 0.97s | 3.84s → 3.65s | 165ms → 93ms | 0.000 | 1.43s | 0.73s → 0.78s | 52ms → 68ms | 0.000 |
+| /work/driftwood | 0.98s → 1.00s | 3.92s → 3.68s | 295ms → 244ms | 0.000 | 1.53s → 1.49s | 0.92s → 0.75s | 153ms → 89ms | 0.000 |
+| /work/scentu | 0.99s → 0.98s | 3.81s → 3.48s | 273ms → 367ms | 0.000 | 1.52s → 1.35s | 0.90s → 0.77s | 136ms → 71ms | 0.000 |
+| /work/verum | 0.98s | 3.91s → 3.61s | 312ms → 172ms | 0.000 | 1.53s → 1.46s | 0.91s → 0.75s | 149ms → 36ms | 0.000 |
+| /work/nocturne | 0.98s → 0.99s | 3.76s → 3.52s | 208ms → 251ms | 0.000 | 1.46s → 1.44s | 0.90s → 0.74s | 143ms → 65ms | 0.000 |
+| /work/fuku-coffee | 0.99s → 1.00s | 3.94s → 3.72s | 296ms → 265ms | 0.000 | 1.55s → 1.58s | 0.90s → 0.77s | 161ms → 53ms | 0.000 |
+| /work/homestead | 0.98s → 0.99s | 3.90s → 3.52s | 293ms → 239ms | 0.000 | 1.54s → 1.41s | 0.90s → 0.77s | 146ms → 118ms | 0.000 |
+| /services | 0.98s → 0.99s | 3.17s → 3.21s | 261ms → 231ms | 0.000 | 1.31s → 1.37s | 0.65s → 0.70s | 33ms → 76ms | 0.000 |
+| /pricing | 1.00s → 0.99s | 3.34s → 3.38s | 189ms → 203ms | 0.000 | 1.44s → 1.36s | 0.71s → 0.74s | 71ms → 123ms | 0.000 |
+| /about | 0.97s → 0.98s | 3.17s → 3.16s | 133ms → 167ms | 0.000 | 1.35s → 1.29s | 0.69s → 0.73s | 40ms → 57ms | 0.000 |
+| /contact | 0.95s → 0.94s | 3.16s → 3.22s | 191ms | 0.000 | 1.15s → 1.09s | 0.69s | 66ms → 25ms | 0.000 |
+
+Average performance: mobile 85.8 → 87.3, desktop 97.8 → 99.3.
+
+## Final checks
+
+- Loader: 90 of 90 loads full sequence on the final build (see report section 1).
+- Mobile: every page clean at 360, 390, 430 and 768 wide; gallery and page strip swipe; pinch-out cannot widen the page.
+- Console: no errors or warnings on any page at 1440 and 390 (the 404 page logs its own 404 status, which is expected).
+- Visual: 410 screenshots at 1920x1080, 1440x900, 768x1024 and 390x844 compared with before; differences only from video frames, the animated light, the longer pricing FAQ and the 404 links.
+- Click-through: navigation and page fades, nav dot, hash links (/pricing#hosting), compare table, FAQ, package picker to a result, case-study videos playing in view, contact form fallback without a Resend key; no console errors.
+- `next build`: no errors or warnings. `tsc --noEmit` and `eslint`: clean. `npm audit`: 0 vulnerabilities.
+- Loader re-run on the final build (after the header and Reveal changes):
+  90 of 90 again. Mobile overflow re-run: all 28 page and size checks clean.
+- Observation: after several hours and a few hundred Lighthouse runs, the
+  local `next start` server's image optimizer stopped answering for one
+  image size (AVIF at 828px wide). Everything else kept working. A restart
+  fixed it: a cold 828px AVIF then took 0.26s, and sharp encodes one in
+  0.23s. On Vercel, images are optimized by Vercel's own image service and
+  cached at the edge, so this does not apply there. If it ever shows up
+  locally, restart the server.

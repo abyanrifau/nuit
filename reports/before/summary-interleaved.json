@@ -1,0 +1,482 @@
+{
+ "home-mobile": {
+  "median": {
+   "scores": {
+    "performance": 88,
+    "accessibility": 96,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 986.937,
+   "lcp": 3178.8740000000007,
+   "tbt": 271.4999999999999,
+   "cls": 0.00029359353124516627,
+   "si": 1494.2637219991898
+  },
+  "all": [
+   89,
+   87,
+   88
+  ]
+ },
+ "work-mobile": {
+  "median": {
+   "scores": {
+    "performance": 86,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 975.86545,
+   "lcp": 3842.1927000000005,
+   "tbt": 164.5,
+   "cls": 0.0001260017808098793,
+   "si": 1425.9150465649834
+  },
+  "all": [
+   85,
+   86,
+   89
+  ]
+ },
+ "work-driftwood-mobile": {
+  "median": {
+   "scores": {
+    "performance": 82,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 981.88275,
+   "lcp": 3918.206875,
+   "tbt": 294.5,
+   "cls": 0.0002148996416886621,
+   "si": 1525.974565947619
+  },
+  "all": [
+   82,
+   81,
+   87
+  ]
+ },
+ "work-scentu-mobile": {
+  "median": {
+   "scores": {
+    "performance": 83,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 986.4564,
+   "lcp": 3814.641,
+   "tbt": 273,
+   "cls": 0.00019590823138579728,
+   "si": 1520.517110493382
+  },
+  "all": [
+   83,
+   77,
+   87
+  ]
+ },
+ "work-verum-mobile": {
+  "median": {
+   "scores": {
+    "performance": 81,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 982.36375,
+   "lcp": 3914.409375,
+   "tbt": 312,
+   "cls": 0.00020221361723484187,
+   "si": 1531.9698389701894
+  },
+  "all": [
+   81,
+   84,
+   81
+  ]
+ },
+ "work-nocturne-mobile": {
+  "median": {
+   "scores": {
+    "performance": 86,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 980.42025,
+   "lcp": 3758.2607499999995,
+   "tbt": 207.99999999999966,
+   "cls": 0.00020025127844756633,
+   "si": 1464.886035986401
+  },
+  "all": [
+   83,
+   87,
+   86
+  ]
+ },
+ "work-fuku-coffee-mobile": {
+  "median": {
+   "scores": {
+    "performance": 81,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 991.1024,
+   "lcp": 3936.2559999999994,
+   "tbt": 295.5000000000002,
+   "cls": 0.00009497765643553613,
+   "si": 1550.6409667537991
+  },
+  "all": [
+   81,
+   80,
+   87
+  ]
+ },
+ "work-homestead-mobile": {
+  "median": {
+   "scores": {
+    "performance": 82,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 984.60425,
+   "lcp": 3897.5106250000003,
+   "tbt": 292.99999999999943,
+   "cls": 0.00021973059984673948,
+   "si": 1539.6370411882374
+  },
+  "all": [
+   82,
+   78,
+   87
+  ]
+ },
+ "services-mobile": {
+  "median": {
+   "scores": {
+    "performance": 88,
+    "accessibility": 96,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 977.523,
+   "lcp": 3171.8075000000003,
+   "tbt": 261,
+   "cls": 0.00011594573938391099,
+   "si": 1314.6644717643712
+  },
+  "all": [
+   88,
+   87,
+   89
+  ]
+ },
+ "pricing-mobile": {
+  "median": {
+   "scores": {
+    "performance": 89,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 995.5221,
+   "lcp": 3336.3052500000003,
+   "tbt": 188.5000000000001,
+   "cls": 0.00025424311498562305,
+   "si": 1443.5514536144024
+  },
+  "all": [
+   89,
+   88,
+   91
+  ]
+ },
+ "about-mobile": {
+  "median": {
+   "scores": {
+    "performance": 92,
+    "accessibility": 96,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 969.56265,
+   "lcp": 3168.9066249999996,
+   "tbt": 133,
+   "cls": 0.00012322683544230495,
+   "si": 1353.9468037568677
+  },
+  "all": [
+   92,
+   88,
+   94
+  ]
+ },
+ "contact-mobile": {
+  "median": {
+   "scores": {
+    "performance": 91,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 948.3427,
+   "lcp": 3160.0281000000004,
+   "tbt": 190.50000000000034,
+   "cls": 0.00013579992477089515,
+   "si": 1149.7749787357907
+  },
+  "all": [
+   91,
+   89,
+   92
+  ]
+ },
+ "home-desktop": {
+  "median": {
+   "scores": {
+    "performance": 100,
+    "accessibility": 96,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 270.89644999999996,
+   "lcp": 711.7929,
+   "tbt": 59.999999999999886,
+   "cls": 0.00021775732021422518,
+   "si": 532.5547619518998
+  },
+  "all": [
+   100,
+   100,
+   99
+  ]
+ },
+ "work-desktop": {
+  "median": {
+   "scores": {
+    "performance": 100,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 258.93635,
+   "lcp": 732.8090500000001,
+   "tbt": 51.999999999999886,
+   "cls": 0.00024962600874120754,
+   "si": 334.63269494950595
+  },
+  "all": [
+   100,
+   99,
+   100
+  ]
+ },
+ "work-driftwood-desktop": {
+  "median": {
+   "scores": {
+    "performance": 96,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 263.88945,
+   "lcp": 920.2261500000001,
+   "tbt": 153,
+   "cls": 0.0002829199956950646,
+   "si": 390.8273396767645
+  },
+  "all": [
+   96,
+   97,
+   95
+  ]
+ },
+ "work-scentu-desktop": {
+  "median": {
+   "scores": {
+    "performance": 97,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 264.4225,
+   "lcp": 900.5912500000002,
+   "tbt": 135.5,
+   "cls": 0.000262350294048974,
+   "si": 407.2746598094584
+  },
+  "all": [
+   97,
+   95,
+   97
+  ]
+ },
+ "work-verum-desktop": {
+  "median": {
+   "scores": {
+    "performance": 96,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 263.99850000000004,
+   "lcp": 912.9902500000003,
+   "tbt": 148.50000000000006,
+   "cls": 0.00024354541073697732,
+   "si": 401.9510551228535
+  },
+  "all": [
+   98,
+   95,
+   96
+  ]
+ },
+ "work-nocturne-desktop": {
+  "median": {
+   "scores": {
+    "performance": 96,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 266.37350000000004,
+   "lcp": 903.6145000000004,
+   "tbt": 143,
+   "cls": 0.00028161504392493355,
+   "si": 420.4359942700514
+  },
+  "all": [
+   97,
+   96,
+   96
+  ]
+ },
+ "work-fuku-coffee-desktop": {
+  "median": {
+   "scores": {
+    "performance": 95,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 264.6091,
+   "lcp": 898.2637000000001,
+   "tbt": 160.5,
+   "cls": 0.0001624705130169571,
+   "si": 402.52470522900103
+  },
+  "all": [
+   93,
+   96,
+   95
+  ]
+ },
+ "work-homestead-desktop": {
+  "median": {
+   "scores": {
+    "performance": 96,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 266.4068,
+   "lcp": 903.8475999999998,
+   "tbt": 146,
+   "cls": 0.00026427854938271614,
+   "si": 417.33106733154716
+  },
+  "all": [
+   97,
+   95,
+   96
+  ]
+ },
+ "services-desktop": {
+  "median": {
+   "scores": {
+    "performance": 100,
+    "accessibility": 96,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 266.69955,
+   "lcp": 651.3991,
+   "tbt": 33.00000000000006,
+   "cls": 0.00020696824927764657,
+   "si": 395.46438936898227
+  },
+  "all": [
+   100,
+   100,
+   99
+  ]
+ },
+ "pricing-desktop": {
+  "median": {
+   "scores": {
+    "performance": 99,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 268.0798,
+   "lcp": 712.6995,
+   "tbt": 71,
+   "cls": 0.00020999132628491361,
+   "si": 434.5446534807644
+  },
+  "all": [
+   99,
+   100,
+   97
+  ]
+ },
+ "about-desktop": {
+  "median": {
+   "scores": {
+    "performance": 100,
+    "accessibility": 96,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 267.07705,
+   "lcp": 690.1541,
+   "tbt": 40.49999999999994,
+   "cls": 0.00022860137940343818,
+   "si": 409.69768625641973
+  },
+  "all": [
+   100,
+   100,
+   100
+  ]
+ },
+ "contact-desktop": {
+  "median": {
+   "scores": {
+    "performance": 99,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 252.56075,
+   "lcp": 690.6822500000001,
+   "tbt": 65.99999999999994,
+   "cls": 0.0002618925116014358,
+   "si": 318.6101882802308
+  },
+  "all": [
+   100,
+   99,
+   99
+  ]
+ }
+}
