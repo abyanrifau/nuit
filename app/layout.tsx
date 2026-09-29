@@ -57,8 +57,8 @@ export const metadata: Metadata = {
     images: [
       {
         url: "/og.jpg",
-        width: 2400,
-        height: 1260,
+        width: 1200,
+        height: 630,
         alt: "Nuit Works wordmark over a glowing prism, web design studio in the Maldives",
       },
     ],
@@ -115,7 +115,8 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             <Cursor />
           </TransitionProvider>
         </SmoothScroll>
-        <Analytics />
+        {/* Vercel Analytics exists only on Vercel; elsewhere its script would 404. */}
+        {process.env.VERCEL && <Analytics />}
       </body>
     </html>
   );
