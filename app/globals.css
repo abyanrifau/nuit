@@ -118,6 +118,10 @@ html {
      where it lives; this is the safety net. clip (not hidden) keeps sticky
      and pinned sections working. */
   overflow-x: clip;
+  /* Touch: the page itself only pans vertically (pinch zoom stays on).
+     Sideways scrollers such as the work gallery are scroll containers of
+     their own, so they still swipe sideways within themselves. */
+  touch-action: pan-y pinch-zoom;
 }
 html::-webkit-scrollbar,
 body::-webkit-scrollbar {
@@ -855,5 +859,16 @@ html:is([data-loader="play"], [data-transition="cover"]) :is(.enter-blur, .enter
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+}
+
+/* Browsers without overflow: clip (Safari before 16) would ignore every
+   clip above and let the prism and light layers widen the page; they get
+   hidden instead, which contains them the same way. */
+@supports not (overflow: clip) {
+  html,
+  body,
+  .overflow-x-clip {
+    overflow-x: hidden;
   }
 }

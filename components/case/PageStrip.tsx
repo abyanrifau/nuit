@@ -72,7 +72,7 @@ export function PageStrip({ work: w }: { work: Work }) {
         tabIndex={0}
         role="region"
         aria-label={`${w.name} key pages, scrollable`}
-        className="mt-10 flex snap-x snap-mandatory gap-(--gutter) overflow-x-auto px-(--pad-x) pb-4 [scrollbar-width:none] select-none [&::-webkit-scrollbar]:hidden"
+        className="mt-10 flex snap-x snap-mandatory gap-(--gutter) overflow-x-auto overscroll-x-contain px-(--pad-x) pb-4 [scrollbar-width:none] select-none [&::-webkit-scrollbar]:hidden"
         style={{ scrollPaddingInline: "var(--pad-x)" }}
       >
         {w.pages.map((p, i) => (

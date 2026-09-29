@@ -119,3 +119,71 @@ What the baseline shows:
 - **Best Practices (96 everywhere):** only `errors-in-console`: the Vercel
   Analytics script 404s when the site is not running on Vercel.
 - **SEO: 100 everywhere.**
+
+## Part 1: loader (test results)
+
+Test: `loadertest.mjs` (Playwright, production build, fresh browser context
+per load so every load is a first visit). Each load logs the stage and count
+every frame, and tries to end or scroll the loader (clicks, Space and arrow
+keys, mouse wheel on desktop; taps and vertical swipes on touch).
+
+- Against the round 6 build: 0 of 6 loads played in full. The first
+  click/tap ended the loader after about 0.9s, the "seen" flag was already
+  set at 0.1s, and a reload during the loader skipped it completely.
+- First pass of the new loader: two real problems found and fixed. (1) The
+  0.4s hold could shrink to a few ms when the main thread was blocked right
+  after 100 (the timer was scheduled before 100 was painted); the hold now
+  starts two frames after 100 is on screen. (2) During the app's startup
+  work a dropped frame could make the count skip 12 to 19 numbers; the count
+  now advances at most 3 per frame and catches up smoothly.
+- Final: **90 of 90 loads passed** (10 each: 1440 normal, 390 normal, 1440
+  Fast 3G, 390 Fast 3G, 1440 cache disabled, 390 cache disabled, direct to
+  /pricing, direct to /work/driftwood on a phone, and a reload one second
+  into the loader). Every load: stages in order, count monotonic with a
+  largest step of 2 or 3, 100 only after the site was ready, hold >= 0.4s,
+  exit >= 0.8s, cover shown >= 2.5s, page never scrolled, flag set only at
+  the end. Typical timings (from navigation start): phone, normal: 100 at
+  2.0s, exit starts 2.6s, gone 3.4s. Desktop, normal: 100 at 2.3s, gone about
+  4.0s (the hold stretches while the test browser compiles the prism shader
+  in software; real GPUs do this in milliseconds). Fast 3G: 100 at 4.6 to
+  5.7s, gone 5.9 to 7.0s.
+
+## Part 2: mobile sideways movement
+
+Test: `overflow.mjs` on every page at 360x780, 390x844, 430x932 and
+768x1024 with touch emulation: `scrollWidth` vs viewport width at several
+scroll positions, a list of any unclipped element past the right edge,
+sideways drags, a pinch-out, and on the home page a sideways swipe on the
+gallery plus a vertical swipe over it.
+
+- In Chromium's emulation the round 6 build already measured clean at these
+  sizes (the earlier rounds had fixed the pricing card glow and the hero
+  canvas). On desktop, the work gallery's pinned track made the document
+  6,425px wide (a trackpad could scroll the page sideways).
+- The likely cause on real phones is Safari: every wide decorative layer
+  (hero prism canvas and still frame, process glow, pricing card glow) is
+  contained with `overflow-x: clip`, which Safari only supports from 16.0.
+  On older iPhones those declarations are ignored, the ~1,300px prism layer
+  widens the page, and the page can be dragged sideways and zoomed out.
+  Safari also lets a page pan sideways when anything pokes out, and the
+  case-study page strip did not contain its horizontal overscroll.
+
+Changes:
+- Work gallery section clipped horizontally (`overflow-x-clip`); its pinned
+  track sits in a fixed layer while pinned, which clipping does not affect.
+- `overflow-x: clip` on `html` and `body` as the safety net.
+- `@supports not (overflow: clip)` fallback: `html`, `body` and every
+  `overflow-x-clip` element use `overflow-x: hidden` instead.
+- `touch-action: pan-y pinch-zoom` on the page: the browser only ever pans
+  it vertically (pinch zoom stays available). The gallery and the page strip
+  are scroll containers of their own, so their sideways swipes still work.
+- `overscroll-x-contain` on the case-study page strip (the gallery already
+  had it), so reaching its end never drags the page.
+- Viewport meta was already `width=device-width, initial-scale=1` with pinch
+  zoom allowed; unchanged. Lenis was already off on touch devices.
+
+Result: every page at every size: `scrollWidth` equals the viewport width,
+no unclipped element past the edge, sideways drags do not move the page,
+pinch-out cannot zoom out beyond the screen width, and the gallery (and the
+case-study page strip) still swipe sideways within themselves while vertical
+swipes over them scroll the page.
