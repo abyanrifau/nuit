@@ -5,6 +5,8 @@ import { NAV_LINKS } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Page not found",
   robots: { index: false, follow: true },
+  // Not a page to index, so it names no canonical URL of its own.
+  alternates: {},
 };
 
 export default function NotFound() {
