@@ -36,7 +36,7 @@
 
 const WORDMARK = "Nuit Works.";
 
-const MARKUP = `<div id="loader" class="loader"><div class="loader-inner px-site"><div class="loader-row"><p class="loader-mark">${WORDMARK.split(
+const MARKUP = `<div id="loader" class="loader grain-cover"><div class="loader-inner px-site"><div class="loader-row"><p class="loader-mark">${WORDMARK.split(
   "",
 )
   .map((ch, i) => `<span class="loader-letter" style="--i:${i}">${ch === " " ? "&nbsp;" : ch}</span>`)

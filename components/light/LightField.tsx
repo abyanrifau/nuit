@@ -280,7 +280,7 @@ export function LightField() {
   }, [idle]);
 
   return (
-    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0">
+    <div aria-hidden="true" className="pointer-events-none fixed inset-0 -z-20">
       {/* CSS stand-in for the hero mood, shown until the canvas is live. */}
       <div
         className="absolute inset-0"

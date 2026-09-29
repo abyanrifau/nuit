@@ -23,7 +23,7 @@ export function Hero() {
     <section
       data-light="hero"
       aria-labelledby="hero-wordmark"
-      className="relative isolate flex min-h-svh flex-col justify-end overflow-x-clip pb-[clamp(28px,5.5vh,64px)] pt-(--header-h) hero-gap"
+      className="relative flex min-h-svh flex-col justify-end overflow-x-clip pb-[clamp(28px,5.5vh,64px)] pt-(--header-h) hero-gap"
     >
       <HeroPrism />
 

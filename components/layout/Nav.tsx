@@ -262,7 +262,7 @@ function MobileMenu({
       aria-label="Menu"
       aria-hidden={!open}
       inert={!open}
-      className="invisible fixed inset-0 z-40 flex flex-col bg-bg md:hidden"
+      className="grain-cover invisible fixed inset-0 z-40 flex flex-col bg-bg md:hidden"
       style={{ clipPath: "inset(0 0 100% 0)" }}
     >
       <div

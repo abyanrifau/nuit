@@ -717,7 +717,7 @@ export function PrismRefraction({ progress }: { progress: Progress }) {
     <div
       ref={hostRef}
       aria-hidden="true"
-      className="pointer-events-none absolute inset-x-0 z-0"
+      className="pointer-events-none absolute inset-x-0 -z-10"
       style={{
         top: `-${OVER_TOP}`,
         bottom: `-${OVER_BOTTOM}`,

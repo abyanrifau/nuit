@@ -108,7 +108,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
             <ScrollProgress />
             <Nav />
             {/* The page: the part that fades out and in between pages. */}
-            <div data-page className="relative z-[1]">
+            <div data-page className="relative">
               <main id="main">{children}</main>
               <Footer />
             </div>

@@ -198,20 +198,52 @@ html.has-cursor select {
 }
 
 /* ==========================================================================
-   Film grain. One static, tiling noise texture on a fixed layer: no
-   animation, so it costs nothing after first paint. Sits above content and
-   below the cursor.
+   Film grain, matched to the old site's: a static 128px tile of monochrome
+   noise (scripts/grain.mjs, with a 2x tile for sharp screens) repeated on one
+   fixed layer. No animation and no live filter, so after the tile loads it
+   costs one blend on the compositor.
+
+   It sits over the background light and both prisms and under everything
+   else, so text, buttons, cards and images stay crisp. That works because
+   the page wrapper ([data-page]) is not a stacking context: the light is at
+   z -20, the prisms at -10, the grain at -5 and the content above. (While
+   the page fades between routes the wrapper briefly becomes one and lifts
+   above the grain, so the grain itself never fades.)
+
+   Soft light, centred on 50% grey: lighter specks lift, darker specks
+   deepen, and the near-black background does not turn grey. The loader and
+   the mobile menu cover the page, so they carry the same layer themselves
+   (.grain-cover), aligned to the same tile.
    ========================================================================== */
 
-body::after {
+:root {
+  --grain-strength: 0.4;
+}
+/* Phones: the hero is bright almost edge to edge, so a little less. */
+@media (width < 768px) {
+  :root {
+    --grain-strength: 0.3;
+  }
+}
+
+body::after,
+.grain-cover::before {
   content: "";
-  position: fixed;
   inset: 0;
-  z-index: 90;
   pointer-events: none;
-  opacity: 0.06;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 240px 240px;
+  background-image: url("/grain.png");
+  background-image: image-set(url("/grain.png") 1x, url("/grain@2x.png") 2x);
+  background-size: 128px 128px;
+  mix-blend-mode: soft-light;
+  opacity: var(--grain-strength);
+}
+body::after {
+  position: fixed;
+  z-index: -5;
+}
+.grain-cover::before {
+  position: absolute;
+  z-index: -1;
 }
 
 /* ==========================================================================
