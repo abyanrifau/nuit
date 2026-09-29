@@ -1,0 +1,608 @@
+{
+ "home-mobile": {
+  "median": {
+   "i": 1,
+   "scores": {
+    "performance": 90,
+    "accessibility": 96,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 975.61515,
+   "lcp": 3491.4606000000003,
+   "tbt": 133.69242499999973,
+   "cls": 0.00010874577520278935,
+   "si": 1414.000516259627,
+   "fails": [
+    "errors-in-console",
+    "color-contrast"
+   ]
+  },
+  "all": [
+   88,
+   90,
+   91
+  ]
+ },
+ "home-desktop": {
+  "median": {
+   "i": 2,
+   "scores": {
+    "performance": 100,
+    "accessibility": 96,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 263.05494999999996,
+   "lcp": 691.1098999999999,
+   "tbt": 23.000000000000057,
+   "cls": 0.0002259317448851532,
+   "si": 481.21125982130445,
+   "fails": [
+    "errors-in-console",
+    "color-contrast",
+    "forced-reflow-insight"
+   ]
+  },
+  "all": [
+   100,
+   100,
+   100
+  ]
+ },
+ "work-mobile": {
+  "median": {
+   "i": 0,
+   "scores": {
+    "performance": 89,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 968.0696,
+   "lcp": 3768.4175999999993,
+   "tbt": 73.5,
+   "cls": 0.00015974659465871417,
+   "si": 1337.1230409086631,
+   "fails": [
+    "errors-in-console",
+    "lcp-discovery-insight"
+   ]
+  },
+  "all": [
+   88,
+   89,
+   89
+  ]
+ },
+ "work-desktop": {
+  "median": {
+   "i": 1,
+   "scores": {
+    "performance": 100,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 257.3326,
+   "lcp": 728.4978000000001,
+   "tbt": 51.499999999999886,
+   "cls": 0.0002499074347692844,
+   "si": 331.09559676393405,
+   "fails": [
+    "errors-in-console"
+   ]
+  },
+  "all": [
+   100,
+   100,
+   100
+  ]
+ },
+ "work-driftwood-mobile": {
+  "median": {
+   "i": 0,
+   "scores": {
+    "performance": 87,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 973.48185,
+   "lcp": 3813.2046249999994,
+   "tbt": 168.0000000000001,
+   "cls": 0.00028525811272366855,
+   "si": 1443.8424835628102,
+   "fails": [
+    "max-potential-fid",
+    "errors-in-console",
+    "lcp-discovery-insight"
+   ]
+  },
+  "all": [
+   83,
+   87,
+   88
+  ]
+ },
+ "work-driftwood-desktop": {
+  "median": {
+   "i": 1,
+   "scores": {
+    "performance": 95,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 263.28285,
+   "lcp": 915.9799500000001,
+   "tbt": 168.5000000000001,
+   "cls": 0.0002938250353880278,
+   "si": 405.08323284497703,
+   "fails": [
+    "errors-in-console",
+    "lcp-discovery-insight"
+   ]
+  },
+  "all": [
+   95,
+   95,
+   98
+  ]
+ },
+ "work-scentu-mobile": {
+  "median": {
+   "i": 1,
+   "scores": {
+    "performance": 88,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 978.04675,
+   "lcp": 3761.1168749999997,
+   "tbt": 122.5,
+   "cls": 0.00021332353319084422,
+   "si": 1437.8260840447401,
+   "fails": [
+    "errors-in-console",
+    "lcp-discovery-insight"
+   ]
+  },
+  "all": [
+   86,
+   88,
+   89
+  ]
+ },
+ "work-scentu-desktop": {
+  "median": {
+   "i": 0,
+   "scores": {
+    "performance": 97,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 262.14755,
+   "lcp": 898.2541750000005,
+   "tbt": 125.5,
+   "cls": 0.00023690129476403108,
+   "si": 394.05000210603316,
+   "fails": [
+    "errors-in-console",
+    "lcp-discovery-insight"
+   ]
+  },
+  "all": [
+   95,
+   97,
+   98
+  ]
+ },
+ "work-verum-mobile": {
+  "median": {
+   "i": 1,
+   "scores": {
+    "performance": 84,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 972.0331,
+   "lcp": 3882.5827499999996,
+   "tbt": 246.50000000000057,
+   "cls": 0.0003226148348810484,
+   "si": 1477.3392854115532,
+   "fails": [
+    "max-potential-fid",
+    "errors-in-console",
+    "lcp-discovery-insight"
+   ]
+  },
+  "all": [
+   83,
+   84,
+   88
+  ]
+ },
+ "work-verum-desktop": {
+  "median": {
+   "i": 2,
+   "scores": {
+    "performance": 95,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 262.66865,
+   "lcp": 917.3462249999998,
+   "tbt": 161.99999999999994,
+   "cls": 0.000296101744228468,
+   "si": 404.2955335465812,
+   "fails": [
+    "errors-in-console",
+    "lcp-discovery-insight"
+   ]
+  },
+  "all": [
+   95,
+   95,
+   96
+  ]
+ },
+ "work-nocturne-mobile": {
+  "median": {
+   "i": 2,
+   "scores": {
+    "performance": 85,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 979.92195,
+   "lcp": 3791.804875,
+   "tbt": 236,
+   "cls": 0.0002895115731714723,
+   "si": 1480.7806363888253,
+   "fails": [
+    "max-potential-fid",
+    "errors-in-console",
+    "lcp-discovery-insight"
+   ]
+  },
+  "all": [
+   84,
+   85,
+   88
+  ]
+ },
+ "work-nocturne-desktop": {
+  "median": {
+   "i": 1,
+   "scores": {
+    "performance": 98,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 262.3234,
+   "lcp": 896.2638,
+   "tbt": 119,
+   "cls": 0.000144739524049266,
+   "si": 402.8733754909455,
+   "fails": [
+    "errors-in-console",
+    "lcp-discovery-insight"
+   ]
+  },
+  "all": [
+   96,
+   98,
+   99
+  ]
+ },
+ "work-fuku-coffee-mobile": {
+  "median": {
+   "i": 0,
+   "scores": {
+    "performance": 83,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 973.9273,
+   "lcp": 3902.318249999999,
+   "tbt": 261.49999999999943,
+   "cls": 0.000294088385304057,
+   "si": 1528.2646125046992,
+   "fails": [
+    "max-potential-fid",
+    "errors-in-console",
+    "lcp-discovery-insight"
+   ]
+  },
+  "all": [
+   83,
+   83,
+   88
+  ]
+ },
+ "work-fuku-coffee-desktop": {
+  "median": {
+   "i": 0,
+   "scores": {
+    "performance": 96,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 264.16325,
+   "lcp": 895.1427499999998,
+   "tbt": 145,
+   "cls": 0.0002415510900971894,
+   "si": 401.68313787334415,
+   "fails": [
+    "errors-in-console",
+    "lcp-discovery-insight"
+   ]
+  },
+  "all": [
+   94,
+   96,
+   98
+  ]
+ },
+ "work-homestead-mobile": {
+  "median": {
+   "i": 2,
+   "scores": {
+    "performance": 81,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 990.18295,
+   "lcp": 3922.9573750000004,
+   "tbt": 319.4999999999992,
+   "cls": 0.00019272213945175599,
+   "si": 1527.4429581809768,
+   "fails": [
+    "max-potential-fid",
+    "errors-in-console",
+    "lcp-discovery-insight"
+   ]
+  },
+  "all": [
+   81,
+   81,
+   84
+  ]
+ },
+ "work-homestead-desktop": {
+  "median": {
+   "i": 0,
+   "scores": {
+    "performance": 97,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 264.54044999999996,
+   "lcp": 897.7831499999998,
+   "tbt": 127.99999999999994,
+   "cls": 0.0002549120954090418,
+   "si": 410.96954314407856,
+   "fails": [
+    "errors-in-console",
+    "lcp-discovery-insight"
+   ]
+  },
+  "all": [
+   94,
+   97,
+   97
+  ]
+ },
+ "services-mobile": {
+  "median": {
+   "i": 2,
+   "scores": {
+    "performance": 93,
+    "accessibility": 96,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 964.26475,
+   "lcp": 3162.161875,
+   "tbt": 103.49999999999955,
+   "cls": 0.00014714926095271968,
+   "si": 1228.26588817976,
+   "fails": [
+    "errors-in-console",
+    "color-contrast",
+    "forced-reflow-insight"
+   ]
+  },
+  "all": [
+   88,
+   93,
+   93
+  ]
+ },
+ "services-desktop": {
+  "median": {
+   "i": 0,
+   "scores": {
+    "performance": 99,
+    "accessibility": 96,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 260.45225,
+   "lcp": 681.9045,
+   "tbt": 107.00000000000011,
+   "cls": 0.00028135112037766654,
+   "si": 371.4538864834468,
+   "fails": [
+    "errors-in-console",
+    "color-contrast",
+    "forced-reflow-insight"
+   ]
+  },
+  "all": [
+   99,
+   99,
+   100
+  ]
+ },
+ "pricing-mobile": {
+  "median": {
+   "i": 0,
+   "scores": {
+    "performance": 92,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 971.86575,
+   "lcp": 3311.664375,
+   "tbt": 84,
+   "cls": 0.00012022361218402032,
+   "si": 1350.004337679022,
+   "fails": [
+    "errors-in-console"
+   ]
+  },
+  "all": [
+   91,
+   92,
+   92
+  ]
+ },
+ "pricing-desktop": {
+  "median": {
+   "i": 2,
+   "scores": {
+    "performance": 99,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 262.42605000000003,
+   "lcp": 709.0651250000001,
+   "tbt": 65.00000000000006,
+   "cls": 0.00014206865824650496,
+   "si": 409.9506560831279,
+   "fails": [
+    "errors-in-console"
+   ]
+  },
+  "all": [
+   99,
+   99,
+   100
+  ]
+ },
+ "about-mobile": {
+  "median": {
+   "i": 2,
+   "scores": {
+    "performance": 93,
+    "accessibility": 96,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 968.00275,
+   "lcp": 3162.506874999999,
+   "tbt": 93,
+   "cls": 0.00015935795672900608,
+   "si": 1272.0398359930948,
+   "fails": [
+    "errors-in-console",
+    "color-contrast"
+   ]
+  },
+  "all": [
+   92,
+   93,
+   93
+  ]
+ },
+ "about-desktop": {
+  "median": {
+   "i": 2,
+   "scores": {
+    "performance": 100,
+    "accessibility": 96,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 261.27705000000003,
+   "lcp": 676.5541000000001,
+   "tbt": 49.5,
+   "cls": 0.00015890097371800503,
+   "si": 361.7196711620146,
+   "fails": [
+    "errors-in-console",
+    "color-contrast",
+    "forced-reflow-insight"
+   ]
+  },
+  "all": [
+   100,
+   100,
+   100
+  ]
+ },
+ "contact-mobile": {
+  "median": {
+   "i": 2,
+   "scores": {
+    "performance": 94,
+    "accessibility": 97,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 932.19425,
+   "lcp": 3156.58275,
+   "tbt": 63,
+   "cls": 0.00012875321160506437,
+   "si": 1084.5012207376415,
+   "fails": [
+    "errors-in-console",
+    "color-contrast"
+   ]
+  },
+  "all": [
+   93,
+   94,
+   94
+  ]
+ },
+ "contact-desktop": {
+  "median": {
+   "i": 0,
+   "scores": {
+    "performance": 100,
+    "accessibility": 97,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 249.2654,
+   "lcp": 686.7962,
+   "tbt": 45.5,
+   "cls": 0.00016725909691212105,
+   "si": 284.0523726517265,
+   "fails": [
+    "errors-in-console",
+    "color-contrast"
+   ]
+  },
+  "all": [
+   100,
+   100,
+   100
+  ]
+ }
+}
