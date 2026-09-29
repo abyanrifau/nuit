@@ -9,6 +9,10 @@ export type ContactResult =
   | { ok: false; reason: "invalid"; errors: ContactErrors }
   | { ok: false; reason: "not-configured" | "failed" };
 
+// A sender on the studio's own domain. Resend only sends from it once
+// nuit.works is verified there (see .env.example).
+const DEFAULT_FROM = "Nuit Works website <forms@nuit.works>";
+
 const escape = (s: string) =>
   s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]!);
 
@@ -16,9 +20,10 @@ const escape = (s: string) =>
  * Emails a project enquiry to the studio through Resend.
  *
  * Environment (set in Vercel > Project > Settings > Environment Variables):
- *   RESEND_API_KEY      required. Without it the form says so and offers email.
- *   CONTACT_FROM_EMAIL  optional. A sender on a domain verified in Resend,
- *                       e.g. "Nuit Works <website@nuit.works>".
+ *   RESEND_API_KEY      required. Without it the form shows its "didn't go
+ *                       through" message and offers a prefilled email.
+ *   CONTACT_FROM_EMAIL  optional. The sender; defaults to forms@nuit.works,
+ *                       which needs nuit.works verified in Resend.
  *   CONTACT_TO_EMAIL    optional. Where enquiries go; defaults to hello@nuit.works.
  */
 export async function sendContact(
@@ -43,7 +48,7 @@ export async function sendContact(
   if (!key) return { ok: false, reason: "not-configured" };
 
   const to = process.env.CONTACT_TO_EMAIL || CONTACT_EMAIL;
-  const from = process.env.CONTACT_FROM_EMAIL || "Nuit Works website <onboarding@resend.dev>";
+  const from = process.env.CONTACT_FROM_EMAIL || DEFAULT_FROM;
   const pkg = packageLabel(clean.pkg);
   const subject = `New enquiry from ${clean.name}${clean.business ? `, ${clean.business}` : ""}`;
 

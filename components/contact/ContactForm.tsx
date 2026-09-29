@@ -233,13 +233,11 @@ export function ContactForm() {
 
       {(status === "not-configured" || status === "failed") && (
         <div ref={alertRef} tabIndex={-1} role="alert" className="rounded-(--radius) border border-line-strong bg-raised/70 p-6 outline-none">
-          <p className="font-display text-h4">
-            {status === "not-configured" ? "The form isn't connected just yet." : "That didn't go through."}
-          </p>
+          {/* One message whatever the cause (email service not set up, or a
+              send that failed), so visitors never read about the setup. */}
+          <p className="font-display text-h4">Your message didn&rsquo;t go through.</p>
           <p className="mt-3 text-muted">
-            {status === "not-configured"
-              ? "Nothing is lost. Email us directly and we'll reply from there. We've written the email for you:"
-              : "Please try again in a moment, or email us directly. We've written the email for you:"}
+            Sorry about that. You can send it by email instead, we&rsquo;ve written it out for you:
           </p>
           <div className="mt-5 flex flex-wrap items-center gap-x-6 gap-y-3">
             <Magnetic>
