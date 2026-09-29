@@ -1,0 +1,82 @@
+{
+ "home-mobile": {
+  "median": {
+   "i": 2,
+   "scores": {
+    "performance": 90,
+    "accessibility": 96,
+    "best-practices": 100,
+    "seo": 100
+   },
+   "fcp": 980.41445,
+   "lcp": 3577.2433499999997,
+   "tbt": 75.5,
+   "cls": 0.00012875556133990442,
+   "si": 1432.5327662296122,
+   "fails": [
+    "color-contrast",
+    "network-dependency-tree-insight"
+   ]
+  },
+  "all": [
+   89,
+   89,
+   90,
+   90,
+   90
+  ]
+ },
+ "work-verum-mobile": {
+  "median": {
+   "i": 2,
+   "scores": {
+    "performance": 89,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100
+   },
+   "fcp": 973.0827,
+   "lcp": 3648.78945,
+   "tbt": 101.5,
+   "cls": 0.00018879869369314682,
+   "si": 1367.6973345680553,
+   "fails": [
+    "lcp-discovery-insight",
+    "network-dependency-tree-insight"
+   ]
+  },
+  "all": [
+   88,
+   89,
+   89,
+   89,
+   90
+  ]
+ },
+ "pricing-mobile": {
+  "median": {
+   "i": 1,
+   "scores": {
+    "performance": 91,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100
+   },
+   "fcp": 972.90975,
+   "lcp": 3420.7292500000003,
+   "tbt": 82,
+   "cls": 0.00013011951753752574,
+   "si": 1300.2015213843047,
+   "fails": [
+    "network-dependency-tree-insight"
+   ]
+  },
+  "all": [
+   90,
+   91,
+   91,
+   92,
+   92
+  ]
+ }
+}

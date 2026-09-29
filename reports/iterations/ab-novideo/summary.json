@@ -1,0 +1,55 @@
+{
+ "home-mobile": {
+  "median": {
+   "i": 2,
+   "scores": {
+    "performance": 87,
+    "accessibility": 96,
+    "best-practices": 100,
+    "seo": 100
+   },
+   "fcp": 986.23055,
+   "lcp": 3629.6916499999998,
+   "tbt": 203.99999999999955,
+   "cls": 0.00014612175848217172,
+   "si": 1649.5071556091364,
+   "fails": [
+    "max-potential-fid",
+    "color-contrast",
+    "network-dependency-tree-insight"
+   ]
+  },
+  "all": [
+   86,
+   87,
+   87
+  ]
+ },
+ "work-verum-mobile": {
+  "median": {
+   "i": 2,
+   "scores": {
+    "performance": 80,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100
+   },
+   "fcp": 982.0447,
+   "lcp": 4259.6564499999995,
+   "tbt": 277.99999999999943,
+   "cls": 0.0002008884072477606,
+   "si": 1628.3201702280317,
+   "fails": [
+    "largest-contentful-paint",
+    "max-potential-fid",
+    "lcp-discovery-insight",
+    "network-dependency-tree-insight"
+   ]
+  },
+  "all": [
+   79,
+   80,
+   81
+  ]
+ }
+}

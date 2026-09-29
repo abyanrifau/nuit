@@ -1,0 +1,156 @@
+{
+ "home-mobile": {
+  "median": {
+   "i": 1,
+   "scores": {
+    "performance": 86,
+    "accessibility": 96,
+    "best-practices": 100,
+    "seo": 100
+   },
+   "fcp": 985.9585,
+   "lcp": 3761.875500000001,
+   "tbt": 194,
+   "cls": 0.0001426797287903584,
+   "si": 1774.8048052882468,
+   "fails": [
+    "max-potential-fid",
+    "color-contrast",
+    "network-dependency-tree-insight"
+   ]
+  },
+  "all": [
+   85,
+   86,
+   87
+  ]
+ },
+ "home-desktop": {
+  "median": {
+   "i": 1,
+   "scores": {
+    "performance": 99,
+    "accessibility": 96,
+    "best-practices": 100,
+    "seo": 100
+   },
+   "fcp": 268.6242,
+   "lcp": 807.8725999999999,
+   "tbt": 71.6878999999999,
+   "cls": 0.00022878422058780602,
+   "si": 527.7385959036033,
+   "fails": [
+    "color-contrast",
+    "forced-reflow-insight",
+    "network-dependency-tree-insight"
+   ]
+  },
+  "all": [
+   99,
+   99,
+   99
+  ]
+ },
+ "work-verum-mobile": {
+  "median": {
+   "i": 1,
+   "scores": {
+    "performance": 80,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100
+   },
+   "fcp": 985.7475,
+   "lcp": 4171.990000000001,
+   "tbt": 304.00000000000045,
+   "cls": 0.00019223641202916316,
+   "si": 1596.740156548515,
+   "fails": [
+    "largest-contentful-paint",
+    "max-potential-fid",
+    "lcp-discovery-insight",
+    "network-dependency-tree-insight"
+   ]
+  },
+  "all": [
+   79,
+   80,
+   81
+  ]
+ },
+ "work-verum-desktop": {
+  "median": {
+   "i": 0,
+   "scores": {
+    "performance": 94,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100
+   },
+   "fcp": 266.80955,
+   "lcp": 978.2620749999999,
+   "tbt": 176,
+   "cls": 0.00022473246468493693,
+   "si": 467.80441971038124,
+   "fails": [
+    "max-potential-fid",
+    "lcp-discovery-insight",
+    "network-dependency-tree-insight"
+   ]
+  },
+  "all": [
+   92,
+   94,
+   98
+  ]
+ },
+ "pricing-mobile": {
+  "median": {
+   "i": 2,
+   "scores": {
+    "performance": 88,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100
+   },
+   "fcp": 977.33745,
+   "lcp": 3625.681075,
+   "tbt": 175.831275,
+   "cls": 0.00015324999738048744,
+   "si": 1559.9103020056284,
+   "fails": [
+    "max-potential-fid",
+    "network-dependency-tree-insight"
+   ]
+  },
+  "all": [
+   87,
+   88,
+   88
+  ]
+ },
+ "pricing-desktop": {
+  "median": {
+   "i": 1,
+   "scores": {
+    "performance": 98,
+    "accessibility": 100,
+    "best-practices": 100,
+    "seo": 100
+   },
+   "fcp": 266.67539999999997,
+   "lcp": 766.0261999999998,
+   "tbt": 111.50000000000034,
+   "cls": 0.00023166953966377712,
+   "si": 452.6361183938531,
+   "fails": [
+    "network-dependency-tree-insight"
+   ]
+  },
+  "all": [
+   98,
+   98,
+   99
+  ]
+ }
+}

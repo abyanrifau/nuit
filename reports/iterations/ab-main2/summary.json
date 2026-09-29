@@ -1,0 +1,58 @@
+{
+ "home-mobile": {
+  "median": {
+   "i": 0,
+   "scores": {
+    "performance": 87,
+    "accessibility": 96,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 993.01655,
+   "lcp": 3523.0661999999998,
+   "tbt": 233.4917250000001,
+   "cls": 0.00010789408646214823,
+   "si": 1490.2120070300698,
+   "fails": [
+    "max-potential-fid",
+    "errors-in-console",
+    "color-contrast"
+   ]
+  },
+  "all": [
+   87,
+   87,
+   87,
+   89,
+   90
+  ]
+ },
+ "work-verum-mobile": {
+  "median": {
+   "i": 4,
+   "scores": {
+    "performance": 85,
+    "accessibility": 100,
+    "best-practices": 96,
+    "seo": 100
+   },
+   "fcp": 987.7492,
+   "lcp": 3870.8730000000005,
+   "tbt": 201.0000000000009,
+   "cls": 0.00020355422492119852,
+   "si": 1429.58201550084,
+   "fails": [
+    "max-potential-fid",
+    "errors-in-console",
+    "lcp-discovery-insight"
+   ]
+  },
+  "all": [
+   74,
+   78,
+   85,
+   86,
+   88
+  ]
+ }
+}
