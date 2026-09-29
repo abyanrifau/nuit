@@ -8,7 +8,6 @@
 export const EASE = "expo.out";
 export const EASE_SOFT = "power3.out";
 export const EASE_SWAP = "expo.inOut";
-export const EASE_IN = "expo.in";
 
 export const DUR = {
   fast: 0.3,

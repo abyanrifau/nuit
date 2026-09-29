@@ -66,8 +66,6 @@ export const media = (slug: string) => {
   return {
     desktop: { webm: `${base}/desktop.webm`, mp4: `${base}/desktop.mp4`, poster: `${base}/desktop-poster.webp`, width: 1280, height: 800 },
     mobile: { webm: `${base}/mobile.webm`, mp4: `${base}/mobile.mp4`, poster: `${base}/mobile-poster.webp`, width: 600, height: 1298 },
-    full: `${base}/full.webp`,
-    fullMobile: `${base}/full-mobile.webp`,
   };
 };
 

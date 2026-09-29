@@ -21,10 +21,18 @@ import ffmpegPath from "ffmpeg-static";
 import sharp from "sharp";
 import { spawn } from "node:child_process";
 import { mkdir, rm, writeFile, readdir, stat } from "node:fs/promises";
+import { mkdirSync } from "node:fs";
 import path from "node:path";
 import { workSources } from "../data/concept-sources.ts";
 
 const ROOT = process.cwd();
+
+/** Where reference-only captures for a project go: scripts/output/<slug>/. */
+function refDir(outDir) {
+  const dir = path.join(ROOT, "scripts", "output", path.basename(outDir));
+  mkdirSync(dir, { recursive: true });
+  return dir;
+}
 const CACHE = path.join(ROOT, "scripts", ".cache");
 const OUTPUT = path.join(ROOT, "scripts", "output");
 
@@ -250,7 +258,9 @@ async function stills(browser, source, outDir) {
       await settle(page);
       await warmScroll(page);
 
-      await toWebp(await page.screenshot({ fullPage: true, type: "png" }), path.join(outDir, "full.webp"), 1440, 72);
+      // Full-page captures are reference material, not used on the site, so
+      // they are kept out of public/ (scripts/output/<slug>/).
+      await toWebp(await page.screenshot({ fullPage: true, type: "png" }), path.join(refDir(outDir), "full.webp"), 1440, 72);
       log("    full.webp");
 
       result.designSystem = await extractDesignSystem(page);
@@ -308,7 +318,7 @@ async function stills(browser, source, outDir) {
       await page.goto(source.url, { waitUntil: "load", timeout: 60000 });
       await settle(page);
       await warmScroll(page);
-      await toWebp(await page.screenshot({ fullPage: true, type: "png" }), path.join(outDir, "full-mobile.webp"), 780, 72);
+      await toWebp(await page.screenshot({ fullPage: true, type: "png" }), path.join(refDir(outDir), "full-mobile.webp"), 780, 72);
       log("    full-mobile.webp");
     } finally {
       await context.close();

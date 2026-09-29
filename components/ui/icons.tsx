@@ -8,26 +8,10 @@ export function ArrowIcon({ className }: IconProps) {
   );
 }
 
-export function ArrowUpRightIcon({ className }: IconProps) {
-  return (
-    <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" className={className}>
-      <path d="M4 12 12 4M5.5 4H12v6.5" stroke="currentColor" strokeWidth="1.3" />
-    </svg>
-  );
-}
-
 export function CheckIcon({ className }: IconProps) {
   return (
     <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" className={className}>
       <path d="m3 8.5 3.2 3L13 4.5" stroke="currentColor" strokeWidth="1.3" />
-    </svg>
-  );
-}
-
-export function MinusIcon({ className }: IconProps) {
-  return (
-    <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" className={className}>
-      <path d="M4 8h8" stroke="currentColor" strokeWidth="1.3" />
     </svg>
   );
 }
@@ -41,10 +25,3 @@ export function PlusIcon({ className }: IconProps) {
 }
 
 /** The prism mark: an equilateral triangle, drawn as a single stroke. */
-export function PrismMark({ className, strokeWidth = 1.5 }: IconProps & { strokeWidth?: number }) {
-  return (
-    <svg viewBox="0 0 100 88" fill="none" aria-hidden="true" className={className}>
-      <path d="M50 2 98 86H2Z" stroke="currentColor" strokeWidth={strokeWidth} strokeLinejoin="round" />
-    </svg>
-  );
-}
