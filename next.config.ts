@@ -25,9 +25,15 @@ const csp = [
   "frame-ancestors 'none'",
 ].join("; ");
 
-const securityHeaders = [
+// Every response.
+const transportHeaders = [
   { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" },
   { key: "X-Content-Type-Options", value: "nosniff" },
+];
+
+// Only meaningful on documents, so they are not repeated on every script,
+// font and image the page loads (about 0.8KB a response).
+const pageHeaders = [
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
   { key: "X-Frame-Options", value: "DENY" },
   { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
@@ -57,7 +63,8 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   async headers() {
     return [
-      { source: "/:path*", headers: securityHeaders },
+      { source: "/:path*", headers: transportHeaders },
+      { source: "/((?!_next/static|_next/image).*)", headers: pageHeaders },
       // `:file+` needs at least one segment after the slug, so the
       // /work/<slug> pages themselves are left alone.
       { source: "/work/:slug/:file+", headers: longCache },
