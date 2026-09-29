@@ -642,8 +642,13 @@ select.field option {
    Strictly black and white. Its states: html[data-loader] is "play" while it
    runs, "done" once the cover starts to lift, "skip" on later visits;
    #loader[data-stage] is "in" while it counts, "full" while it holds at
-   100, then "out" (or "skip" when clicked away).
+   100, then "out". html[data-scroll-lock] holds the page still until the
+   cover has fully lifted.
    ========================================================================== */
+
+html[data-scroll-lock] {
+  overflow: hidden;
+}
 
 .loader {
   position: fixed;
@@ -654,6 +659,9 @@ select.field option {
   justify-content: center;
   background: var(--bg);
   color: var(--fg);
+  /* Touches and swipes land here and go nowhere. */
+  touch-action: none;
+  overscroll-behavior: none;
 }
 html:is([data-loader="play"], [data-loader="done"]) .loader {
   display: flex;
@@ -751,14 +759,6 @@ html:is([data-loader="play"], [data-loader="done"]) .loader {
   transition:
     opacity 0.5s var(--ease-soft) 0.3s,
     visibility 0s linear 0.8s;
-}
-.loader[data-stage="skip"] {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition:
-    opacity 0.35s var(--ease-soft),
-    visibility 0s linear 0.35s;
 }
 /* The safety net in <head>: if the sequence ever stalls, the cover goes. */
 html[data-loader-bail] .loader {

@@ -33,3 +33,9 @@ next-env.d.ts
 
 # media capture scratch frames
 /scripts/.cache/
+
+# Lighthouse reports: raw reports stay on disk, summaries are committed
+/reports/**/*.report.json
+/reports/**/*.report.html
+/reports/**/*-run*.json
+/reports/**/*-run*.html

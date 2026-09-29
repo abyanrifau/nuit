@@ -1,0 +1,121 @@
+# Round 7 optimization log
+
+Running log for round 7 (loader, mobile scrolling, performance, SEO, GEO).
+Newest entries at the bottom of each section. Scores are Lighthouse medians
+of 3 runs against a local production build (`next build` + `next start`).
+
+## Setup
+
+- The project folder was not a git repository. Decision: ran `git init`,
+  committed the site exactly as it stood after round 6 to `main` as the
+  baseline ("Baseline: site as of round 6"), then created the branch
+  `round-7-loader-mobile-performance`. All round 7 work is committed on that
+  branch; `main` is untouched. Nothing is pushed anywhere (there is no
+  remote) and nothing is deployed.
+- Local git config for this repo only: `core.autocrlf=false` (the files are
+  LF; this avoids line-ending churn on Windows) and a commit identity of
+  "Nuit Works <abyanalirifau@gmail.com>".
+- Stack notes that differ from the brief: the site uses `ogl` (a ~30KB WebGL
+  library) for both prisms and a hand-written WebGL light field. There is no
+  three.js, @react-three/fiber or drei in the project, so the three.js items
+  in the brief are covered by checking that the ogl prisms are code-split and
+  load only where they appear.
+- `components/about/TeamSection.tsx` and `data/team.ts` are a deliberate,
+  switched-off placeholder (renders nothing until real people are added and
+  `SHOW_TEAM` is true). Kept as is.
+
+## Decisions made without asking
+
+(Also repeated in OPTIMIZATION_REPORT.md.)
+
+1. Initialised git and made the round 6 state the baseline commit on `main`.
+
+## Part 1: loader (analysis)
+
+Read through `components/layout/Loader.tsx`, the head script, the CSS states
+and everything that listens to `data-loader`. The loader is a server-rendered
+overlay driven by a small inline script (not React state), so React Strict
+Mode, re-renders, Suspense and the page fade cannot unmount or restart it,
+and GSAP/ScrollTrigger/Lenis never touch it. The real causes of early exits:
+
+1. **Any tap, click or key press skipped it.** The script listened for
+   `pointerdown` and `keydown` on the window (capture phase) and jumped
+   straight to a 0.35s exit. On phones the first touch of a scroll attempt
+   is a `pointerdown`, so simply trying to scroll ended the loader. This is
+   the main cause of "it gets cut off and the site opens".
+2. **The "seen" flag was set when the loader started**, in the head script.
+   A reload (or a remount of the document) during the animation therefore
+   skipped the loader entirely on the next load.
+3. **The last-resort timer (10s in `<head>`) could fire during a legitimate
+   slow finish**: with an 8s safety, a 0.4s hold and a 0.8s exit, a slow
+   load could still be lifting at 9.2s+, close enough to the 10s cutoff to
+   collide on a slow device.
+4. **Nothing locked scrolling.** The page could scroll underneath (and on
+   desktop Lenis scrolls by script, which `overflow: hidden` alone does not
+   stop), so the hero could be scrolled away before the reveal.
+5. The count's finishing phase was time-boxed to 0.6s from whenever loading
+   completed, so a late "ready" could make the last stretch feel rushed.
+
+## Part 1: loader (changes)
+
+- Removed the click / key skip entirely.
+- New timeline: the count runs on a fixed 1.95s curve (quick start, slowing
+  toward 100). The exit only starts when that timeline has reached 100 AND
+  the site is ready (load event, all fonts, background light and hero prism
+  fully drawn). While the site is still loading, the count follows a
+  ceiling that eases from 88 toward 99 (it slows and waits, never stops
+  dead), then glides to 100 over 0.7s once ready. A light follower smooths
+  every change of pace, so the count can never jump.
+- Minimum: the cover stays at least 2.5s. Hold at 100: 0.4s. Exit: 0.8s.
+- Safety: at 8s the site is treated as ready and the sequence still finishes
+  normally (glide to 100, hold, exit). The head-script last resort moved to
+  12s and only acts if the inline script never ran.
+- The "seen" flag is written only when the exit has completed.
+- Scroll lock: `html[data-scroll-lock]` (set by the head script before first
+  paint, removed after the exit) sets `overflow: hidden`; Lenis is paused
+  while it is present (and page transitions cannot restart it); the overlay
+  has `touch-action: none` so swipes on it go nowhere.
+
+2. Raw Lighthouse reports (JSON and HTML, 1 to 3MB each) are saved under
+   `reports/before/` and `reports/after/` on disk but ignored by git, to keep
+   the repository small; the score summaries (`summary.json` and the tables
+   in this log) are committed.
+
+## Baseline (before)
+
+Lighthouse 13.5 against the round 6 production build (`next build` +
+`next start` on port 3100), median of 3 runs per page and preset. Raw reports
+in `reports/before/`; the table is also in `reports/before/scores.md`.
+
+| Page | Mobile P / A / BP / SEO | Desktop P / A / BP / SEO | Mobile FCP / LCP / TBT / CLS / SI | Desktop LCP / TBT / CLS |
+|---|---|---|---|---|
+| / | 90 / 96 / 96 / 100 | 100 / 96 / 96 / 100 | 0.98s / 3.49s / 134ms / 0.000 / 1.41s | 0.69s / 23ms / 0.000 |
+| /work | 89 / 100 / 96 / 100 | 100 / 100 / 96 / 100 | 0.97s / 3.77s / 74ms / 0.000 / 1.34s | 0.73s / 51ms / 0.000 |
+| /work/driftwood | 87 / 100 / 96 / 100 | 95 / 100 / 96 / 100 | 0.97s / 3.81s / 168ms / 0.000 / 1.44s | 0.92s / 169ms / 0.000 |
+| /work/scentu | 88 / 100 / 96 / 100 | 97 / 100 / 96 / 100 | 0.98s / 3.76s / 123ms / 0.000 / 1.44s | 0.90s / 126ms / 0.000 |
+| /work/verum | 84 / 100 / 96 / 100 | 95 / 100 / 96 / 100 | 0.97s / 3.88s / 247ms / 0.000 / 1.48s | 0.92s / 162ms / 0.000 |
+| /work/nocturne | 85 / 100 / 96 / 100 | 98 / 100 / 96 / 100 | 0.98s / 3.79s / 236ms / 0.000 / 1.48s | 0.90s / 119ms / 0.000 |
+| /work/fuku-coffee | 83 / 100 / 96 / 100 | 96 / 100 / 96 / 100 | 0.97s / 3.90s / 261ms / 0.000 / 1.53s | 0.90s / 145ms / 0.000 |
+| /work/homestead | 81 / 100 / 96 / 100 | 97 / 100 / 96 / 100 | 0.99s / 3.92s / 319ms / 0.000 / 1.53s | 0.90s / 128ms / 0.000 |
+| /services | 93 / 96 / 96 / 100 | 99 / 96 / 96 / 100 | 0.96s / 3.16s / 103ms / 0.000 / 1.23s | 0.68s / 107ms / 0.000 |
+| /pricing | 92 / 100 / 96 / 100 | 99 / 100 / 96 / 100 | 0.97s / 3.31s / 84ms / 0.000 / 1.35s | 0.71s / 65ms / 0.000 |
+| /about | 93 / 96 / 96 / 100 | 100 / 96 / 96 / 100 | 0.97s / 3.16s / 93ms / 0.000 / 1.27s | 0.68s / 50ms / 0.000 |
+| /contact | 94 / 97 / 96 / 100 | 100 / 97 / 96 / 100 | 0.93s / 3.16s / 63ms / 0.000 / 1.08s | 0.69s / 46ms / 0.000 |
+
+The 404 page cannot be scored: Lighthouse (like PageSpeed Insights) refuses any page that returns a 404 status, which the 404 page correctly does.
+
+What the baseline shows:
+
+- **Performance (mobile, 81 to 94):** the only weak metric is LCP (3.2 to
+  3.9s simulated). The observed load is fast (LCP actually paints at about
+  0.17s), but locally every script arrives and runs before the first paint,
+  so Lighthouse's throttled simulation charges all of that JavaScript to
+  LCP. Case studies are worst: their scroll recordings were preloading about
+  2MB of video during page load, their LCP element was a 1280px video poster
+  shown at 370px, and hydration costs 120 to 320ms of TBT.
+- **Accessibility (96 to 97 on home, services, about, contact):** only
+  `color-contrast`, on the process steps that rest at 35% opacity (the
+  round 1 design) and, on contact, see the contact notes in the after table.
+- **Best Practices (96 everywhere):** only `errors-in-console`: the Vercel
+  Analytics script 404s when the site is not running on Vercel.
+- **SEO: 100 everywhere.**

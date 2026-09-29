@@ -47,9 +47,17 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     const tick = (time: number) => instance.raf(time * 1000);
     gsap.ticker.add(tick);
     gsap.ticker.lagSmoothing(0);
+    // The loading screen holds the page still (html[data-scroll-lock]);
+    // Lenis scrolls by script, so it is paused too until the lock lifts.
+    const html = document.documentElement;
+    const syncLock = () => ("scrollLock" in html.dataset ? instance.stop() : instance.start());
+    syncLock();
+    const lock = new MutationObserver(syncLock);
+    lock.observe(html, { attributes: true, attributeFilter: ["data-scroll-lock"] });
     // eslint-disable-next-line react-hooks/set-state-in-effect -- the instance only exists on the client
     setLenis(instance);
     return () => {
+      lock.disconnect();
       gsap.ticker.remove(tick);
       instance.destroy();
       setLenis(null);
@@ -81,7 +89,10 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
       lenis,
       scrollTo,
       stop: () => lenis?.stop(),
-      start: () => lenis?.start(),
+      // Never while the loading screen holds the page still.
+      start: () => {
+        if (!("scrollLock" in document.documentElement.dataset)) lenis?.start();
+      },
     }),
     [lenis, scrollTo],
   );
