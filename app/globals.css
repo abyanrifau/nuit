@@ -114,6 +114,10 @@ html {
      for it). Scrolling itself is untouched. */
   scrollbar-width: none;
   -ms-overflow-style: none;
+  /* The page only ever scrolls vertically. Every wide element is contained
+     where it lives; this is the safety net. clip (not hidden) keeps sticky
+     and pinned sections working. */
+  overflow-x: clip;
 }
 html::-webkit-scrollbar,
 body::-webkit-scrollbar {
@@ -133,6 +137,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  overflow-x: clip;
 }
 
 h1,

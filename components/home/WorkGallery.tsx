@@ -93,7 +93,8 @@ export function WorkGallery({ items }: { items: Work[] }) {
 
 
   return (
-    <section id="work" data-light="work" aria-labelledby="work-title" className="relative pt-(--section-y)">
+    // Clipped sideways: the pinned track is wider than the screen and scrolls within it.
+    <section id="work" data-light="work" aria-labelledby="work-title" className="relative overflow-x-clip pt-(--section-y)">
       <div className="px-site grid-site items-end gap-y-8">
         <div className="col-span-12 md:col-span-8">
           <p className="label flex items-center gap-3 text-muted">
