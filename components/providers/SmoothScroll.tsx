@@ -1,6 +1,6 @@
 "use client";
 
-import Lenis from "lenis";
+import type Lenis from "lenis";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
 import { prefersReducedMotion } from "@/lib/motion";
@@ -37,30 +37,39 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
     // Reduced motion scrolls natively; so do touch-only devices, where Lenis
     // would only pass native touch scrolling through anyway.
     if (prefersReducedMotion() || !window.matchMedia("(hover: hover)").matches) return;
-    const instance = new Lenis({
-      lerp: 0.11,
-      smoothWheel: true,
-      syncTouch: false,
-      autoRaf: false,
+    // Lenis is only fetched where it is used, so phones never download it.
+    let cancelled = false;
+    let cleanup = () => {};
+    void import("lenis").then(({ default: LenisClass }) => {
+      if (cancelled) return;
+      const instance = new LenisClass({
+        lerp: 0.11,
+        smoothWheel: true,
+        syncTouch: false,
+        autoRaf: false,
+      });
+      instance.on("scroll", ScrollTrigger.update);
+      const tick = (time: number) => instance.raf(time * 1000);
+      gsap.ticker.add(tick);
+      gsap.ticker.lagSmoothing(0);
+      // The loading screen holds the page still (html[data-scroll-lock]);
+      // Lenis scrolls by script, so it is paused too until the lock lifts.
+      const html = document.documentElement;
+      const syncLock = () => ("scrollLock" in html.dataset ? instance.stop() : instance.start());
+      syncLock();
+      const lock = new MutationObserver(syncLock);
+      lock.observe(html, { attributes: true, attributeFilter: ["data-scroll-lock"] });
+      setLenis(instance);
+      cleanup = () => {
+        lock.disconnect();
+        gsap.ticker.remove(tick);
+        instance.destroy();
+        setLenis(null);
+      };
     });
-    instance.on("scroll", ScrollTrigger.update);
-    const tick = (time: number) => instance.raf(time * 1000);
-    gsap.ticker.add(tick);
-    gsap.ticker.lagSmoothing(0);
-    // The loading screen holds the page still (html[data-scroll-lock]);
-    // Lenis scrolls by script, so it is paused too until the lock lifts.
-    const html = document.documentElement;
-    const syncLock = () => ("scrollLock" in html.dataset ? instance.stop() : instance.start());
-    syncLock();
-    const lock = new MutationObserver(syncLock);
-    lock.observe(html, { attributes: true, attributeFilter: ["data-scroll-lock"] });
-    // eslint-disable-next-line react-hooks/set-state-in-effect -- the instance only exists on the client
-    setLenis(instance);
     return () => {
-      lock.disconnect();
-      gsap.ticker.remove(tick);
-      instance.destroy();
-      setLenis(null);
+      cancelled = true;
+      cleanup();
     };
   }, []);
 

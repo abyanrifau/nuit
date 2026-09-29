@@ -1,15 +1,15 @@
 "use client";
 
 import { useRef, type ElementType, type ReactNode } from "react";
-import { gsap, SplitText, useGSAP } from "@/lib/gsap";
+import { gsap, loadSplitText, useGSAP } from "@/lib/gsap";
 import { EASE_SOFT, prefersReducedMotion, REVEAL_START } from "@/lib/motion";
 
 /**
  * A heading that reveals line by line as it scrolls into view: each line
  * goes from clear and slightly blurred to sharp, with no movement (0.9s a
- * line, 80ms apart). Lines are measured by SplitText and re-measured when
- * fonts load or the width changes. With reduced motion the text is simply
- * there.
+ * line, 80ms apart). Lines are measured by SplitText (fetched on first
+ * use) and re-measured when fonts load or the width changes. With reduced
+ * motion the text is simply there.
  *
  * Headings visible on first paint (page titles) use the CSS `enter-blur`
  * class instead, which looks the same and never waits on JavaScript.
@@ -35,7 +35,9 @@ export function RevealText({
       if (!el || prefersReducedMotion()) return;
       // Split only when the heading is within a screen of the viewport, so
       // page load does not pay for measuring every heading at once.
-      const split = contextSafe!(() => {
+      let alive = true;
+      const split = contextSafe!((SplitText: Awaited<ReturnType<typeof loadSplitText>>) => {
+        if (!alive) return;
         SplitText.create(el, {
           type: "lines",
           linesClass: "reveal-line",
@@ -61,12 +63,15 @@ export function RevealText({
         ([e]) => {
           if (!e.isIntersecting) return;
           io.disconnect();
-          split();
+          loadSplitText().then(split);
         },
         { rootMargin: "0px 0px 100% 0px" },
       );
       io.observe(el);
-      return () => io.disconnect();
+      return () => {
+        alive = false;
+        io.disconnect();
+      };
     },
     { scope: ref },
   );

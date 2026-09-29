@@ -8,9 +8,9 @@ import { cn } from "@/lib/utils";
 /**
  * A muted, looping scroll recording.
  *
- * Its first frame is shown straight away as a properly sized image (so a
- * phone never downloads the full-size frame), exactly where the video will
- * play. The video itself downloads only once it is near the screen AND the
+ * Its first frame appears as it nears the screen, as a properly sized image
+ * (so a phone never downloads the full-size frame), exactly where the video
+ * will play. The video itself downloads only once it is near the screen AND the
  * page has finished loading (after the loading screen, when idle), so no
  * video data competes with the first view. It plays only while at least a
  * third of it is visible, and pauses the moment it leaves. With reduced
@@ -87,13 +87,8 @@ export function WorkVideo({
 
   return (
     <div className="relative h-full w-full">
-      <Image
-        src={poster}
-        alt=""
-        fill
-        sizes={sizes}
-        className={cn("object-cover object-top", className)}
-      />
+      {/* Only once it is close; until then the frame shows its background. */}
+      {near && <Image src={poster} alt="" fill sizes={sizes} className={cn("object-cover object-top", className)} />}
       <video
         ref={ref}
         className={cn("relative block h-full w-full object-cover object-top", className)}
