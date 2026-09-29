@@ -7,7 +7,7 @@ import { Reveal } from "@/components/motion/Reveal";
 import { RevealText } from "@/components/motion/RevealText";
 import { SectionLabel } from "@/components/ui/SectionLabel";
 import { process } from "@/data/studio";
-import { pageMeta } from "@/lib/metadata";
+import { ogImage, pageMeta } from "@/lib/metadata";
 import { HERO_WORDS } from "@/lib/site";
 import { breadcrumbJsonLd, jsonLd } from "@/lib/structured-data";
 import { pad2 } from "@/lib/utils";
@@ -15,8 +15,9 @@ import { pad2 } from "@/lib/utils";
 export const metadata: Metadata = pageMeta({
   title: "About",
   description:
-    "Nuit Works is a web design and development studio in the Maldives. We take care of everything, from the first concept to launch and ongoing support, for clients in the Maldives and abroad.",
+    "Nuit Works is a web design and development studio in the Maldives. We design, build, host and look after websites for clients here and abroad.",
   path: "/about",
+  image: ogImage("about", "A web studio in the Maldives: about Nuit Works"),
 });
 
 const PRINCIPLES = [

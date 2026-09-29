@@ -1,13 +1,7 @@
+import { services } from "@/data/studio";
 import { CONTACT_EMAIL, INSTAGRAM_URL, SITE_DESCRIPTION, SITE_NAME, SITE_URL } from "@/lib/site";
 
 const ORG_ID = `${SITE_URL}/#organization`;
-
-const SERVICES = [
-  "Custom design",
-  "Development and launch",
-  "Fast turnaround",
-  "Hosting and support",
-];
 
 /**
  * The studio as a local business in the Maldives, and the site itself.
@@ -17,7 +11,7 @@ export const organizationJsonLd = {
   "@context": "https://schema.org",
   "@graph": [
     {
-      "@type": ["LocalBusiness", "ProfessionalService"],
+      "@type": ["Organization", "ProfessionalService"],
       "@id": ORG_ID,
       name: SITE_NAME,
       url: SITE_URL,
@@ -34,9 +28,15 @@ export const organizationJsonLd = {
       hasOfferCatalog: {
         "@type": "OfferCatalog",
         name: "Services",
-        itemListElement: SERVICES.map((name) => ({
+        itemListElement: services.map((s) => ({
           "@type": "Offer",
-          itemOffered: { "@type": "Service", name, provider: { "@id": ORG_ID } },
+          itemOffered: {
+            "@type": "Service",
+            name: s.name,
+            description: s.body,
+            provider: { "@id": ORG_ID },
+            areaServed: [{ "@type": "Country", name: "Maldives" }, "Worldwide"],
+          },
         })),
       },
     },

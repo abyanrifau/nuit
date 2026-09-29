@@ -3,10 +3,13 @@ import { SITE_NAME, SITE_URL } from "@/lib/site";
 
 const DEFAULT_IMAGE = {
   url: "/og.jpg",
-  width: 2400,
-  height: 1260,
+  width: 1200,
+  height: 630,
   alt: "Nuit Works wordmark over a glowing prism, web design studio in the Maldives",
 };
+
+/** A page's own share image (made by scripts/og-images.mjs). */
+export const ogImage = (name: string, alt: string) => ({ url: `/og/${name}.jpg`, width: 1200, height: 630, alt });
 
 /**
  * Complete metadata for an inner page. Next replaces (rather than merges)

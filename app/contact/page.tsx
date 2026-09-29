@@ -1,15 +1,16 @@
 import type { Metadata } from "next";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { enterDelay } from "@/components/layout/PageHero";
-import { pageMeta } from "@/lib/metadata";
+import { ogImage, pageMeta } from "@/lib/metadata";
 import { breadcrumbJsonLd, jsonLd } from "@/lib/structured-data";
 import { CONTACT_EMAIL, INSTAGRAM_HANDLE, INSTAGRAM_URL } from "@/lib/site";
 
 export const metadata: Metadata = pageMeta({
   title: "Contact",
   description:
-    "Start a project with Nuit Works, a web design and development studio in the Maldives. Send a message, email hello@nuit.works or find us on Instagram at @nuit.works.",
+    "Start a project with Nuit Works, a web design studio in the Maldives. Send a message, email hello@nuit.works or find us on Instagram at @nuit.works.",
   path: "/contact",
+  image: ogImage("contact", "Start a project with Nuit Works"),
 });
 
 export default function ContactPage() {

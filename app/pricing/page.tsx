@@ -12,7 +12,7 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 import { faqs } from "@/data/faq";
 import { packages, planIncludes, plans, pricingNotes } from "@/data/pricing";
 import { getWork } from "@/data/work";
-import { pageMeta } from "@/lib/metadata";
+import { ogImage, pageMeta } from "@/lib/metadata";
 import { breadcrumbJsonLd, faqJsonLd, jsonLd } from "@/lib/structured-data";
 import { SITE_URL } from "@/lib/site";
 
@@ -21,6 +21,7 @@ export const metadata: Metadata = pageMeta({
   description:
     "Website packages in the Maldives: Essential from MVR 3,500, Business from MVR 7,500 and Commerce from MVR 12,500. Hosting and support from MVR 300 a month.",
   path: "/pricing",
+  image: ogImage("pricing", "Clear prices, quoted to fit: Nuit Works website packages and hosting plans"),
 });
 
 const amount = (price: string) => Number(price.replace(/[^\d]/g, ""));
@@ -36,9 +37,11 @@ export default function PricingPage() {
         name: "Website packages",
         itemListElement: packages.map((p) => ({
           "@type": "Offer",
-          name: p.name,
-          description: `${p.goodFor} ${p.includes.join(", ")}.`,
+          name: `${p.name} website package`,
+          description: `Starting price: from ${p.price}. The final price is quoted based on the size of the project. ${p.goodFor} Includes: ${p.includes.join(", ")}. Typical timeline: ${p.timeline}.`,
           url: `${SITE_URL}/pricing#${p.id}`,
+          price: amount(p.price),
+          priceCurrency: "MVR",
           priceSpecification: { "@type": "PriceSpecification", priceCurrency: "MVR", minPrice: amount(p.price) },
           seller: { "@id": `${SITE_URL}/#organization` },
         })),
@@ -49,8 +52,10 @@ export default function PricingPage() {
         itemListElement: plans.map((p) => ({
           "@type": "Offer",
           name: `${p.name} hosting and support`,
-          description: [...planIncludes, ...(p.adds ?? [])].join(", ") + ".",
+          description: `${p.price} per month. ${[...planIncludes, ...(p.adds ?? [])].join(", ")}.`,
           url: `${SITE_URL}/pricing#${p.id}`,
+          price: amount(p.price),
+          priceCurrency: "MVR",
           priceSpecification: {
             "@type": "UnitPriceSpecification",
             priceCurrency: "MVR",

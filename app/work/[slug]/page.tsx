@@ -7,7 +7,7 @@ import { CaseStory } from "@/components/case/CaseStory";
 import { NextProject } from "@/components/case/NextProject";
 import { PageStrip } from "@/components/case/PageStrip";
 import { getWork, media, nextWork, work } from "@/data/work";
-import { pageMeta } from "@/lib/metadata";
+import { ogImage, pageMeta } from "@/lib/metadata";
 import { breadcrumbJsonLd, jsonLd } from "@/lib/structured-data";
 import { SITE_URL } from "@/lib/site";
 
@@ -23,12 +23,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const w = getWork(slug);
   if (!w) return {};
-  const m = media(w.slug);
   return pageMeta({
     title: `${w.name}, ${w.industry.toLowerCase()} ${w.kind.toLowerCase()}`,
     description: `${w.summary} A ${w.kind.toLowerCase()} website by Nuit Works, designed and built in the Maldives.`,
     path: `/work/${w.slug}`,
-    image: { url: m.desktop.poster, width: m.desktop.width, height: m.desktop.height, alt: `The ${w.name} homepage` },
+    image: ogImage(`work-${w.slug}`, `${w.name}, a ${w.industry.toLowerCase()} ${w.kind.toLowerCase()} website by Nuit Works`),
   });
 }
 
@@ -43,7 +42,10 @@ export default async function CaseStudyPage({ params }: Props) {
     "@type": "CreativeWork",
     name: w.name,
     headline: `${w.name}: ${w.summary}`,
-    description: w.brief,
+    description:
+      w.kind === "Concept"
+        ? `A concept website designed and built by Nuit Works to show what the studio can do; not a client project. ${w.brief}`
+        : w.brief,
     url: `${SITE_URL}/work/${w.slug}`,
     genre: w.kind === "Concept" ? "Concept website" : "Website",
     about: w.industry,

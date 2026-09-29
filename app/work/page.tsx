@@ -3,15 +3,16 @@ import { FinalCta } from "@/components/home/FinalCta";
 import { PageHero } from "@/components/layout/PageHero";
 import { WorkIndex } from "@/components/work/WorkIndex";
 import { work } from "@/data/work";
-import { pageMeta } from "@/lib/metadata";
+import { ogImage, pageMeta } from "@/lib/metadata";
 import { breadcrumbJsonLd, jsonLd } from "@/lib/structured-data";
 import { SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = pageMeta({
   title: "Work",
   description:
-    "Concept websites by Nuit Works for cafes, guesthouses, shops and boutiques, designed and built in the Maldives to show what we can do.",
+    "Six concept websites by Nuit Works for cafes, guesthouses, shops and boutiques, designed and built in the Maldives to show what the studio can do.",
   path: "/work",
+  image: ogImage("work", "Concepts, built to be used: concept websites by Nuit Works"),
 });
 
 export default function WorkPage() {

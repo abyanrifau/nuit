@@ -6,7 +6,7 @@ import { PageHero } from "@/components/layout/PageHero";
 import { Reveal } from "@/components/motion/Reveal";
 import { RevealText } from "@/components/motion/RevealText";
 import { process, services } from "@/data/studio";
-import { pageMeta } from "@/lib/metadata";
+import { ogImage, pageMeta } from "@/lib/metadata";
 import { breadcrumbJsonLd, jsonLd } from "@/lib/structured-data";
 import { SITE_URL } from "@/lib/site";
 import { pad2 } from "@/lib/utils";
@@ -16,6 +16,7 @@ export const metadata: Metadata = pageMeta({
   description:
     "Custom website design, development and launch, fast turnaround, and hosting and support. Web design and development in the Maldives by Nuit Works.",
   path: "/services",
+  image: ogImage("services", "Everything you need to be online: services by Nuit Works"),
 });
 
 const slug = (s: string) => s.toLowerCase().replace(/[^a-z]+/g, "-");

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Button } from "@/components/ui/Button";
+import { Button, TextLink } from "@/components/ui/Button";
+import { NAV_LINKS } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Page not found",
@@ -26,6 +27,15 @@ export default function NotFound() {
       <div className="enter-fade mt-10" style={{ "--d": "0.3s" } as React.CSSProperties}>
         <Button href="/">Back to the home page</Button>
       </div>
+      <nav aria-label="Main pages" className="enter-fade mt-10" style={{ "--d": "0.38s" } as React.CSSProperties}>
+        <ul className="flex flex-wrap gap-x-6 gap-y-3 text-small">
+          {NAV_LINKS.map((l) => (
+            <li key={l.href}>
+              <TextLink href={l.href}>{l.label[0].toUpperCase() + l.label.slice(1)}</TextLink>
+            </li>
+          ))}
+        </ul>
+      </nav>
     </section>
   );
 }
