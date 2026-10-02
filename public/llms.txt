@@ -39,7 +39,7 @@ Domain and hosting fees are quoted separately.
 
 The studio's portfolio is six concept sites it designed and built itself to show its capability. They are concepts, not client projects.
 
-- [Driftwood](https://www.nuit.works/work/driftwood): guesthouse concept with a full booking flow.
+- [Driftwood](https://www.nuit.works/work/driftwood): guesthouse concept built for direct bookings, with a rate calendar priced by season and an itemised quote.
 - [Scentu](https://www.nuit.works/work/scentu): fragrance shop concept organised by scent family.
 - [VERUM](https://www.nuit.works/work/verum): skincare shop concept with a 30-second skin quiz, a routine builder and formula breakdowns.
 - [Nocturne](https://www.nuit.works/work/nocturne): coffee bar concept.

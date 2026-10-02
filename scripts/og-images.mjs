@@ -28,7 +28,7 @@ const pages = [
 ];
 
 const cases = [
-  { slug: "driftwood", name: "Driftwood", industry: "Guesthouse", summary: "A guesthouse site with a full booking flow, from dates to confirmation." },
+  { slug: "driftwood", name: "Driftwood", industry: "Guesthouse", summary: "Built for direct bookings, with the real price on every date." },
   { slug: "scentu", name: "Scentu", industry: "Fragrance", summary: "A fragrance shop sorted by how things smell, not by brand." },
   { slug: "verum", name: "VERUM", industry: "Skincare shop", summary: "Built around a 30-second quiz that builds your routine." },
   { slug: "nocturne", name: "Nocturne", industry: "Coffee bar", summary: "A coffee bar site built around low light and late evenings." },

@@ -18,7 +18,7 @@ export type WorkSource = {
 
 export const workSources: WorkSource[] = [
   { slug: "fuku-coffee", url: "https://fukucoffee.nuit.works" },
-  { slug: "driftwood", url: "https://guesthouse-nuit.vercel.app" },
+  { slug: "driftwood", url: "https://driftwood.nuit.works" },
   { slug: "verum", url: "https://verum.nuit.works" },
   { slug: "homestead", url: "https://homestead.nuit.works" },
   { slug: "scentu", url: "https://perfume-nuit.vercel.app" },

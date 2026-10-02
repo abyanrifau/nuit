@@ -62,7 +62,7 @@ export const packages: Package[] = [
     popular: true,
     example: {
       slug: "driftwood",
-      note: "Driftwood shows what a Business site can be: several pages and a booking request flow.",
+      note: "Driftwood shows what a Business site can be: several pages and a booking request flow with a price on every date.",
     },
   },
   {

@@ -1,7 +1,7 @@
 {
   "slug": "driftwood",
-  "url": "https://guesthouse-nuit.vercel.app",
-  "capturedAt": "2026-09-28T17:56:26.526Z",
+  "url": "https://driftwood.nuit.works",
+  "capturedAt": "2026-10-02T23:12:44.789Z",
   "pages": [
     {
       "file": "pages/01-home.webp",
@@ -11,17 +11,17 @@
     {
       "file": "pages/02-rooms.webp",
       "label": "Rooms",
-      "path": "/rooms"
+      "path": "/rooms/"
     },
     {
       "file": "pages/03-experiences.webp",
       "label": "Experiences",
-      "path": "/experiences"
+      "path": "/experiences/"
     },
     {
       "file": "pages/04-about.webp",
       "label": "About",
-      "path": "/about"
+      "path": "/about/"
     }
   ],
   "components": [
@@ -29,13 +29,13 @@
       "name": "navigation",
       "file": "components/navigation.webp",
       "width": 1440,
-      "height": 79
+      "height": 77
     },
     {
       "name": "button",
       "file": "components/button.webp",
-      "width": 260,
-      "height": 113
+      "width": 384,
+      "height": 117
     }
   ],
   "specimens": [
@@ -59,103 +59,140 @@
       "display": {
         "selector": "h1",
         "family": "Cormorant Garamond",
-        "stack": "\"Cormorant Garamond\", Cormorant, Garamond, \"Times New Roman\", serif",
+        "stack": "\"Cormorant Garamond-4a141df00b670e70\", \"Cormorant Garamond-4a141df00b670e70 fallback: Times New Roman\", Garamond, Georgia, serif",
         "weight": "300",
         "style": "normal",
-        "size": "105.6px",
-        "letterSpacing": "-1.2672px",
+        "size": "93.44px",
+        "letterSpacing": "-1.12128px",
         "textTransform": "none",
-        "sample": "Driftwood. A quiet stay on Maafushi."
+        "sample": "A twelve-room guesthouse on Maafushi"
       },
       "heading": {
         "selector": "h2",
-        "family": "Cormorant Garamond",
-        "stack": "\"Cormorant Garamond\", Cormorant, Garamond, \"Times New Roman\", serif",
-        "weight": "300",
+        "family": "Jost",
+        "stack": "Jost-19796d47ab671eee, \"Jost-19796d47ab671eee fallback: Arial\", Futura, Avenir, Arial, sans-serif",
+        "weight": "400",
         "style": "normal",
-        "size": "48px",
-        "letterSpacing": "-0.576px",
-        "textTransform": "none",
-        "sample": "Coral starts where the sand runs out."
+        "size": "11.52px",
+        "letterSpacing": "2.0736px",
+        "textTransform": "uppercase",
+        "sample": "Driftwood, Maafushi"
       },
       "body": {
         "selector": "[data-nw-body]",
         "family": "Jost",
-        "stack": "Jost, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Helvetica, Arial, sans-serif",
+        "stack": "Jost-19796d47ab671eee, \"Jost-19796d47ab671eee fallback: Arial\", Futura, Avenir, Arial, sans-serif",
         "weight": "300",
         "style": "normal",
-        "size": "20.928px",
+        "size": "17px",
         "letterSpacing": "normal",
         "textTransform": "none",
-        "sample": "Walk to the end of our street, turn left at the water, and y"
+        "sample": "January books up early. May has the most availability. Chris"
       },
       "ui": {
         "selector": "nav a",
         "family": "Jost",
-        "stack": "Jost, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Helvetica, Arial, sans-serif",
+        "stack": "Jost-19796d47ab671eee, \"Jost-19796d47ab671eee fallback: Arial\", Futura, Avenir, Arial, sans-serif",
         "weight": "400",
         "style": "normal",
-        "size": "13px",
-        "letterSpacing": "1.105px",
-        "textTransform": "none",
-        "sample": "Home"
+        "size": "11.52px",
+        "letterSpacing": "2.0736px",
+        "textTransform": "uppercase",
+        "sample": "Rooms"
       }
     },
     "cssColorVars": {
-      "--sand": "#F5F1EA",
-      "--sand-deep": "#EDE7DC",
-      "--sand-warm": "#E6DFD3",
-      "--ink": "#2B2622",
-      "--stone": "#8C877E",
-      "--stone-ink": "#6F6960",
-      "--wood": "#6B5B4D",
-      "--clay": "#8E5A3C",
-      "--clay-deep": "#754730",
-      "--clay-soft": "#FAF4ED",
-      "--line": "rgba(107, 91, 77, .20)",
-      "--line-soft": "rgba(107, 91, 77, .12)"
+      "--cream": "#f6f2ec",
+      "--ivory": "#fbf9f5",
+      "--ink": "#1e1a17",
+      "--espresso": "#2b2420",
+      "--taupe": "#8b8178",
+      "--hairline": "#e3dcd2",
+      "--sea": "#3e6f70",
+      "--sand": "#eee7dd",
+      "--ink-soft": "#3d3631",
+      "--taupe-ink": "#675e56",
+      "--control-line": "#b4a99c",
+      "--error": "#9e2a2b",
+      "--line-strong": "#cdc3b6",
+      "--season-0": "#fbf9f5",
+      "--season-1": "#ece4d8",
+      "--season-2": "#d8ccbc",
+      "--season-3": "#b8aa99",
+      "--tint-0": "#fbf9f5",
+      "--tint-1": "#f1ebe2",
+      "--tint-2": "#e6dccf",
+      "--tint-3": "#d6c9b9"
     },
     "backgrounds": [
       {
-        "hex": "#f5f1ea",
-        "weight": 7116480
+        "hex": "#f6f2ec",
+        "weight": 12836150
       },
       {
-        "hex": "#e6dfd3",
-        "weight": 3066541
+        "hex": "#eee7dd",
+        "weight": 6930389
       },
       {
-        "hex": "#8e5a3c",
-        "weight": 33505
+        "hex": "#6f8f8d",
+        "weight": 1172160
+      },
+      {
+        "hex": "#fbf9f5",
+        "weight": 946861
+      },
+      {
+        "hex": "#dce6e4",
+        "weight": 464401
+      },
+      {
+        "hex": "#2b2420",
+        "weight": 42485
+      },
+      {
+        "hex": "#d8ccbc",
+        "weight": 19636
+      },
+      {
+        "hex": "#ece4d8",
+        "weight": 9916
       }
     ],
     "textColors": [
       {
-        "hex": "#2b2622",
-        "weight": 1177994
+        "hex": "#1e1a17",
+        "weight": 1886653
       },
       {
-        "hex": "#f5f1ea",
-        "weight": 625527
+        "hex": "#f6f2ec",
+        "weight": 477581
       },
       {
-        "hex": "#6f6960",
-        "weight": 484406
+        "hex": "#675e56",
+        "weight": 395193
       },
       {
-        "hex": "#8e5a3c",
-        "weight": 9971
+        "hex": "#3d3631",
+        "weight": 379766
+      },
+      {
+        "hex": "#f6f2eb",
+        "weight": 24081
+      },
+      {
+        "hex": "#2b2420",
+        "weight": 3865
       }
     ]
   },
   "recordings": {
     "desktop": {
-      "maxScroll": 8984,
-      "seconds": 14.03
+      "maxScroll": 16662,
+      "seconds": 18.2
     },
     "mobile": {
-      "maxScroll": 9946,
-      "seconds": 13.27
+      "maxScroll": 17971,
+      "seconds": 18.2
     }
   }
 }
