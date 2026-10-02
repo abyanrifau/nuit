@@ -24,6 +24,7 @@ export function CaseProblem({ work: w }: { work: Work }) {
           </h2>
           <RevealText
             as="p"
+            defer
             delay={i * 0.08}
             className="mt-6 max-w-[30ch] font-display text-[clamp(1.5rem,1rem+1.6vw,2.625rem)] leading-[1.12] tracking-[-0.025em]"
           >

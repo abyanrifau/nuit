@@ -3,6 +3,7 @@
 import { useRef, type ElementType, type ReactNode } from "react";
 import { gsap, loadSplitText, useGSAP } from "@/lib/gsap";
 import { EASE_SOFT, prefersReducedMotion, REVEAL_START } from "@/lib/motion";
+import { cn } from "@/lib/utils";
 
 /**
  * A heading that reveals line by line as it scrolls into view: each line
@@ -13,6 +14,11 @@ import { EASE_SOFT, prefersReducedMotion, REVEAL_START } from "@/lib/motion";
  *
  * Headings visible on first paint (page titles) use the CSS `enter-blur`
  * class instead, which looks the same and never waits on JavaScript.
+ *
+ * `defer` is for long text that sits close to the top of a page: the lines
+ * are measured when the browser is next idle, as their own small task,
+ * instead of during page load. The text stays hidden until then (.reveal-defer
+ * in globals.css), so it never shows unsplit and then flickers.
  */
 export function RevealText({
   as: Tag = "h2",
@@ -20,12 +26,14 @@ export function RevealText({
   className,
   delay = 0,
   id,
+  defer = false,
 }: {
   as?: ElementType;
   children: ReactNode;
   className?: string;
   delay?: number;
   id?: string;
+  defer?: boolean;
 }) {
   const ref = useRef<HTMLElement>(null);
 
@@ -38,6 +46,7 @@ export function RevealText({
       let alive = true;
       const split = contextSafe!((SplitText: Awaited<ReturnType<typeof loadSplitText>>) => {
         if (!alive) return;
+        el.classList.add("is-split");
         SplitText.create(el, {
           type: "lines",
           linesClass: "reveal-line",
@@ -63,7 +72,9 @@ export function RevealText({
         ([e]) => {
           if (!e.isIntersecting) return;
           io.disconnect();
-          loadSplitText().then(split);
+          if (!defer) return void loadSplitText().then(split);
+          const idle = window.requestIdleCallback ?? ((cb: () => void) => window.setTimeout(cb, 1));
+          idle(() => void loadSplitText().then(split), { timeout: 1200 });
         },
         { rootMargin: "0px 0px 100% 0px" },
       );
@@ -77,7 +88,7 @@ export function RevealText({
   );
 
   return (
-    <Tag ref={ref} id={id} className={className}>
+    <Tag ref={ref} id={id} className={defer ? cn("reveal-defer", className) : className}>
       {children}
     </Tag>
   );
