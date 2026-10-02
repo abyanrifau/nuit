@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { CaseDesignSystem } from "@/components/case/CaseDesignSystem";
 import { CaseHero } from "@/components/case/CaseHero";
+import { CaseProblem } from "@/components/case/CaseProblem";
 import { CaseRecordings } from "@/components/case/CaseRecordings";
 import { CaseStory } from "@/components/case/CaseStory";
 import { NextProject } from "@/components/case/NextProject";
@@ -79,6 +80,7 @@ export default async function CaseStudyPage({ params }: Props) {
         )}
       />
       <CaseHero work={w} />
+      <CaseProblem work={w} />
       <CaseRecordings work={w} />
       <CaseStory work={w} />
       <CaseDesignSystem work={w} />

@@ -41,7 +41,7 @@ The studio's portfolio is six concept sites it designed and built itself to show
 
 - [Driftwood](https://www.nuit.works/work/driftwood): guesthouse concept with a full booking flow.
 - [Scentu](https://www.nuit.works/work/scentu): fragrance shop concept organised by scent family.
-- [Verum](https://www.nuit.works/work/verum): skincare shop concept with ingredient breakdowns and a quiz.
+- [VERUM](https://www.nuit.works/work/verum): skincare shop concept with a 30-second skin quiz, a routine builder and formula breakdowns.
 - [Nocturne](https://www.nuit.works/work/nocturne): coffee bar concept.
 - [Fuku Coffee](https://www.nuit.works/work/fuku-coffee): café concept.
 - [Homestead](https://www.nuit.works/work/homestead): furniture shop concept.

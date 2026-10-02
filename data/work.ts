@@ -21,7 +21,7 @@ export type WorkKind = "Concept" | "Client";
 export type Swatch = { name: string; hex: string; role: string };
 
 export type Typeface = {
-  role: "Display" | "Body";
+  role: "Display" | "Body" | "Data";
   family: string;
   /** e.g. "Light 300" */
   style: string;
@@ -44,6 +44,10 @@ export type Work = {
   summary: string;
   /** The concept's own headline, shown in quotes. */
   headline: string;
+  /** One sentence: the problem this kind of business has (not a claim about a client). */
+  problem: string;
+  /** One sentence: the standout feature built to solve it. */
+  usp: string;
   brief: string;
   approach: { title: string; body: string }[];
   result: string;
@@ -87,6 +91,10 @@ export const work: Work[] = [
     url: urlFor("driftwood"),
     summary: "A guesthouse site with a full booking flow, from dates to confirmation.",
     headline: "A quiet stay on Maafushi.",
+    problem:
+      "Guests booking a small guesthouse often have to message back and forth just to find out which rooms are free and what the stay will really cost.",
+    usp:
+      "A four-step booking flow that shows only the rooms free on your dates, with the full price, taxes included, before asking for any details.",
     brief:
       "A guesthouse lives on direct bookings. Guests want to see the rooms, understand the island and check dates without messaging back and forth. The site has to feel calm and trustworthy, and make booking the obvious next step.",
     approach: [
@@ -150,6 +158,10 @@ export const work: Work[] = [
     url: urlFor("scentu"),
     summary: "A fragrance shop sorted by how things smell, not by brand.",
     headline: "Find your scent. By smell, not by house.",
+    problem:
+      "You can't smell perfume through a screen, so most people shopping online can only buy by brand name and hope it suits them.",
+    usp:
+      "A shop sorted by nine scent families, where every bottle explains its notes, how far it carries and how long it lasts, in plain words.",
     brief:
       "Most people choose perfume by name, because they cannot smell it online. A fragrance boutique needs a way to describe scent that anyone can follow, and a shop that feels as considered as the bottles.",
     approach: [
@@ -205,65 +217,71 @@ export const work: Work[] = [
   },
   {
     slug: "verum",
-    name: "Verum",
+    name: "VERUM",
     kind: "Concept",
-    industry: "Skincare",
+    industry: "Skincare shop",
     location: "Malé, Maldives",
     year: 2026,
     url: urlFor("verum"),
-    summary: "A skincare shop that puts the ingredients first.",
+    summary: "An online skincare shop with a 30-second quiz that builds your routine.",
     headline: "Shop skincare that earns its place.",
+    problem:
+      "Skincare shoppers can't tell which products suit their skin or whether they're genuine, so they hesitate to buy online.",
+    usp:
+      "A 30-second skin quiz that builds a priced morning and evening routine, explains every pick and adds the lot to the cart with the bundle discount already applied.",
     brief:
-      "Skincare shoppers compare ingredients, not just brands. A skincare retailer needs to make that comparison easy, help people who don't know where to start, and still feel like a shop.",
+      "VERUM is a Malé retailer of Korean and Western skincare, with the line \"Formula first.\" It sells online, so the site has to do a good shop assistant's job: help people who don't know where to start, show that every product is genuine and what is really in it, and make buying a full routine easy.",
     approach: [
       {
         title: "Layout",
-        body: "A clean catalogue with generous spacing, and product pages that give the ingredient breakdown as much room as the product photo.",
+        body: "A clean, lab-like catalogue on paper white with thin rules. Every product card carries a code, its size and routine step, and product pages give the formula breakdown as much room as the photo.",
       },
       {
         title: "Typography",
-        body: "Fraunces for headings, a warm serif with character, set against Inter for body text and a mono face for prices and data, like a lab notebook.",
+        body: "Geist for headlines and reading, with Geist Mono for product codes, prices, labels and formula data, so the numbers read like a spec sheet.",
       },
       {
         title: "Colour",
-        body: "Paper white, ink and a muted sage. The calm palette keeps attention on the information.",
+        body: "Paper, bone and ink, with sage tints and one deep green for every action. Calm enough that the information leads.",
       },
       {
         title: "Interaction",
-        body: "Live search and filter chips, ingredient rows that open to show animated concentration bars, and a three-question quiz that ends in a ranked shortlist.",
+        body: "A three-tap quiz that ranks a routine and shows its reasons, a routine builder with a live savings bar and layering warnings, side-by-side compare, and quick view and add to cart from any product card.",
       },
     ],
     result:
-      "A catalogue you can search by product, brand or ingredient, product pages that show what is inside and why, and a quiz for people who want a starting point.",
+      "A full shop of 50 products from 21 brands, built for online sales. Shoppers can take the quiz, build and adjust an AM and PM routine with bundle savings, compare products, look up any ingredient, and check out on one page with delivery across Malé or pickup.",
     built: [
-      "Home, Shop, product, Quiz, Philosophy and Contact pages",
-      "Live search, sorting, and filters by category, origin, concern and brand",
-      "Ingredient breakdowns with published concentrations",
-      "\"Find your formula\" quiz with ranked results",
-      "Cart drawer that remembers items",
+      "Home, Shop, product, brand, ingredient, Philosophy and Delivery pages",
+      "30-second skin quiz: three questions, a ranked AM and PM routine with reasons and swaps",
+      "Routine builder with layering warnings, a shareable link and bundle savings of up to 15%",
+      "Formula breakdowns that show published ingredient strengths, and say Not published where a brand gives none",
+      "Compare up to three products side by side, including price per 10 ml",
+      "Ingredient explorer for 20 ingredients, with a pair checker",
+      "Cart and one-page checkout with delivery zones, pickup, and card or BML transfer",
     ],
-    note: "The cart is a front-end prototype. A real shop would connect checkout and payments.",
+    note: "VERUM is a fictional shop. The skincare brands shown are real and belong to their owners; none of them is a client or partner of Nuit Works. Checkout is a prototype: no order is placed and no payment is taken.",
     palette: [
       { name: "Paper", hex: "#FAFAF8", role: "Background" },
-      { name: "Ink", hex: "#1C1C1A", role: "Text" },
-      { name: "Sage", hex: "#8B9D83", role: "Fills and buttons" },
-      { name: "Deep sage", hex: "#56654F", role: "Accent text" },
-      { name: "Forest", hex: "#242A22", role: "Footer" },
+      { name: "Ink", hex: "#141414", role: "Text" },
+      { name: "Deep green", hex: "#1D2A1F", role: "Buttons and actions" },
+      { name: "Sage", hex: "#566754", role: "Savings and accents" },
+      { name: "Bone", hex: "#F1F1EC", role: "Surfaces" },
     ],
     typefaces: [
-      { role: "Display", family: "Fraunces", style: "Regular 400", usage: "Headlines", specimen: "/work/verum/specimens/display.webp" },
-      { role: "Body", family: "Inter", style: "Regular 400", usage: "Body and small headings", specimen: "/work/verum/specimens/body.webp" },
+      { role: "Display", family: "Geist", style: "SemiBold 600", usage: "Headlines and product names", specimen: "/work/verum/specimens/display.webp" },
+      { role: "Data", family: "Geist Mono", style: "Regular 400", usage: "Product codes, prices, labels and formula data", specimen: "/work/verum/specimens/data.webp" },
     ],
     components: [
-      { label: "Navigation", file: "/work/verum/components/navigation.webp", width: 1440, height: 69 },
-      { label: "Button", file: "/work/verum/components/button.webp", width: 202, height: 124 },
-      { label: "Product card", file: "/work/verum/components/card.webp", width: 458, height: 709 },
+      { label: "Navigation", file: "/work/verum/components/navigation.webp", width: 1425, height: 69 },
+      { label: "Button", file: "/work/verum/components/button.webp", width: 380, height: 122 },
+      { label: "Product card", file: "/work/verum/components/card.webp", width: 379, height: 613 },
     ],
     pages: [
       page("verum", "01-home.webp", "Home"),
       page("verum", "02-shop.webp", "Shop"),
-      page("verum", "03-find-your-formula.webp", "Quiz"),
-      page("verum", "04-philosophy.webp", "Philosophy"),
+      page("verum", "03-skin-quiz.webp", "Skin quiz"),
+      page("verum", "04-routine-builder.webp", "Routine builder"),
     ],
     light: "olive",
   },
@@ -277,6 +295,10 @@ export const work: Work[] = [
     url: urlFor("nocturne"),
     summary: "A coffee bar site built around low light and late evenings.",
     headline: "Slow coffee, low light.",
+    problem:
+      "A late-opening coffee bar sells an evening atmosphere, but a social feed rarely tells people when it's open, how to find it or whether they can book a space.",
+    usp:
+      "A visit page with the hours, step-by-step directions to the door and an enquiry form for booking the back room for tastings and private evenings.",
     brief:
       "A coffee bar that stays open late sells a feeling as much as a drink. The site needs to show the room, the menu and the hours, and make it easy to ask about private events.",
     approach: [
@@ -339,6 +361,10 @@ export const work: Work[] = [
     url: urlFor("fuku-coffee"),
     summary: "A calm café site with a Japanese touch.",
     headline: "Good fortune, poured slowly.",
+    problem:
+      "A café that relies on social media has no single place where people can see the menu, prices, events and how to find it.",
+    usp:
+      "An events page where people can ask for a seat at a weekend cupping or pour-over class, or for the private back room, with the full priced menu one click away.",
     brief:
       "A neighbourhood café needs people to find it, see the menu and know when it's open. For Fuku, the site also had to carry the café's quiet, Japanese-inspired character.",
     approach: [
@@ -381,7 +407,7 @@ export const work: Work[] = [
     ],
     components: [
       { label: "Navigation", file: "/work/fuku-coffee/components/navigation.webp", width: 1440, height: 76 },
-      { label: "Button", file: "/work/fuku-coffee/components/button.webp", width: 206, height: 109 },
+      { label: "Button", file: "/work/fuku-coffee/components/button.webp", width: 216, height: 100 },
       { label: "Menu card", file: "/work/fuku-coffee/components/card.webp", width: 400, height: 224 },
     ],
     pages: [
@@ -402,6 +428,10 @@ export const work: Work[] = [
     url: urlFor("homestead"),
     summary: "A furniture shop with six pieces and room to breathe.",
     headline: "Furniture for the quiet hours.",
+    problem:
+      "Furniture is a big, slow purchase, and people won't buy a sofa online unless they're sure it will fit their room and know when it will arrive.",
+    usp:
+      "Product pages that put exact dimensions, the made-to-order lead time, materials and care right next to the price, so buyers can check the fit before they commit.",
     brief:
       "Furniture is bought slowly. A furniture maker needs a site that shows each piece properly, answers practical questions like size and lead time, and feels as calm as the rooms it furnishes.",
     approach: [
@@ -445,7 +475,7 @@ export const work: Work[] = [
     ],
     components: [
       { label: "Navigation", file: "/work/homestead/components/navigation.webp", width: 1440, height: 64 },
-      { label: "Button", file: "/work/homestead/components/button.webp", width: 311, height: 120 },
+      { label: "Button", file: "/work/homestead/components/button.webp", width: 310, height: 120 },
       { label: "Product card", file: "/work/homestead/components/card.webp", width: 451, height: 607 },
     ],
     pages: [
@@ -466,7 +496,7 @@ export const nextWork = (slug: string) => {
   return work[(i + 1) % work.length];
 };
 
-/** "driftwood.vercel.app" style host, for browser frames. */
+/** "verum.nuit.works" style host, for browser frames. */
 export const hostOf = (url: string) => {
   try {
     return new URL(url).host;

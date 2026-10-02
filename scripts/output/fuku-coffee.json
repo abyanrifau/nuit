@@ -1,7 +1,7 @@
 {
   "slug": "fuku-coffee",
-  "url": "https://cafe-nuit.vercel.app",
-  "capturedAt": "2026-09-28T17:54:11.679Z",
+  "url": "https://fukucoffee.nuit.works",
+  "capturedAt": "2026-10-02T20:10:57.006Z",
   "pages": [
     {
       "file": "pages/01-home.webp",
@@ -124,7 +124,7 @@
     "backgrounds": [
       {
         "hex": "#f2f4f3",
-        "weight": 3647253
+        "weight": 3697653
       },
       {
         "hex": "#ede0d4",
@@ -132,7 +132,7 @@
       },
       {
         "hex": "#5e503f",
-        "weight": 1917203
+        "weight": 2017013
       },
       {
         "hex": "#7f5539",
@@ -154,11 +154,11 @@
       },
       {
         "hex": "#242331",
-        "weight": 150280
+        "weight": 167331
       },
       {
         "hex": "#ede0d4",
-        "weight": 26540
+        "weight": 43007
       },
       {
         "hex": "#7f5539",
@@ -172,11 +172,11 @@
   },
   "recordings": {
     "desktop": {
-      "maxScroll": 3931,
+      "maxScroll": 4001,
       "seconds": 11.2
     },
     "mobile": {
-      "maxScroll": 4741,
+      "maxScroll": 4983,
       "seconds": 11.2
     }
   }

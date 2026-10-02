@@ -66,7 +66,7 @@ function build() {
     "",
   );
   for (const w of work) {
-    add(`### ${w.name} (${w.kind.toLowerCase()}, ${w.industry.toLowerCase()})`, "", `Case study: ${SITE_URL}/work/${w.slug}`, "", w.summary, "", w.brief, "", w.result, "");
+    add(`### ${w.name} (${w.kind.toLowerCase()}, ${w.industry.toLowerCase()})`, "", `Case study: ${SITE_URL}/work/${w.slug}`, "", w.summary, "", `The problem: ${w.problem}`, `What we added: ${w.usp}`, "", w.brief, "", w.result, "");
   }
 
   add(

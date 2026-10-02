@@ -1,7 +1,7 @@
 {
   "slug": "homestead",
-  "url": "https://furniture-nuit.vercel.app",
-  "capturedAt": "2026-09-28T18:02:47.722Z",
+  "url": "https://homestead.nuit.works",
+  "capturedAt": "2026-10-02T20:15:01.271Z",
   "pages": [
     {
       "file": "pages/01-home.webp",
@@ -111,11 +111,11 @@
     "backgrounds": [
       {
         "hex": "#f7f3ec",
-        "weight": 4381892
+        "weight": 4504472
       },
       {
         "hex": "#f1ebe1",
-        "weight": 1966230
+        "weight": 2017350
       },
       {
         "hex": "#e9e1d5",
@@ -133,11 +133,11 @@
     "textColors": [
       {
         "hex": "#2b241d",
-        "weight": 699370
+        "weight": 708496
       },
       {
         "hex": "#75695b",
-        "weight": 168876
+        "weight": 178956
       },
       {
         "hex": "#2a241d",
@@ -151,11 +151,11 @@
   },
   "recordings": {
     "desktop": {
-      "maxScroll": 4392,
+      "maxScroll": 4472,
       "seconds": 11.2
     },
     "mobile": {
-      "maxScroll": 7865,
+      "maxScroll": 7986,
       "seconds": 11.2
     }
   }

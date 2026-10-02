@@ -30,7 +30,7 @@ const pages = [
 const cases = [
   { slug: "driftwood", name: "Driftwood", industry: "Guesthouse", summary: "A guesthouse site with a full booking flow, from dates to confirmation." },
   { slug: "scentu", name: "Scentu", industry: "Fragrance", summary: "A fragrance shop sorted by how things smell, not by brand." },
-  { slug: "verum", name: "Verum", industry: "Skincare", summary: "A skincare shop that puts the ingredients first." },
+  { slug: "verum", name: "VERUM", industry: "Skincare shop", summary: "Built around a 30-second quiz that builds your routine." },
   { slug: "nocturne", name: "Nocturne", industry: "Coffee bar", summary: "A coffee bar site built around low light and late evenings." },
   { slug: "fuku-coffee", name: "Fuku Coffee", industry: "Café", summary: "A calm café site with a Japanese touch." },
   { slug: "homestead", name: "Homestead", industry: "Furniture", summary: "A furniture shop with six pieces and room to breathe." },

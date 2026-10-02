@@ -1,7 +1,17 @@
 {
   "slug": "verum",
-  "url": "https://skincare-nuit.vercel.app",
-  "capturedAt": "2026-09-28T18:00:11.662Z",
+  "url": "https://verum.nuit.works",
+  "capturedAt": "2026-10-02T20:33:13.188Z",
+  "recordings": {
+    "desktop": {
+      "tour": true,
+      "seconds": 23.73
+    },
+    "mobile": {
+      "tour": true,
+      "seconds": 24.43
+    }
+  },
   "pages": [
     {
       "file": "pages/01-home.webp",
@@ -14,47 +24,47 @@
       "path": "/shop"
     },
     {
-      "file": "pages/03-find-your-formula.webp",
-      "label": "Find your formula",
+      "file": "pages/03-find-your-routine30s.webp",
+      "label": "Find your routine30s",
       "path": "/quiz"
     },
     {
-      "file": "pages/04-philosophy.webp",
-      "label": "Philosophy",
-      "path": "/philosophy"
+      "file": "pages/04-routine-builder.webp",
+      "label": "Routine builder",
+      "path": "/routine"
     }
   ],
   "components": [
     {
       "name": "navigation",
       "file": "components/navigation.webp",
-      "width": 1440,
+      "width": 1425,
       "height": 69
     },
     {
       "name": "button",
       "file": "components/button.webp",
-      "width": 202,
-      "height": 124
+      "width": 380,
+      "height": 122
     },
     {
       "name": "card",
       "file": "components/card.webp",
-      "width": 458,
-      "height": 709
+      "width": 380,
+      "height": 614
     }
   ],
   "specimens": [
     {
       "role": "display",
-      "family": "Fraunces",
-      "weight": "400",
+      "family": "Geist",
+      "weight": "600",
       "style": "normal",
       "file": "specimens/display.webp"
     },
     {
       "role": "body",
-      "family": "Inter",
+      "family": "Geist",
       "weight": "400",
       "style": "normal",
       "file": "specimens/body.webp"
@@ -64,134 +74,109 @@
     "fonts": {
       "display": {
         "selector": "h1",
-        "family": "Fraunces",
-        "stack": "Fraunces, \"Iowan Old Style\", Georgia, \"Times New Roman\", serif",
-        "weight": "400",
+        "family": "Geist",
+        "stack": "Geist-df0175e0576b3b31, \"Geist-df0175e0576b3b31 fallback: Arial\", Arial, sans-serif, Geist, Arial, sans-serif",
+        "weight": "600",
         "style": "normal",
-        "size": "112px",
-        "letterSpacing": "-2.464px",
+        "size": "68px",
+        "letterSpacing": "-3.06px",
         "textTransform": "none",
-        "sample": "Shop skincarethat earnsits place."
+        "sample": "Shop skincare that earns its place."
       },
       "heading": {
         "selector": "h2",
-        "family": "Fraunces",
-        "stack": "Fraunces, \"Iowan Old Style\", Georgia, \"Times New Roman\", serif",
-        "weight": "400",
+        "family": "Geist",
+        "stack": "Geist-df0175e0576b3b31, \"Geist-df0175e0576b3b31 fallback: Arial\", Arial, sans-serif, Geist, Arial, sans-serif",
+        "weight": "600",
         "style": "normal",
-        "size": "36px",
-        "letterSpacing": "-0.36px",
+        "size": "38px",
+        "letterSpacing": "-1.14px",
         "textTransform": "none",
-        "sample": "Not sure what to get?Find your formula in 30 seconds."
+        "sample": "Three taps to a full routine."
       },
       "body": {
         "selector": "[data-nw-body]",
-        "family": "Inter",
-        "stack": "Inter, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Helvetica, Arial, sans-serif",
+        "family": "Geist",
+        "stack": "Geist-df0175e0576b3b31, \"Geist-df0175e0576b3b31 fallback: Arial\", Arial, sans-serif, Geist, Arial, sans-serif",
         "weight": "400",
         "style": "normal",
-        "size": "13px",
-        "letterSpacing": "-0.08px",
+        "size": "16px",
+        "letterSpacing": "normal",
         "textTransform": "none",
-        "sample": "Anua · Beauty of Joseon · CeraVe · COSRX · EltaMD · Glow Rec"
+        "sample": "Choose BML transfer at checkout, send the total to the accou"
       },
       "ui": {
         "selector": "nav a",
-        "family": "Inter",
-        "stack": "Inter, -apple-system, BlinkMacSystemFont, \"Segoe UI\", Helvetica, Arial, sans-serif",
-        "weight": "400",
+        "family": "Geist",
+        "stack": "Geist-df0175e0576b3b31, \"Geist-df0175e0576b3b31 fallback: Arial\", Arial, sans-serif, Geist, Arial, sans-serif",
+        "weight": "500",
         "style": "normal",
-        "size": "14px",
-        "letterSpacing": "-0.08px",
+        "size": "15px",
+        "letterSpacing": "normal",
         "textTransform": "none",
         "sample": "Shop"
       }
     },
     "cssColorVars": {
-      "--paper": "#FAFAF8",
-      "--ink": "#1C1C1A",
-      "--ink-60": "#5A5A55",
-      "--ink-40": "#6C6C66",
-      "--sage": "#8B9D83",
-      "--sage-deep": "#56654F",
-      "--sage-wash": "#EEF1EA",
-      "--sage-tint": "#E4EADF",
-      "--sage-line": "rgba(139, 157, 131, 0.30)",
-      "--forest": "#242A22",
-      "--forest-line": "rgba(250, 250, 248, 0.16)",
-      "--grey": "#D8D8D3",
-      "--grey-soft": "#EFEFEC",
-      "--white": "#FFFFFF"
+      "--paper": "#fafaf8",
+      "--bone": "#f1f1ec",
+      "--ink": "#141414",
+      "--graphite": "#63635e",
+      "--hairline": "#e2e2dc",
+      "--line-strong": "#8c8c85",
+      "--sage": "#8a9a86",
+      "--sage-deep": "#566754",
+      "--sage-tint": "#e7ece4",
+      "--cta": "#1d2a1f",
+      "--cta-hover": "#31432f",
+      "--on-cta": "#fafaf8",
+      "--error": "#a33a2b",
+      "--error-tint": "#f7e9e6",
+      "--focus": "#2f5bd3"
     },
     "backgrounds": [
       {
         "hex": "#fafaf8",
-        "weight": 6448152
+        "weight": 10919249
       },
       {
-        "hex": "#eef1ea",
-        "weight": 1614150
+        "hex": "#f1f1ec",
+        "weight": 4982927
       },
       {
-        "hex": "#ffffff",
-        "weight": 1291045
+        "hex": "#1d2a1f",
+        "weight": 190532
       },
       {
-        "hex": "#242a22",
-        "weight": 788085
+        "hex": "#e7ece4",
+        "weight": 22876
       },
       {
-        "hex": "#8b9d83",
-        "weight": 74452
+        "hex": "#141414",
+        "weight": 6407
       },
       {
-        "hex": "#e4eadf",
-        "weight": 19296
-      },
-      {
-        "hex": "#efefec",
-        "weight": 9801
-      },
-      {
-        "hex": "#1c1c1a",
-        "weight": 7684
+        "hex": "#566754",
+        "weight": 4008
       }
     ],
     "textColors": [
       {
-        "hex": "#1c1c1a",
-        "weight": 922475
+        "hex": "#141414",
+        "weight": 1304934
       },
       {
-        "hex": "#5a5a55",
-        "weight": 367574
-      },
-      {
-        "hex": "#6c6c66",
-        "weight": 33412
-      },
-      {
-        "hex": "#56654f",
-        "weight": 32559
-      },
-      {
-        "hex": "#8b9d83",
-        "weight": 13622
+        "hex": "#63635e",
+        "weight": 771565
       },
       {
         "hex": "#fafaf8",
-        "weight": 5285
+        "weight": 51959
+      },
+      {
+        "hex": "#566754",
+        "weight": 15385
       }
     ]
-  },
-  "recordings": {
-    "desktop": {
-      "maxScroll": 4270,
-      "seconds": 11.2
-    },
-    "mobile": {
-      "maxScroll": 10495,
-      "seconds": 13.87
-    }
   }
 }
