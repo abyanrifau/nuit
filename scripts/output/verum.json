@@ -1,15 +1,15 @@
 {
   "slug": "verum",
   "url": "https://verum.nuit.works",
-  "capturedAt": "2026-10-02T20:33:13.188Z",
+  "capturedAt": "2026-10-02T21:59:38.814Z",
   "recordings": {
     "desktop": {
-      "tour": true,
-      "seconds": 23.73
+      "maxScroll": 6159,
+      "seconds": 11.2
     },
     "mobile": {
-      "tour": true,
-      "seconds": 24.43
+      "maxScroll": 8476,
+      "seconds": 11.63
     }
   },
   "pages": [

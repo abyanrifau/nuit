@@ -5,5 +5,5 @@ export const mediaVersions: Record<string, string> = {
   homestead: "d8cc6a7e24",
   nocturne: "5861cc6f1c",
   scentu: "a68705f50c",
-  verum: "3f684beeb1"
+  verum: "b638fe07c7"
 };

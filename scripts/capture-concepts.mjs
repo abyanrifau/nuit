@@ -1,8 +1,6 @@
 // Captures every piece of media the site shows for a concept:
 //   - smooth top-to-bottom scroll recordings at desktop (1440x900) and mobile
-//     (390x844), encoded as MP4 (H.264) and WebM (VP9), muted and loop-friendly;
-//     or, when data/concept-sources.ts gives the concept a `tour`, a scripted
-//     walk through its standout flow instead (see recordTour)
+//     (390x844), encoded as MP4 (H.264) and WebM (VP9), muted and loop-friendly
 //   - a poster frame for each recording
 //   - a full-page screenshot at both sizes, the first screen of each key page,
 //     and two or three key components, all as WebP
@@ -163,14 +161,6 @@ async function record(browser, source, kind, outDir) {
       return file;
     };
 
-    if (source.tour?.[kind]) {
-      const { first, last } = await recordTour(page, source, source.tour[kind], shoot, put);
-      await loopFade(first, last, put);
-      log(`  ${kind}: tour of ${source.tour[kind].length} steps, ${(n / FPS).toFixed(1)}s`);
-      await encode(frameDir, outDir, kind, cfg.outWidth, true);
-      return { tour: true, seconds: +(n / FPS).toFixed(2) };
-    }
-
     const maxScroll = await page.evaluate(
       () => document.documentElement.scrollHeight - window.innerHeight,
     );
@@ -223,75 +213,7 @@ async function crossfade(a, b, frames, put) {
 /** Cross-fade the last frame into the first so the loop has no jump cut. */
 const loopFade = (first, last, put) => crossfade(last, first, Math.round(CROSSFADE_S * FPS), put);
 
-/**
- * A scripted recording (TourStep[] from data/concept-sources.ts). Scrolls are
- * filmed frame by frame like the plain recordings; after a click the page is
- * filmed in real time and resampled to the frame rate, so its own animations
- * play at their real speed. A new page cross-fades in from the last frame.
- */
-async function recordTour(page, source, steps, shoot, put) {
-  let first = null;
-  let last = null;
-  const frame = async () => {
-    last = await shoot();
-    first ??= last;
-  };
-  const vh = page.viewportSize().height;
-  const easeScroll = async (to, seconds) => {
-    const from = await page.evaluate(() => window.scrollY);
-    const max = await page.evaluate(() => document.documentElement.scrollHeight - window.innerHeight);
-    const target = Math.max(0, Math.min(max, Math.round(to)));
-    const frames = Math.max(1, Math.round(seconds * FPS));
-    for (let i = 1; i <= frames; i++) {
-      await scrollTo(page, Math.round(from + (target - from) * easeInOut(i / frames)));
-      await frame();
-    }
-  };
-
-  for (const step of steps) {
-    if ("goto" in step) {
-      const previous = last;
-      await page.goto(new URL(step.goto, source.url).href, { waitUntil: "load", timeout: 60000 });
-      await settle(page, 1200);
-      await scrollTo(page, 0);
-      await sleep(300);
-      const shot = await page.screenshot({ type: "jpeg", quality: 92 });
-      if (previous) await crossfade(previous, shot, Math.round(0.45 * FPS), put);
-      last = await put(shot);
-      first ??= last;
-    } else if ("hold" in step) {
-      if (!last) await frame();
-      const buf = await readFile(last);
-      for (let i = 0; i < Math.round(step.hold * FPS); i++) last = await put(buf);
-    } else if ("scroll" in step) {
-      const to =
-        typeof step.scroll === "number"
-          ? step.scroll
-          : await page.locator(step.scroll).first().evaluate((el) => el.getBoundingClientRect().top + window.scrollY - 80);
-      await easeScroll(to, step.s);
-    } else if ("click" in step) {
-      const el = page.locator(step.click).first();
-      // Bring it into view smoothly first, so the click never jumps the page.
-      const box = await el.boundingBox();
-      if (box && (box.y < 70 || box.y + box.height > vh - 40) && !(await el.evaluate((n) => !!n.closest("[role=dialog], dialog")))) {
-        await easeScroll((await page.evaluate(() => window.scrollY)) + box.y - vh * 0.4, 0.7);
-      }
-      await el.click({ timeout: 15000 });
-      const shots = [];
-      const t0 = Date.now();
-      while (Date.now() - t0 < step.s * 1000) shots.push({ t: Date.now() - t0, buf: await page.screenshot({ type: "jpeg", quality: 92 }) });
-      for (let i = 0, j = 0; i < Math.round(step.s * FPS); i++) {
-        while (j + 1 < shots.length && shots[j + 1].t <= (i * 1000) / FPS) j++;
-        last = await put(shots[j].buf);
-      }
-    }
-  }
-  return { first, last };
-}
-
-// Tours change the picture far more than a scroll and run about twice as
-// long, so their WebM is compressed a little harder to stay a similar size.
-async function encode(frameDir, outDir, kind, outWidth, tour = false) {
+async function encode(frameDir, outDir, kind, outWidth) {
   const input = ["-y", "-hide_banner", "-loglevel", "error", "-framerate", String(FPS), "-i", path.join(frameDir, "%05d.jpg")];
   const scale = `scale=${outWidth}:-2:flags=lanczos,format=yuv420p`;
 
@@ -303,7 +225,7 @@ async function encode(frameDir, outDir, kind, outWidth, tour = false) {
   ]);
   await run(ffmpegPath, [
     ...input, "-vf", scale, "-an",
-    "-c:v", "libvpx-vp9", "-crf", String((kind === "desktop" ? 38 : 40) + (tour ? 6 : 0)), "-b:v", "0",
+    "-c:v", "libvpx-vp9", "-crf", kind === "desktop" ? "38" : "40", "-b:v", "0",
     "-row-mt", "1", "-deadline", "good", "-cpu-used", "3",
     path.join(outDir, `${kind}.webm`),
   ]);
