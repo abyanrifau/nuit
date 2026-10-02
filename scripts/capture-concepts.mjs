@@ -220,6 +220,9 @@ async function encode(frameDir, outDir, kind, outWidth) {
   await run(ffmpegPath, [
     ...input, "-vf", scale, "-an",
     "-c:v", "libx264", "-preset", "slow", "-crf", kind === "desktop" ? "28" : "31",
+    // A ceiling on the bitrate, so a long or photo-heavy homepage cannot
+    // produce a much heavier file than the rest (they all sit around 1.7 Mbps).
+    "-maxrate", "1.8M", "-bufsize", "3.6M",
     "-profile:v", "high", "-movflags", "+faststart",
     path.join(outDir, `${kind}.mp4`),
   ]);
