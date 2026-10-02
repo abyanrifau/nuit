@@ -732,5 +732,8 @@ try {
   await browser.close();
 }
 
+// New captures need new URLs (browsers cache concept media for a year).
+await run(process.execPath, [path.join(ROOT, "scripts", "media-versions.mjs")]);
+
 const files = await readdir(OUTPUT).catch(() => []);
 log(`\ndone. reports in scripts/output (${files.length} files)`);

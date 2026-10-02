@@ -46,13 +46,17 @@ const pageHeaders = [
 ];
 
 // Captured concept media and the hero's still frames only change when they
-// are re-made, so browsers may keep them for a year. Give a replacement file
-// a new name so visitors pick it up straight away.
+// are re-made, so browsers may keep them for a year. Concept media URLs carry
+// a content version (?v=, scripts/media-versions.mjs), so a recapture reaches
+// visitors straight away; give a replacement hero still a new name.
 const longCache = [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }];
 
 const nextConfig: NextConfig = {
   images: {
     qualities: [75, 85],
+    // Concept media carries a content version (?v=, data/work.ts) so new
+    // captures get new URLs; local images may therefore have a query string.
+    localPatterns: [{ pathname: "/**" }],
     formats: ["image/avif", "image/webp"],
   },
   experimental: {

@@ -1,5 +1,6 @@
 import type { LightColor } from "@/lib/light";
 import { workSources } from "./concept-sources";
+import { mediaVersions } from "./media-versions";
 
 /*
  * Every piece of work on the site, in the order it is shown.
@@ -64,23 +65,33 @@ export type Work = {
 
 const urlFor = (slug: string) => workSources.find((s) => s.slug === slug)?.url ?? "";
 
+/**
+ * A media path with its concept's content version (?v=, see
+ * scripts/media-versions.mjs). Browsers keep concept media for a year, so a
+ * recapture has to arrive under a new URL.
+ */
+const versioned = (file: string) => {
+  const v = mediaVersions[file.split("/")[2]];
+  return v ? `${file}?v=${v}` : file;
+};
+
 /** Paths to a project's captured media in public/work/<slug>/. */
 export const media = (slug: string) => {
-  const base = `/work/${slug}`;
+  const at = (file: string) => versioned(`/work/${slug}/${file}`);
   return {
-    desktop: { webm: `${base}/desktop.webm`, mp4: `${base}/desktop.mp4`, poster: `${base}/desktop-poster.webp`, width: 1280, height: 800 },
-    mobile: { webm: `${base}/mobile.webm`, mp4: `${base}/mobile.mp4`, poster: `${base}/mobile-poster.webp`, width: 600, height: 1298 },
+    desktop: { webm: at("desktop.webm"), mp4: at("desktop.mp4"), poster: at("desktop-poster.webp"), width: 1280, height: 800 },
+    mobile: { webm: at("mobile.webm"), mp4: at("mobile.mp4"), poster: at("mobile-poster.webp"), width: 600, height: 1298 },
   };
 };
 
 const page = (slug: string, file: string, label: string): Shot => ({
   label,
-  file: `/work/${slug}/pages/${file}`,
+  file: versioned(`/work/${slug}/pages/${file}`),
   width: 1440,
   height: 900,
 });
 
-export const work: Work[] = [
+const entries: Work[] = [
   {
     slug: "driftwood",
     name: "Driftwood",
@@ -487,6 +498,13 @@ export const work: Work[] = [
     light: "olive",
   },
 ];
+
+// Specimens and component captures are written as plain paths above; version them too.
+export const work: Work[] = entries.map((w) => ({
+  ...w,
+  typefaces: w.typefaces.map((t) => ({ ...t, specimen: versioned(t.specimen) })),
+  components: w.components.map((c) => ({ ...c, file: versioned(c.file) })),
+}));
 
 export const getWork = (slug: string) => work.find((w) => w.slug === slug);
 
