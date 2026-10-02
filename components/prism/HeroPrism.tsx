@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { MOUSE_QUERY, mouseFrame, REACH, touchFrame, type PrismFrame } from "@/components/prism/prism-frame";
 import { gsap, useGSAP } from "@/lib/gsap";
-import { isLowPowerDevice, useAfterIdle, useMedia } from "@/lib/hooks";
+import { isLowPowerDevice, useAfterIdle, useMedia, usePageSettled } from "@/lib/hooks";
 
 // The shader is fetched and started only after first paint and an idle
 // moment; until then a pre-rendered frame of the same prism holds its place.
@@ -25,15 +25,20 @@ function announceReady() {
  * The prism behind the hero, laid out as on the previous site.
  *
  * With a mouse, it tilts toward the cursor and sits to the right of centre
- * at every window width, at its original size. On touch screens (phones and
- * tablets) it is huge, soft and centred, filling the hero behind the
- * heading, drifting slowly by itself, and fading out toward the bottom of
- * the hero as the previous site's did. Which one follows the pointer, not
- * the window's width, and switches if that changes.
+ * at every window width, at its original size, and as the hero scrolls away
+ * it turns and fades, so its light sweeps as you leave.
  *
- * As the hero scrolls away it turns and fades, so its light sweeps as you
- * leave. It tells the loading screen once it is fully drawn (the live prism
- * after its hand-over, or the still frame where that is all there will be).
+ * On touch screens (phones and tablets) it is huge, soft and centred,
+ * filling the hero behind the heading and fading out toward the bottom of
+ * the hero, and it moves only by itself, as the previous site's did: a slow
+ * tumble on its own clock (the "3drotate" mode at a time scale of 0.22),
+ * starting once the loading screen lifts. Touch, scrolling and tilting the
+ * phone do not affect it.
+ *
+ * Which one follows the pointer (hover and a fine pointer), not the
+ * window's width, and switches if that changes. It tells the loading screen
+ * once it is fully drawn (the live prism after its hand-over, or the still
+ * frame where that is all the loading screen waits for).
  *
  * Reduced motion, data saver and low-power devices keep the still frame.
  */
@@ -41,6 +46,7 @@ export function HeroPrism() {
   const hostRef = useRef<HTMLDivElement>(null);
   const mouse = useMedia(MOUSE_QUERY);
   const idle = useAfterIdle();
+  const settled = usePageSettled();
   const [allowed, setAllowed] = useState(false);
   const [live, setLive] = useState(false);
   const [frame, setFrame] = useState<PrismFrame | null>(null);
@@ -73,65 +79,55 @@ export function HeroPrism() {
     };
   }, []);
 
-  // Where the live prism will not start by itself (low-power devices, or
-  // touch screens until they are touched), the still frame is the scene:
-  // ready once its image has loaded and decoded.
+  // Where the live prism does not start during page load (low-power
+  // devices, and touch screens, which start it once the loading screen has
+  // lifted), the still frame is what the loading screen waits for: ready
+  // once its image has loaded and decoded.
   useEffect(() => {
-    if (!frame || (!isLowPowerDevice() && window.matchMedia("(hover: hover)").matches)) return;
+    if (!frame || (!isLowPowerDevice() && window.matchMedia(MOUSE_QUERY).matches)) return;
     const img = new Image();
     img.src = window.matchMedia("(min-width: 768px)").matches ? "/hero-poster-desktop.webp" : "/hero-poster-mobile.webp";
     img.decode().then(announceReady, announceReady);
   }, [frame]);
 
   useEffect(() => {
-    if (isLowPowerDevice()) return;
-    // Desktop starts the live prism as soon as the page is idle. Touch
-    // devices keep the identical still frame until the visitor first touches
-    // or scrolls, which spares the battery (and the first seconds of the
-    // page) the shader work for anyone who only glances at the hero.
-    if (window.matchMedia("(hover: hover)").matches) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect -- device checks only exist on the client
-      setAllowed(true);
-      return;
-    }
-    const go = () => setAllowed(true);
-    const opts = { once: true, passive: true } as const;
-    window.addEventListener("touchstart", go, opts);
-    window.addEventListener("scroll", go, opts);
-    window.addEventListener("pointerdown", go, opts);
-    return () => {
-      window.removeEventListener("touchstart", go);
-      window.removeEventListener("scroll", go);
-      window.removeEventListener("pointerdown", go);
-    };
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- device checks only exist on the client
+    if (!isLowPowerDevice()) setAllowed(true);
   }, []);
 
-  // Scroll: turn the prism and let the whole glow sink back and fade.
+  // Scroll (mouse devices only): turn the prism and let the whole glow sink
+  // back and fade. On touch screens the prism ignores scrolling.
   useGSAP(
     () => {
       const host = hostRef.current;
       const hero = host?.closest("section");
       if (!host || !hero) return;
-      gsap.to(host, {
-        yPercent: 18,
-        opacity: 0.15,
-        ease: "none",
-        scrollTrigger: {
-          trigger: hero,
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-          onUpdate: (self) => {
-            turn.value = self.progress;
-            turn.kick?.();
+      const mm = gsap.matchMedia();
+      mm.add(MOUSE_QUERY, () => {
+        gsap.to(host, {
+          yPercent: 18,
+          opacity: 0.15,
+          ease: "none",
+          scrollTrigger: {
+            trigger: hero,
+            start: "top top",
+            end: "bottom top",
+            scrub: true,
+            onUpdate: (self) => {
+              turn.value = self.progress;
+              turn.kick?.();
+            },
           },
-        },
+        });
       });
+      return () => mm.revert();
     },
     { scope: hostRef },
   );
 
-  const mount = idle && allowed;
+  // Mouse: as soon as the page is idle. Touch: once the loading screen has
+  // lifted too, so it starts moving as the hero comes into view.
+  const mount = allowed && (mouse ? idle : settled);
   const reach = frame ? REACH * frame.unit : 0;
 
   return (
@@ -165,7 +161,7 @@ export function HeroPrism() {
             glow={1}
             suspendWhenOffscreen
             renderScale={mouse ? 0.5 : 0.4}
-            turn={turn}
+            turn={mouse ? turn : undefined}
             onReady={() => {
               window.setTimeout(() => setLive(true), 120);
               window.setTimeout(announceReady, HANDOVER_MS);
