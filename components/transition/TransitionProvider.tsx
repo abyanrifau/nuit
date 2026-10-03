@@ -62,6 +62,9 @@ export function TransitionProvider({ children }: { children: ReactNode }) {
   const fadeIn = useCallback(
     (hash?: string) => {
       window.clearTimeout(safety.current);
+      // From the first page change on, pages animate in (see globals.css:
+      // the first page after the loading screen does not).
+      document.documentElement.dataset.navigated = "";
       const el = pageEl();
       toTop();
       start();

@@ -843,13 +843,20 @@ html[data-loader-still] .loader[data-stage="out"] :is(.loader-mark, .loader-fill
 /* ==========================================================================
    Entrance animations that must not wait for JavaScript (page titles and
    the hero). They play on first paint, and hold on their first frame while
-   a page is fading out. On a first visit they play beneath the loading
-   screen, whose own fade is the reveal (as for the hero wordmark), so no
-   text is ever left part-faded once the page is showing.
+   a page is fading out.
+
+   On a first visit the loading screen's own fade is the reveal (as for the
+   hero wordmark): the first page sits in its final state beneath it, with
+   no entrance animation, so no text is ever part-faded once the page is
+   showing and nothing animates during page load. After the first page
+   change (TransitionProvider sets data-navigated) every page animates in.
    ========================================================================== */
 
 html[data-transition="cover"] :is(.enter-blur, .enter-fade) {
   animation-play-state: paused;
+}
+html:is([data-loader="play"], [data-loader="done"]):not([data-navigated]) :is(.enter-blur, .enter-fade) {
+  animation: none;
 }
 
 /* Every page title and section heading reveals the same way: from clear
