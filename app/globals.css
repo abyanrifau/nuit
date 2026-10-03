@@ -15,6 +15,8 @@
   --fg: #f4f4f2;
   --fg-muted: #a6a6a3;
   --fg-faint: #7e7e7b;
+  /* Inactive process steps (see .step). */
+  --step-rest: #b0b0ad;
   --line: rgb(255 255 255 / 0.12);
   --line-strong: rgb(255 255 255 / 0.3);
 
@@ -423,15 +425,19 @@ html[data-transition="cover"] .wm-word {
 
 /* Process steps (components/home/ProcessSteps.tsx). One step is active at a
    time: fully white, with a soft, heavily blurred pool of prism light behind
-   it. The others rest at 35%, with no glow. Everything crossfades slowly. */
+   it. The others rest in a light grey, with no glow. Everything crossfades
+   slowly. The grey is an explicit colour, not a lowered opacity, so it
+   keeps at least 5:1 contrast even over the brightest part of the light
+   field behind the section (#343d3a), and 9:1 on the plain background; the
+   crossfade only ever moves between it and white. */
 .step {
   position: relative;
   isolation: isolate;
-  opacity: 0.35;
-  transition: opacity 1.2s var(--ease-soft);
+  color: var(--step-rest);
+  transition: color 1.2s var(--ease-soft);
 }
 .step[data-active="true"] {
-  opacity: 1;
+  color: var(--fg);
 }
 .step-glow {
   position: absolute;
@@ -449,7 +455,7 @@ html[data-transition="cover"] .wm-word {
 }
 @media (prefers-reduced-motion: reduce) {
   .step {
-    opacity: 1;
+    color: var(--fg);
   }
   .step-glow {
     display: none;
@@ -837,10 +843,12 @@ html[data-loader-still] .loader[data-stage="out"] :is(.loader-mark, .loader-fill
 /* ==========================================================================
    Entrance animations that must not wait for JavaScript (page titles and
    the hero). They play on first paint, and hold on their first frame while
-   the loading screen plays or a page is fading out.
+   a page is fading out. On a first visit they play beneath the loading
+   screen, whose own fade is the reveal (as for the hero wordmark), so no
+   text is ever left part-faded once the page is showing.
    ========================================================================== */
 
-html:is([data-loader="play"], [data-transition="cover"]) :is(.enter-blur, .enter-fade) {
+html[data-transition="cover"] :is(.enter-blur, .enter-fade) {
   animation-play-state: paused;
 }
 

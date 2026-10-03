@@ -5,14 +5,22 @@ import { SectionLabel } from "@/components/ui/SectionLabel";
 import type { Work } from "@/data/work";
 
 /** Readable text colour for a swatch label sitting on the swatch itself. */
+/** Dark or light label text for a swatch: whichever contrasts more with it. */
 function onColor(hex: string) {
-  const n = parseInt(hex.slice(1), 16);
-  const [r, g, b] = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((c) => {
-    const s = c / 255;
-    return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
-  });
-  const L = 0.2126 * r + 0.7152 * g + 0.0722 * b;
-  return L > 0.3 ? "#111" : "#f4f4f2";
+  const luminance = (h: string) => {
+    const n = parseInt(h.slice(1), 16);
+    const [r, g, b] = [(n >> 16) & 255, (n >> 8) & 255, n & 255].map((c) => {
+      const s = c / 255;
+      return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+    });
+    return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+  };
+  const L = luminance(hex);
+  const ratio = (other: string) => {
+    const o = luminance(other);
+    return (Math.max(L, o) + 0.05) / (Math.min(L, o) + 0.05);
+  };
+  return ratio("#111111") >= ratio("#f4f4f2") ? "#111" : "#f4f4f2";
 }
 
 /*

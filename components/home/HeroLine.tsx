@@ -49,17 +49,20 @@ export function HeroLine({ className }: { className?: string }) {
           schedule();
         },
       });
+      // Words are never shown at part opacity (it would fail contrast for
+      // as long as it lasts): a word turns visible or invisible only while
+      // it is outside the clipped slot, and the roll itself is movement and
+      // blur. With reduced motion the word simply changes.
       if (reduced) {
-        tl.to(front, { opacity: 0, duration: 0.25, ease: "none" })
-          .set(slot, { width: w })
-          .fromTo(back, { yPercent: 0, opacity: 0 }, { opacity: 1, duration: 0.25, ease: "none" });
+        tl.set(front, { opacity: 0 }).set(slot, { width: w }).set(back, { yPercent: 0, opacity: 1 });
         return;
       }
-      tl.to(front, { yPercent: -100, opacity: 0, filter: "blur(5px)", duration: 0.85, ease: EASE_SWAP }, 0)
+      tl.to(front, { yPercent: -100, filter: "blur(5px)", duration: 0.85, ease: EASE_SWAP }, 0)
+        .set(front, { opacity: 0 }, 0.85)
         .fromTo(
           back,
-          { yPercent: 100, opacity: 0, filter: "blur(5px)" },
-          { yPercent: 0, opacity: 1, filter: "blur(0px)", duration: 0.85, ease: EASE_SWAP },
+          { yPercent: 100, opacity: 1, filter: "blur(5px)" },
+          { yPercent: 0, filter: "blur(0px)", duration: 0.85, ease: EASE_SWAP },
           0,
         )
         .to(slot, { width: w, duration: 0.85, ease: EASE_SWAP }, 0);
